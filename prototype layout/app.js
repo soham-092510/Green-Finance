@@ -417,11 +417,14 @@ function startLiveMetricsTicker() {
 // --- Bank Money Transfer Engine ---
 function processSimulatedTransfer({ senderBankId, recipientBankId, amount, protocol, note }) {
   // 1. Calculate realistic energy consumption for the transfer
+  // Base energy for FastAPI request + DB row locking + serialization: ~15 to 45 Joules
   const baseJoules = 18 + Math.min(amount / 5000, 25) + (Math.random() * 8);
   const joules = Number(baseJoules.toFixed(2));
 
   // 2. Derive carbon footprint using SRS formula:
   // (Joules / 3,600,000) * (emissionFactor * 1000) = grams CO2
+  // Factor: 0.38 kg/kWh = 380 g/kWh.
+  // 1 kWh = 3,600,000 Joules.
   const kwh = joules / 3600000;
   const carbonGrams = Number((kwh * state.config.emissionFactor * 1000).toFixed(4));
 
@@ -495,7 +498,7 @@ function pushNewDataPoint(carbonValue, energyValue) {
   Object.values(charts).forEach(chart => {
     if (chart && chart.data && chart.data.labels) {
       chart.data.labels = [...state.timeLabels];
-      chart.update('none');
+      chart.update('none'); // fast update without animation jerk
     }
   });
 
@@ -787,10 +790,13 @@ function executePromQLQuery() {
 // --- Grafana Controls ---
 function updateGrafanaTimeRange() {
   const range = document.getElementById('grafana-timerange').value;
+  // Trigger chart re-render with animation
   Object.values(charts).forEach(c => { if (c) c.update(); });
 }
 
-function toggleGrafanaRefresh() {}
+function toggleGrafanaRefresh() {
+  // Configured in interval
+}
 
 function manualGrafanaRefresh() {
   triggerRandomTransaction();
