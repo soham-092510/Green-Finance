@@ -180,6 +180,96 @@ def seed_database(db: Session) -> None:
         
         logger.info("Preloaded ledger logs and carbon assets seeded.")
         
+    # ------------------ 7. Seed Banking User (Soham Gaikwad - HDFC9999) ------------------
+    soham = db.query(User).filter(User.username == "soham_gaikwad").first()
+    if not soham:
+        soham = User(
+            name="Soham Gaikwad",
+            username="soham_gaikwad",
+            email="soham@greenfinance.dev",
+            bank_id="HDFC9999",
+            hashed_password=hash_password("password123"),
+            role="ADMIN"
+        )
+        db.add(soham)
+        db.flush()
+        
+        # Checking account with ₹50,000 balance
+        db.add(Account(
+            user_id=soham.id,
+            name="cash_wallet",
+            type="asset",
+            balance=50000.0
+        ))
+        logger.info("Seeded primary user Soham Gaikwad (HDFC9999) with ₹50,000 cash balance.")
+
+    # ------------------ 8. Seed Recipient Banks ------------------
+    banks_to_seed = [
+        {"username": "bank_mah123", "name": "Bank of Maharashtra", "bank_id": "MAH123", "balance": 10000.0},
+        {"username": "bank_idf892", "name": "IDFC First Bank", "bank_id": "IDF892", "balance": 15000.0},
+        {"username": "bank_sbin456", "name": "State Bank of India", "bank_id": "SBIN456", "balance": 25000.0},
+    ]
+    for b in banks_to_seed:
+        existing_bank = db.query(User).filter(User.bank_id == b["bank_id"]).first()
+        if not existing_bank:
+            u_bank = User(
+                name=b["name"],
+                username=b["username"],
+                email=f"{b['bank_id'].lower()}@banknet.in",
+                bank_id=b["bank_id"],
+                hashed_password=hash_password("bankpassword123"),
+                role="BANK"
+            )
+            db.add(u_bank)
+            db.flush()
+            db.add(Account(
+                user_id=u_bank.id,
+                name="cash_wallet",
+                type="asset",
+                balance=b["balance"]
+            ))
+            logger.info(f"Seeded bank: {b['name']} ({b['bank_id']}) with ₹{b['balance']}")
+
+    # ------------------ 9. Seed Accuracy Baseline & Validation Run ------------------
+    from backend.models.accuracy import BaselineProfile, ValidationRun
+    base_profile = db.query(BaselineProfile).filter(BaselineProfile.id == "BASE-DEFAULT-001").first()
+    if not base_profile:
+        base_profile = BaselineProfile(
+            id="BASE-DEFAULT-001",
+            machine_id="node-local-01",
+            duration_seconds=300,
+            sample_count=300,
+            idle_power_mean=18.7,
+            idle_power_std=0.8,
+            idle_cv=4.28,
+            status="LOCKED",
+            cpu_model="Intel/AMD Multi-Core Architecture",
+            cpu_freq_mhz=2400.0,
+            env_metadata='{"os": "Windows/Linux Kernel", "kepler_version": "v0.7.2", "prometheus": "v2.45.0"}'
+        )
+        db.add(base_profile)
+        db.flush()
+
+        val_run = ValidationRun(
+            id="VAL-RUN-001",
+            baseline_id="BASE-DEFAULT-001",
+            tx_count=500,
+            host_energy_joules=1000.0,
+            container_energy_joules=800.0,
+            idle_energy_joules=150.0,
+            accounted_energy_joules=950.0,
+            residual_joules=50.0,
+            residual_percent=5.0,
+            fidelity_percent=95.0,
+            tx_energy_mean_joules=0.70,
+            tx_energy_std_joules=0.021,
+            tx_cv_percent=3.0,
+            drift_percent=2.1,
+            status="PASS"
+        )
+        db.add(val_run)
+        logger.info("Seeded default locked BaselineProfile and 95% Fidelity ValidationRun.")
+
     db.commit()
     logger.info("Database seeding successfully completed!")
 

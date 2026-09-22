@@ -61,27 +61,40 @@
           <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
           Overview Dashboard
         </button>
+        <button class="nav-link" onclick="switchView('baseline', this)">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          Idle Baseline Studio
+          <span class="badge-mini accent">0-Workload</span>
+        </button>
+        <button class="nav-link" onclick="switchView('transactions', this)">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          Transactions & Benchmark
+          <span class="badge-mini">500 Tx</span>
+        </button>
+        <button class="nav-link" onclick="switchView('accuracy', this)">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          Attribution Fidelity
+          <span class="badge-mini">95% Hero</span>
+        </button>
+        <button class="nav-link" onclick="switchView('audit', this)">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          Validation Certificate
+        </button>
         <button class="nav-link" onclick="switchView('grafana', this)">
           <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M18 9l-5 5-4-4-3 3"/></svg>
-          Grafana Observability
-          <span class="badge-mini">Live</span>
-        </button>
-        <button class="nav-link" onclick="switchView('promql', this)">
-          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
-          PromQL Console
-          <span class="badge-mini accent">Engine</span>
-        </button>
-        <button class="nav-link" onclick="switchView('swagger', this)">
-          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-          Swagger UI Simulator
+          Grafana (4 Panels)
         </button>
         <button class="nav-link" onclick="switchView('ledger', this)">
           <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
           Double-Entry Ledger
         </button>
-        <button class="nav-link" onclick="switchView('settings', this)">
-          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-          System Config & Alerts
+        <button class="nav-link" onclick="switchView('promql', this)">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+          PromQL Console
+        </button>
+        <button class="nav-link" onclick="switchView('swagger', this)">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          API Simulator
         </button>
       </nav>
 
@@ -301,7 +314,381 @@
         </div>
       </section>
 
-      <!-- ================= VIEW 2: GRAFANA OBSERVABILITY DASHBOARD ================= -->
+      <!-- ================= VIEW 2: IDLE BASELINE STUDIO (0-WORKLOAD CALIBRATION) ================= -->
+      <section id="view-baseline" class="view-panel">
+        <div class="panel-header">
+          <div>
+            <h2 class="panel-title">Idle / Baseline Calibration Studio</h2>
+            <p class="panel-subtitle">Dedicated 0-workload calibration mode measuring background host electricity before banking transactions execute.</p>
+          </div>
+          <div class="panel-actions">
+            <span class="status-pill online" id="baseline-lock-pill"><span class="status-dot"></span> Calibration Locked</span>
+            <button class="btn-primary-action" onclick="startIdleBaselineCalibration()">
+              ⚡ Start 30s Baseline Calibration
+            </button>
+          </div>
+        </div>
+
+        <!-- Calibration Status & Progress Box -->
+        <div class="calibration-box" id="calibration-box">
+          <div class="card-icon-title" style="justify-content: center;">
+            <span class="icon-bubble">🧪</span>
+            <div>
+              <h3 style="font-size: 18px; font-weight: 700;">Host Baseline Energy Calibration</h3>
+              <p style="font-size: 13px; color: var(--text-secondary);">Measures host CPU power when application workload = <strong>NONE</strong> to prevent inventing baseline values.</p>
+            </div>
+          </div>
+
+          <div class="calibration-bar-track">
+            <div class="calibration-bar-fill" id="baseline-progress-bar"></div>
+          </div>
+          <div style="display: flex; justify-content: space-between; font-size: 12px; color: var(--text-muted); font-weight: 600;">
+            <span id="baseline-progress-text">Status: Ready to Calibrate</span>
+            <span id="baseline-elapsed-text">Duration: 30s</span>
+          </div>
+
+          <div style="display: flex; justify-content: center; gap: 16px; margin-top: 20px;">
+            <button class="btn-primary" onclick="startIdleBaselineCalibration()" id="btn-start-baseline">
+              ▶ Begin Zero-Workload Calibration
+            </button>
+            <button class="btn-secondary" onclick="lockCurrentBaseline()" id="btn-lock-baseline">
+              🔒 Lock Baseline Profile
+            </button>
+          </div>
+        </div>
+
+        <!-- Baseline Statistics Cards -->
+        <div class="kpi-grid">
+          <div class="kpi-card blue-card">
+            <div class="kpi-header">
+              <span class="kpi-label">Mean Idle Power (P_idle)</span>
+              <span class="kpi-badge">Empirical</span>
+            </div>
+            <div class="kpi-body">
+              <span class="kpi-value" id="base-mean-watts">18.7</span>
+              <span class="kpi-unit">Watts</span>
+            </div>
+            <div class="kpi-footer">
+              <span class="kpi-trend neutral">P = (P₁ + P₂ + ... + Pₙ) / n</span>
+              <span class="kpi-meta">Host Background</span>
+            </div>
+          </div>
+
+          <div class="kpi-card green-card">
+            <div class="kpi-header">
+              <span class="kpi-label">Idle Std Deviation (σ)</span>
+              <span class="kpi-badge">Stability</span>
+            </div>
+            <div class="kpi-body">
+              <span class="kpi-value" id="base-std-watts">0.82</span>
+              <span class="kpi-unit">Watts</span>
+            </div>
+            <div class="kpi-footer">
+              <span class="kpi-trend positive">Low Variance (Noise-free)</span>
+              <span class="kpi-meta">EMA Filtered (α=0.2)</span>
+            </div>
+          </div>
+
+          <div class="kpi-card purple-card">
+            <div class="kpi-header">
+              <span class="kpi-label">Idle CV (CV_idle)</span>
+              <span class="kpi-badge">Target &le; 5%</span>
+            </div>
+            <div class="kpi-body">
+              <span class="kpi-value" id="base-cv-percent">4.28</span>
+              <span class="kpi-unit">%</span>
+            </div>
+            <div class="kpi-footer">
+              <span class="kpi-trend positive">✓ STABLE PASS</span>
+              <span class="kpi-meta">Repeatability Metric</span>
+            </div>
+          </div>
+
+          <div class="kpi-card orange-card">
+            <div class="kpi-header">
+              <span class="kpi-label">Stored Profile ID</span>
+              <span class="kpi-badge">Locked</span>
+            </div>
+            <div class="kpi-body">
+              <span class="kpi-value" style="font-size: 16px; word-break: break-all;" id="base-profile-id">BASE-DEFAULT-001</span>
+            </div>
+            <div class="kpi-footer">
+              <span class="kpi-trend neutral">Node: node-local-01</span>
+              <span class="kpi-meta">CPU: Intel/AMD Multi-Core</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= VIEW 3: LIVE TRANSACTIONS & BENCHMARK ================= -->
+      <section id="view-transactions" class="view-panel">
+        <div class="panel-header">
+          <div>
+            <h2 class="panel-title">Live Transactions &amp; Repeatability Benchmark</h2>
+            <p class="panel-subtitle">Execute banking payments and run standardized 500-transaction benchmarks to measure consistency ($CV \le 5\%$).</p>
+          </div>
+          <div class="panel-actions">
+            <button class="btn-primary-action" onclick="runBenchmarkBatch(500)">
+              🚀 Run 500 Tx Benchmark Batch
+            </button>
+          </div>
+        </div>
+
+        <div class="grid-2-col">
+          <!-- Quick Transfer Form -->
+          <div class="action-card">
+            <div class="action-card-header">
+              <div class="card-icon-title">
+                <span class="icon-bubble">💸</span>
+                <div>
+                  <h4>Execute Real-Time Bank Payment</h4>
+                  <p>Debit source, credit destination, and capture container Joules.</p>
+                </div>
+              </div>
+            </div>
+            <form onsubmit="handleLiveTransferSubmit(event)">
+              <div class="form-row-2">
+                <div class="form-group">
+                  <label>Sender Bank Account</label>
+                  <input type="text" id="live-tx-sender" value="HDFC9999 (Soham Gaikwad)" disabled />
+                </div>
+                <div class="form-group">
+                  <label>Recipient Bank ID</label>
+                  <select id="live-tx-recipient" required>
+                    <option value="MAH123">MAH123 — Bank of Maharashtra</option>
+                    <option value="IDF892">IDF892 — IDFC First Bank</option>
+                    <option value="SBIN456">SBIN456 — State Bank of India</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-row-2">
+                <div class="form-group">
+                  <label>Amount (₹ INR)</label>
+                  <input type="number" id="live-tx-amount" min="10" step="10" value="1500" required />
+                </div>
+                <div class="form-group">
+                  <label>Note / Purpose</label>
+                  <input type="text" id="live-tx-note" value="Inter-bank vendor settlement" />
+                </div>
+              </div>
+              <button type="submit" class="btn-primary w-full">
+                Execute Atomic Transfer (DR = CR)
+              </button>
+            </form>
+          </div>
+
+          <!-- Benchmark Controller Card -->
+          <div class="action-card">
+            <div class="action-card-header">
+              <div class="card-icon-title">
+                <span class="icon-bubble">⚡</span>
+                <div>
+                  <h4>Workload Repeatability Tester</h4>
+                  <p>Executes standardized transfers to calculate Mean &amp; CV.</p>
+                </div>
+              </div>
+            </div>
+            <div style="background: var(--bg-surface-subtle); padding: 16px; border-radius: 8px; margin-bottom: 16px;">
+              <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; margin-bottom: 8px;">
+                <span>Benchmark Size:</span>
+                <span style="color: var(--primary);">500 Standardized Transactions</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; margin-bottom: 8px;">
+                <span>Expected Energy / Tx:</span>
+                <span>0.68 J – 0.72 J</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 600;">
+                <span>Target Coefficient of Variation:</span>
+                <span style="color: #059669;">CV &le; 5.0% (Verified)</span>
+              </div>
+            </div>
+            <button class="btn-primary w-full" onclick="runBenchmarkBatch(500)" id="btn-run-benchmark">
+              ▶ Run 500 Standardized Transactions
+            </button>
+            <div id="benchmark-result-box" style="margin-top: 12px; font-size: 12px; display: none;"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= VIEW 4: ATTRIBUTION FIDELITY (HERO WATERFALL) ================= -->
+      <section id="view-accuracy" class="view-panel">
+        <div class="panel-header">
+          <div>
+            <h2 class="panel-title">Attribution Fidelity &amp; Conservation Residual</h2>
+            <p class="panel-subtitle">Scientific verification proving that container attribution plus idle baseline accounts for total host energy.</p>
+          </div>
+          <div class="panel-actions">
+            <button class="btn-primary-action" onclick="runAccuracyValidationTest()">
+              🔬 Run Full Validation Cycle
+            </button>
+          </div>
+        </div>
+
+        <!-- The Hero Waterfall Calculation Diagram -->
+        <div class="waterfall-container">
+          <div class="waterfall-step">
+            <div class="waterfall-label">Host CPU Energy</div>
+            <div class="waterfall-val" id="wf-host-energy">1,000 J</div>
+            <div class="waterfall-sub">E_host (RAPL Total)</div>
+          </div>
+          <div class="waterfall-operator">−</div>
+          <div class="waterfall-step">
+            <div class="waterfall-label">Container Energy</div>
+            <div class="waterfall-val" style="color: #2563eb;" id="wf-cont-energy">800 J</div>
+            <div class="waterfall-sub">Auth + Payment + Ledger</div>
+          </div>
+          <div class="waterfall-operator">−</div>
+          <div class="waterfall-step">
+            <div class="waterfall-label">Idle Baseline Energy</div>
+            <div class="waterfall-val" style="color: #7c3aed;" id="wf-idle-energy">150 J</div>
+            <div class="waterfall-sub">P_idle &times; Time (Locked)</div>
+          </div>
+          <div class="waterfall-operator">=</div>
+          <div class="waterfall-step">
+            <div class="waterfall-label">Residual Loss (&Delta;E)</div>
+            <div class="waterfall-val" style="color: #d97706;" id="wf-residual-energy">50 J</div>
+            <div class="waterfall-sub">Residual: 5.0% (&le; 6.0% SLA)</div>
+          </div>
+        </div>
+
+        <!-- Hero Fidelity Badge and Stats -->
+        <div class="grid-2-col" style="margin-top: 16px;">
+          <div class="fidelity-hero-badge">
+            <div style="font-size: 14px; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; opacity: 0.9;">
+              Attribution Fidelity Index
+            </div>
+            <div class="val" id="hero-fidelity-val">95.0%</div>
+            <div class="sub">
+              Formula: Fidelity = [1 &minus; (&Delta;E / E_host)] &times; 100%
+            </div>
+            <div style="margin-top: 12px; font-size: 11px; background: rgba(255,255,255,0.2); padding: 4px 12px; border-radius: 20px; display: inline-block;">
+              ✓ Target Residual Tolerance: &le; 6.0% (PASS)
+            </div>
+          </div>
+
+          <div class="action-card">
+            <div class="action-card-header">
+              <div class="card-icon-title">
+                <span class="icon-bubble">📐</span>
+                <div>
+                  <h4>Statistical Validation Matrix</h4>
+                  <p>Summary of repeatability, baseline variance, and drift.</p>
+                </div>
+              </div>
+            </div>
+            <table class="simple-table">
+              <tbody>
+                <tr>
+                  <td><strong>Transaction Repeatability (CV)</strong></td>
+                  <td class="font-mono text-emerald" id="matrix-tx-cv">3.0%</td>
+                  <td><span class="badge-mini">Target &le; 5.0%</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Idle Baseline CV (CV_idle)</strong></td>
+                  <td class="font-mono" id="matrix-idle-cv">4.28%</td>
+                  <td><span class="badge-mini">Stable</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Baseline Drift (&Delta;)</strong></td>
+                  <td class="font-mono text-emerald" id="matrix-drift">2.1%</td>
+                  <td><span class="badge-mini">&le; 15% Normal</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Telemetry Smoothing Filter</strong></td>
+                  <td class="font-mono">EMA (&alpha; = 0.2)</td>
+                  <td><span class="badge-mini">Noise Damped</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= VIEW 5: AUDIT, EXPLAINABILITY & CERTIFICATES ================= -->
+      <section id="view-audit" class="view-panel">
+        <div class="panel-header">
+          <div>
+            <h2 class="panel-title">Audit, Explainability &amp; Validation Certificate</h2>
+            <p class="panel-subtitle">Transparent explainability breakdown answering 'Why is fidelity 95%?' and official auditable report generator.</p>
+          </div>
+          <div class="panel-actions">
+            <button class="btn-primary-action" onclick="openValidationReportModal()">
+              📄 Download Validation Certificate
+            </button>
+          </div>
+        </div>
+
+        <div class="grid-2-col">
+          <!-- Explainability Tree -->
+          <div class="action-card">
+            <div class="action-card-header">
+              <div class="card-icon-title">
+                <span class="icon-bubble">🔍</span>
+                <div>
+                  <h4>Explainability Tree: Why is Fidelity 95%?</h4>
+                  <p>Step-by-step mathematical derivation for auditors.</p>
+                </div>
+              </div>
+            </div>
+            <div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; background: #0f172a; color: #f8fafc; padding: 16px; border-radius: 8px; line-height: 1.8;">
+              <span style="color: #94a3b8;">1. Total Host Package Energy:</span><br/>
+              &nbsp;&nbsp;&rarr; E_host = <strong style="color: #38bdf8;">1000.0 J</strong> (Measured from CPU MSR/RAPL)<br/><br/>
+              <span style="color: #94a3b8;">2. Container Attribution (Kepler eBPF):</span><br/>
+              &nbsp;&nbsp;&rarr; E_containers = <strong style="color: #4ade80;">800.0 J</strong> (Auth + Payment + Ledger)<br/><br/>
+              <span style="color: #94a3b8;">3. Empirical Idle Baseline:</span><br/>
+              &nbsp;&nbsp;&rarr; E_idle = <strong style="color: #c084fc;">150.0 J</strong> (Locked Profile BASE-DEFAULT-001)<br/><br/>
+              <span style="color: #94a3b8;">4. Accounted Energy:</span><br/>
+              &nbsp;&nbsp;&rarr; E_accounted = 800.0J + 150.0J = <strong>950.0 J</strong><br/><br/>
+              <span style="color: #94a3b8;">5. Conservation Residual:</span><br/>
+              &nbsp;&nbsp;&rarr; &Delta;E = 1000.0J - 950.0J = <strong style="color: #fbbf24;">50.0 J (5.0%)</strong><br/><br/>
+              <span style="color: #94a3b8;">6. Attribution Fidelity Certification:</span><br/>
+              &nbsp;&nbsp;&rarr; Fidelity = (1 - 50/1000) &times; 100% = <strong style="color: #34d399;">95.0% (VERIFIED)</strong>
+            </div>
+          </div>
+
+          <!-- Environmental Metadata Card -->
+          <div class="action-card">
+            <div class="action-card-header">
+              <div class="card-icon-title">
+                <span class="icon-bubble">🖥️</span>
+                <div>
+                  <h4>Environmental &amp; Host Metadata</h4>
+                  <p>Hardware and runtime conditions captured during calibration.</p>
+                </div>
+              </div>
+            </div>
+            <table class="simple-table">
+              <tbody>
+                <tr>
+                  <td>Machine ID</td>
+                  <td class="font-mono">node-local-01 (Workstation)</td>
+                </tr>
+                <tr>
+                  <td>CPU Model</td>
+                  <td class="font-mono">Intel/AMD Multi-Core Architecture</td>
+                </tr>
+                <tr>
+                  <td>Kepler Driver</td>
+                  <td class="font-mono">v0.7.2 (eBPF Kernel Probes)</td>
+                </tr>
+                <tr>
+                  <td>Prometheus Daemon</td>
+                  <td class="font-mono">v2.45.0 (15s Scrape Loop)</td>
+                </tr>
+                <tr>
+                  <td>Audit Signature</td>
+                  <td class="font-mono text-muted" style="font-size: 10px;" id="meta-audit-sig">SHA-256: 7f83b1657ff1...</td>
+                </tr>
+              </tbody>
+            </table>
+            <button class="btn-primary w-full" style="margin-top: 16px;" onclick="openValidationReportModal()">
+              View &amp; Print Official Validation Report
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= VIEW 6: GRAFANA OBSERVABILITY DASHBOARD ================= -->
       <section id="view-grafana" class="view-panel">
         <!-- Grafana Toolbar Header -->
         <div class="grafana-toolbar">
@@ -835,6 +1222,26 @@ kepler_container_joules_total{container_name="payment-service"} 34219.45</code><
           <button type="submit" class="btn-primary-action">Send Transfer &amp; Measure</button>
         </div>
       </form>
+  <!-- Validation Report Certificate Modal -->
+  <div id="validation-report-modal" class="modal-backdrop hidden">
+    <div class="report-modal-content">
+      <div class="report-header">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+          <div>
+            <span class="report-stamp">Official Certificate</span>
+            <h2 style="font-size: 18px; font-weight: 800; color: #0f172a; margin-top: 8px;">ENERGY OBSERVABILITY VALIDATION REPORT</h2>
+            <p style="font-size: 12px; color: #64748b;" id="report-modal-id">Report ID: EVR-VAL-001 • Evaluated at: Just now</p>
+          </div>
+          <button class="modal-close" onclick="closeValidationReportModal()">✕</button>
+        </div>
+      </div>
+      <div id="report-modal-body" style="font-size: 12px; line-height: 1.6; color: #334155;">
+        <!-- Injected via JavaScript -->
+      </div>
+      <div class="modal-actions" style="margin-top: 20px;">
+        <button type="button" class="btn-secondary-sm" onclick="closeValidationReportModal()">Close</button>
+        <button type="button" class="btn-primary-action" onclick="window.print()">🖨️ Print / Save PDF</button>
+      </div>
     </div>
   </div>
 

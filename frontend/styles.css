@@ -1432,3 +1432,120 @@ textarea:focus {
     grid-template-columns: 1fr;
   }
 }
+
+/* ================= ACCURACY & FIDELITY ENGINE STYLES ================= */
+.waterfall-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: var(--bg-surface-subtle);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  margin: 16px 0;
+  overflow-x: auto;
+}
+.waterfall-step {
+  flex: 1;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+  min-width: 140px;
+}
+.waterfall-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+.waterfall-val {
+  font-size: 22px;
+  font-weight: 800;
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--text-main);
+}
+.waterfall-sub {
+  font-size: 10px;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+.waterfall-operator {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+.fidelity-hero-badge {
+  background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+  color: white;
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  text-align: center;
+  box-shadow: 0 10px 25px -5px rgba(16, 185, 129, 0.3);
+}
+.fidelity-hero-badge .val {
+  font-size: 48px;
+  font-weight: 800;
+  font-family: 'JetBrains Mono', monospace;
+  line-height: 1.1;
+}
+.fidelity-hero-badge .sub {
+  font-size: 13px;
+  font-weight: 600;
+  opacity: 0.95;
+  margin-top: 6px;
+}
+.calibration-box {
+  background: #f8fafc;
+  border: 2px dashed #cbd5e1;
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  text-align: center;
+  margin: 16px 0;
+}
+.calibration-bar-track {
+  width: 100%;
+  height: 12px;
+  background: #e2e8f0;
+  border-radius: 6px;
+  overflow: hidden;
+  margin: 16px 0 8px 0;
+}
+.calibration-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #10b981, #059669);
+  width: 0%;
+  transition: width 0.3s ease;
+}
+.report-modal-content {
+  background: white;
+  border-radius: 12px;
+  padding: 28px;
+  max-width: 700px;
+  width: 90%;
+  font-family: 'Inter', sans-serif;
+  max-height: 85vh;
+  overflow-y: auto;
+}
+.report-header {
+  border-bottom: 2px solid #059669;
+  padding-bottom: 12px;
+  margin-bottom: 16px;
+}
+.report-stamp {
+  display: inline-block;
+  border: 2px solid #059669;
+  color: #059669;
+  font-weight: 800;
+  padding: 4px 12px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+}
