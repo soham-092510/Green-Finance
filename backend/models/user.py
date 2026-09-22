@@ -64,6 +64,11 @@ class User(Base):
     # - Optional field representing the user's human-readable name
     name = Column(String(100), nullable=True)
 
+    # Bank Identifier Column
+    # WHY:
+    # - Connects user to their banking entity (e.g. HDFC9999, MAH123)
+    bank_id = Column(String(50), unique=True, nullable=True, index=True)
+
     # Role Column
     # WHY:
     # - Supports Role-Based Access Control (RBAC) (INVESTOR, AUDITOR, ADMIN)

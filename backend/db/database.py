@@ -24,6 +24,9 @@ def init_db() -> None:
     # - Important note: only for development, NOT production
     """Creates all tables from models. Call once on startup (dev only — use Alembic in prod)."""
 
+    # Ensure all models are imported so their tables are in Base.metadata
+    from backend.models import user, account, transaction, ledger_entry, carbon_record, carbon_credit, credit, accuracy
+
     # Create all tables defined in models
     # WHY:
     # - Base.metadata contains all model definitions (User, Transaction, etc.)

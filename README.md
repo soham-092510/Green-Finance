@@ -4,6 +4,14 @@ A scalable, highly modular, and production-ready **Carbon Footprint Monitoring &
 
 ---
 
+> 🚀 **Phase 2 Presentation & Prototype Layout Quick Start**:
+> - **Branch**: `layout`
+> - **Run Local Server**: `python -m http.server 8085 --directory "prototype layout"`
+> - **Access UI**: 👉 **[http://localhost:8085](http://localhost:8085)**
+> - Full prototype guide, commands, and architecture: [prototype layout/README.md](prototype%20layout/README.md)
+
+---
+
 ## 📌 Table of Contents
 1. [Project Overview](#-project-overview)
 2. [System Architecture & Data Flows](#-system-architecture--data-flows)

@@ -4,6 +4,8 @@ __pycache__/
 *.pyo
 *.pyd
 .env
+*.db
+*.sqlite3
 
 # Virtual env
 venv/

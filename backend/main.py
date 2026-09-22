@@ -52,7 +52,7 @@ from backend.db.database import init_db
 
 # 🔹 Import API routers
 # Registers the different pages/sections of our application.
-from backend.api import health, auth, user, carbon, credits, ledger, portfolio, telemetry
+from backend.api import health, auth, user, carbon, credits, ledger, portfolio, telemetry, baseline, accuracy, payment
 
 # 🔹 Import CORSMiddleware
 # CORS (Cross-Origin Resource Sharing) is a browser security mechanism.
@@ -115,7 +115,10 @@ app.include_router(carbon.router)
 app.include_router(credits.router)
 app.include_router(ledger.router)
 app.include_router(portfolio.router)
-app.include_router(telemetry.router) # Registers the new Kepler PromQL telemetry pathways
+app.include_router(telemetry.router) # Registers the Kepler PromQL telemetry pathways
+app.include_router(baseline.router)  # Registers Idle Baseline Calibration endpoints
+app.include_router(accuracy.router)  # Registers Attribution Fidelity & Accuracy endpoints
+app.include_router(payment.router)   # Registers Simulated Banking Microservices endpoints
 
 
 # =====================================================================
