@@ -1,213 +1,186 @@
 # =====================================================================
-# ECO MONITOR — SEED.PY (SEEDER)
-# Purpose: Seeds the database with default Scope 1, 2, 3 emission factors,
-#          creates a demo user with pre-configured double-entry accounts,
-#          and generates mock ledger transactions and carbon credits.
+# ECO MONITOR / GREEN-FINANCE — SEED.PY (COMPREHENSIVE SEEDER)
+# Purpose: Seeds database with:
+#          - Scope 1, 2, 3 emission factors & CEA India Grid factors
+#          - Demo users (Soham, Demo User, Alice, Bob) & Bank Accounts
+#          - Recipient Institutional Banks (MAH, IDFC, SBI)
+#          - Sustainability Goals, Alerts & Explainable Recommendations
+#          - Realistic preloaded audited banking transactions
+#          - Baseline Profiles and Validation Runs
 # =====================================================================
 
-# Import Session from SQLAlchemy ORM
+import hashlib
+import uuid
+from datetime import datetime, timedelta
+import random
+
 from sqlalchemy.orm import Session
 
-# Import models
-from backend.models.user import User
-from backend.models.account import Account
-from backend.models.carbon_record import EmissionFactor, CarbonRecord
-from backend.models.carbon_credit import CarbonCredit
-from backend.models.transaction import Transaction
-from backend.models.ledger_entry import LedgerEntry
-from backend.models.credit import CreditRetirement
-
-# Import security hash function
 from backend.core.security import hash_password
-
-# Import DB session creator
 from backend.db.session import SessionLocal
-
-# Import logging
 from backend.middleware.logger import logger
-
-# Import datetime
-from datetime import datetime, timedelta
-
-# Import uuid
-import uuid
+from backend.models.account import Account
+from backend.models.accuracy import BaselineProfile, ValidationRun, TransactionTelemetry
+from backend.models.carbon_credit import CarbonCredit
+from backend.models.carbon_record import EmissionFactor, CarbonRecord
+from backend.models.credit import CreditRetirement
+from backend.models.ledger_entry import LedgerEntry
+from backend.models.transaction import Transaction
+from backend.models.user import User
+from backend.models.sustainability import (
+    CarbonFactor, SustainabilityGoal, Alert, Recommendation, CarbonMeasurement
+)
 
 
 def seed_database(db: Session) -> None:
-    # Main seeder execution routine
-    # WHY:
-    # - Sets up default values for emission factor lookups
-    # - Sets up a demo account preloaded with data so the UI has immediate, beautiful charts
-    logger.info("Initializing database seeding...")
+    logger.info("Initializing comprehensive database seeding...")
 
-    # ------------------ 1. Seed Emission Factors ------------------
-    # WHY:
-    # - Standard conversion factors for carbon math (Scope 1, 2, 3)
-    factors = [
-        {"activity_type": "transport", "factor": 0.24, "unit": "km"},       # Scope 1 (Direct Fuel)
-        {"activity_type": "energy", "factor": 0.38, "unit": "kWh"},         # Scope 2 (Indirect Electricity)
-        {"activity_type": "manufacturing", "factor": 1.50, "unit": "USD"},  # Scope 3 (Supply Chain Spend)
-        {"activity_type": "agriculture", "factor": 2.10, "unit": "kg"},     # Scope 3 (Food Supply)
+    # ------------------ 1. Seed Generic Activity Factors ------------------
+    activity_factors = [
+        {"activity_type": "transport", "factor": 0.24, "unit": "km"},
+        {"activity_type": "energy", "factor": 0.38, "unit": "kWh"},
+        {"activity_type": "manufacturing", "factor": 1.50, "unit": "USD"},
+        {"activity_type": "agriculture", "factor": 2.10, "unit": "kg"},
         {"activity_type": "other", "factor": 0.50, "unit": "unit"}
     ]
-
-    for f in factors:
+    for f in activity_factors:
         existing = db.query(EmissionFactor).filter(
             EmissionFactor.activity_type == f["activity_type"]
         ).first()
         if not existing:
             db.add(EmissionFactor(**f))
-            logger.info(f"Seeded Emission Factor: {f['activity_type']}")
-    db.commit()
 
-    # ------------------ 2. Seed Demo User ------------------
-    # WHY:
-    # - Provides a ready-to-use profile to login with immediately (demo_user / password123)
-    demo_username = "demo_user"
-    user = db.query(User).filter(User.username == demo_username).first()
-    if not user:
-        user = User(
-            name="Demo User",
-            username=demo_username,
-            email="demo@ecomonitor.dev",
-            hashed_password=hash_password("password123"),
-            role="INVESTOR"
-        )
-        db.add(user)
-        db.flush()  # Assures user.id UUID is generated
-        logger.info("Seeded Demo User: demo_user")
-        
-        # Create user accounts
-        # WHY:
-        # - Establish asset, liability and equity accounts for the demo user
-        asset_account = Account(
-            user_id=user.id,
-            name="carbon_asset",
-            type="asset",
-            balance=500.0  # Pre-seed with some assets
-        )
-        liability_account = Account(
-            user_id=user.id,
-            name="carbon_liability",
-            type="liability",
-            balance=150.0  # Pre-seed with some liabilities
-        )
-        db.add(asset_account)
-        db.add(liability_account)
-        db.flush()
-        
-        # ------------------ 3. Seed System Account ------------------
-        # WHY:
-        # - Balancing system registry account to absorb credit issuance entries
-        system_issuance = Account(
-            id="system_issuance_id",
-            user_id="system",
-            name="issuance",
-            type="liability",
-            balance=10000000.0
-        )
-        db.add(system_issuance)
-        db.flush()
-        
-        # ------------------ 4. Seed Carbon Record History ------------------
-        # WHY:
-        # - Populates the carbon tracker table with historic entries (Scope 1 and Scope 2)
-        records = [
-            {"activity_type": "energy", "amount": 100.0, "description": "Offices electrical billing", "created_at": datetime.utcnow() - timedelta(days=15)},
-            {"activity_type": "transport", "amount": 50.0, "description": "Executive flights", "created_at": datetime.utcnow() - timedelta(days=5)}
-        ]
-        for r in records:
-            # We seed direct carbon records
-            # Note: 100 kWh * 0.38 factor = 38 kg, 50 km * 0.24 factor = 12 kg. Total emissions = 50 kg CO2.
-            # Let's write the amount calculated or raw metric.
-            record_amount = r["amount"] * (0.38 if r["activity_type"] == "energy" else 0.24)
-            db.add(CarbonRecord(
-                user_id=user.id,
-                activity_type=r["activity_type"],
-                amount=record_amount,
-                description=r["description"],
-                created_at=r["created_at"]
-            ))
-            
-        # ------------------ 5. Seed Carbon Credits ------------------
-        # WHY:
-        # - Pre-populates carbon credit listings (solar, wind) in active state
-        c1 = CarbonCredit(
-            user_id=user.id,
-            credit_type="solar",
-            amount=300.0,
-            source="Gujarat Solar Clean Energy Project",
-            vintage_year=2025,
-            serial_number="GF-2025-SOL-A8B9C0D1",
-            status="active"
-        )
-        c2 = CarbonCredit(
-            user_id=user.id,
-            credit_type="wind",
-            amount=200.0,
-            source="Tamil Nadu Wind Power Farm",
-            vintage_year=2026,
-            serial_number="GF-2026-WIN-E2F3G4H5",
-            status="active"
-        )
-        db.add(c1)
-        db.add(c2)
-        db.flush()
-        
-        # ------------------ 6. Seed Double-Entry Ledger Transactions ------------------
-        # WHY:
-        # - Ensures the ledger journal is filled out with balanced entries representing
-        #   minting, logging emissions, and buying offsets.
-        
-        # Transaction 1: Minting Credits
-        # - Debit: User Asset Account (+ 500)
-        # - Credit: System Issuance Account (- 500)
-        t1 = Transaction(description="Initial Carbon Credit Issuance", created_at=datetime.utcnow() - timedelta(days=20))
-        db.add(t1)
-        db.flush()
-        db.add(LedgerEntry(transaction_id=t1.id, account_id=asset_account.id, type="debit", amount=500.0, running_balance=500.0))
-        db.add(LedgerEntry(transaction_id=t1.id, account_id=system_issuance.id, type="credit", amount=500.0, running_balance=9999500.0))
-        
-        # Transaction 2: Emissions logged (creates liability)
-        # - Credit: User Liability Account (+ 150)
-        # - Debit: Offset Equity / System Account (we represent this simply by updating running balances)
-        t2 = Transaction(description="Logged Carbon Emissions (Energy & Transport)", created_at=datetime.utcnow() - timedelta(days=10))
-        db.add(t2)
-        db.flush()
-        db.add(LedgerEntry(transaction_id=t2.id, account_id=liability_account.id, type="credit", amount=150.0, running_balance=150.0))
-        # Balancing system entry
-        db.add(LedgerEntry(transaction_id=t2.id, account_id=system_issuance.id, type="debit", amount=150.0, running_balance=9999650.0))
-        
-        logger.info("Preloaded ledger logs and carbon assets seeded.")
-        
-    # ------------------ 7. Seed Banking User (Soham Gaikwad - HDFC9999) ------------------
-    soham = db.query(User).filter(User.username == "soham_gaikwad").first()
-    if not soham:
-        soham = User(
-            name="Soham Gaikwad",
-            username="soham_gaikwad",
-            email="soham@greenfinance.dev",
-            bank_id="HDFC9999",
-            hashed_password=hash_password("password123"),
-            role="ADMIN"
-        )
-        db.add(soham)
-        db.flush()
-        
-        # Checking account with ₹50,000 balance
-        db.add(Account(
-            user_id=soham.id,
-            name="cash_wallet",
-            type="asset",
-            balance=50000.0
-        ))
-        logger.info("Seeded primary user Soham Gaikwad (HDFC9999) with ₹50,000 cash balance.")
+    # ------------------ 2. Seed CEA India Grid Carbon Factors ------------------
+    grid_factors = [
+        {
+            "region": "India (National Grid)",
+            "year": 2024,
+            "factor_gco2_per_kwh": 713.0,
+            "unit": "gCO2/kWh",
+            "source": "Central Electricity Authority (CEA) CO2 Baseline Database v20.0 (2024)",
+            "effective_date": "2024-01-01",
+            "is_active": True
+        },
+        {
+            "region": "India (National Grid)",
+            "year": 2023,
+            "factor_gco2_per_kwh": 727.0,
+            "unit": "gCO2/kWh",
+            "source": "Central Electricity Authority (CEA) CO2 Baseline Database v19.0 (2023)",
+            "effective_date": "2023-01-01",
+            "is_active": False
+        },
+        {
+            "region": "India (National Grid)",
+            "year": 2022,
+            "factor_gco2_per_kwh": 827.0,
+            "unit": "gCO2/kWh",
+            "source": "Central Electricity Authority (CEA) CO2 Baseline Database v18.0 (2022)",
+            "effective_date": "2022-01-01",
+            "is_active": False
+        },
+        {
+            "region": "Maharashtra State Grid",
+            "year": 2024,
+            "factor_gco2_per_kwh": 742.0,
+            "unit": "gCO2/kWh",
+            "source": "MERC State Electricity Analysis / CEA Regional Breakdown (2024)",
+            "effective_date": "2024-01-01",
+            "is_active": False
+        },
+        {
+            "region": "Corporate Renewable PPA",
+            "year": 2024,
+            "factor_gco2_per_kwh": 120.0,
+            "unit": "gCO2/kWh",
+            "source": "Corporate Solar-Wind Hybrid PPA Verified Guarantee of Origin",
+            "effective_date": "2024-01-01",
+            "is_active": False
+        }
+    ]
+    for gf in grid_factors:
+        existing = db.query(CarbonFactor).filter(
+            CarbonFactor.region == gf["region"],
+            CarbonFactor.year == gf["year"]
+        ).first()
+        if not existing:
+            db.add(CarbonFactor(**gf))
+            logger.info(f"Seeded Grid Carbon Factor: {gf['region']} ({gf['year']}) -> {gf['factor_gco2_per_kwh']} g/kWh")
 
-    # ------------------ 8. Seed Recipient Banks ------------------
+    # ------------------ 3. Seed Banking & Investor Users ------------------
+    users_to_seed = [
+        {
+            "username": "soham_gaikwad",
+            "name": "Soham Gaikwad",
+            "email": "soham@greenfinance.dev",
+            "bank_id": "HDFC9999",
+            "balance": 50000.0,
+            "role": "ADMIN",
+            "password": "password123"
+        },
+        {
+            "username": "demo_user",
+            "name": "Demo User",
+            "email": "demo@greenfinance.dev",
+            "bank_id": "DEMO0001",
+            "balance": 25000.0,
+            "role": "INVESTOR",
+            "password": "password123"
+        },
+        {
+            "username": "alice_smith",
+            "name": "Alice Smith",
+            "email": "alice@greenfinance.dev",
+            "bank_id": "ALICE101",
+            "balance": 30000.0,
+            "role": "USER",
+            "password": "password123"
+        },
+        {
+            "username": "bob_kumar",
+            "name": "Bob Kumar",
+            "email": "bob@greenfinance.dev",
+            "bank_id": "BOB202",
+            "balance": 15000.0,
+            "role": "USER",
+            "password": "password123"
+        }
+    ]
+
+    user_map = {}
+    for u in users_to_seed:
+        db_user = db.query(User).filter(User.username == u["username"]).first()
+        if not db_user:
+            db_user = User(
+                name=u["name"],
+                username=u["username"],
+                email=u["email"],
+                bank_id=u["bank_id"],
+                hashed_password=hash_password(u["password"]),
+                role=u["role"]
+            )
+            db.add(db_user)
+            db.flush()
+
+            # Assign wallet
+            wallet = Account(
+                user_id=db_user.id,
+                name="cash_wallet",
+                type="asset",
+                balance=u["balance"]
+            )
+            db.add(wallet)
+            # Assign carbon accounts
+            db.add(Account(user_id=db_user.id, name="carbon_asset", type="asset", balance=250.0))
+            db.add(Account(user_id=db_user.id, name="carbon_liability", type="liability", balance=50.0))
+            logger.info(f"Seeded User: {u['username']} ({u['bank_id']}) with ₹{u['balance']:,}")
+        user_map[u["bank_id"]] = db_user
+
+    # ------------------ 4. Seed Recipient Institutional Banks ------------------
     banks_to_seed = [
-        {"username": "bank_mah123", "name": "Bank of Maharashtra", "bank_id": "MAH123", "balance": 10000.0},
-        {"username": "bank_idf892", "name": "IDFC First Bank", "bank_id": "IDF892", "balance": 15000.0},
-        {"username": "bank_sbin456", "name": "State Bank of India", "bank_id": "SBIN456", "balance": 25000.0},
+        {"username": "bank_mah123", "name": "Bank of Maharashtra", "bank_id": "MAH123", "balance": 100000.0},
+        {"username": "bank_idf892", "name": "IDFC First Bank", "bank_id": "IDF892", "balance": 150000.0},
+        {"username": "bank_sbin456", "name": "State Bank of India", "bank_id": "SBIN456", "balance": 250000.0},
     ]
     for b in banks_to_seed:
         existing_bank = db.query(User).filter(User.bank_id == b["bank_id"]).first()
@@ -222,16 +195,124 @@ def seed_database(db: Session) -> None:
             )
             db.add(u_bank)
             db.flush()
-            db.add(Account(
-                user_id=u_bank.id,
-                name="cash_wallet",
-                type="asset",
-                balance=b["balance"]
-            ))
-            logger.info(f"Seeded bank: {b['name']} ({b['bank_id']}) with ₹{b['balance']}")
+            db.add(Account(user_id=u_bank.id, name="cash_wallet", type="asset", balance=b["balance"]))
+            logger.info(f"Seeded Bank: {b['name']} ({b['bank_id']}) with ₹{b['balance']:,}")
+
+    # ------------------ 5. Seed System Registry Account ------------------
+    system_issuance = db.query(Account).filter(Account.id == "system_issuance_id").first()
+    if not system_issuance:
+        system_issuance = Account(
+            id="system_issuance_id",
+            user_id="system",
+            name="issuance",
+            type="liability",
+            balance=10000000.0
+        )
+        db.add(system_issuance)
+        db.flush()
+
+    # ------------------ 6. Seed Sustainability Goals ------------------
+    goals_to_seed = [
+        {
+            "title": "Computational Carbon per Transaction",
+            "goal_type": "co2_per_tx",
+            "target_value": 0.20,
+            "current_value": 0.16,
+            "unit": "gCO2/tx",
+            "period": "Continuous SLA",
+            "status": "ACHIEVED"
+        },
+        {
+            "title": "Monthly Scope 2 Processing Emissions",
+            "goal_type": "monthly_co2",
+            "target_value": 50.0,
+            "current_value": 32.4,
+            "unit": "kg CO2",
+            "period": "October 2026",
+            "status": "ON_TRACK"
+        },
+        {
+            "title": "Payment Workload Energy Efficiency",
+            "goal_type": "energy_per_tx",
+            "target_value": 0.80,
+            "current_value": 0.69,
+            "unit": "J/tx",
+            "period": "Continuous SLA",
+            "status": "ACHIEVED"
+        }
+    ]
+    for g in goals_to_seed:
+        existing = db.query(SustainabilityGoal).filter(SustainabilityGoal.goal_type == g["goal_type"]).first()
+        if not existing:
+            db.add(SustainabilityGoal(**g))
+            logger.info(f"Seeded Sustainability Goal: {g['title']}")
+
+    # ------------------ 7. Seed Dynamic Alerts ------------------
+    alerts_to_seed = [
+        {
+            "alert_type": "SERVICE_EFFICIENCY_DRIFT",
+            "severity": "WARNING",
+            "service": "payment-service",
+            "value": 0.82,
+            "threshold": 0.75,
+            "unit": "J/tx",
+            "status": "ACTIVE",
+            "message": "Payment Service energy intensity +17.1% above calibrated baseline.",
+            "details": "Triggered by multi-window persistence (N=4 consecutive windows > 0.75 J/tx). Baseline idle = 18.7W."
+        },
+        {
+            "alert_type": "WORKLOAD_SURGE_RESOLVED",
+            "severity": "INFO",
+            "service": "fraud-service",
+            "value": 0.44,
+            "threshold": 0.50,
+            "unit": "J/tx",
+            "status": "RESOLVED",
+            "message": "Fraud Service cryptographic evaluation surge stabilized below threshold.",
+            "details": "Workload normalized after temporary concurrent UPI batch settlement."
+        }
+    ]
+    for a in alerts_to_seed:
+        existing = db.query(Alert).filter(Alert.alert_type == a["alert_type"]).first()
+        if not existing:
+            db.add(Alert(**a))
+
+    # ------------------ 8. Seed Recommendations ------------------
+    recs_to_seed = [
+        {
+            "issue": "Payment Service higher energy share vs Auth Service",
+            "detected_value": "0.45 J / tx (65% of workload)",
+            "baseline_threshold": "0.35 J / tx (50% target)",
+            "recommendation": "Profile payment-service JSON serialization and batch double-entry database flushes to reduce CPU cycles.",
+            "expected_benefit": "~14% reduction in computational energy per transaction",
+            "service": "payment-service",
+            "status": "OPEN"
+        },
+        {
+            "issue": "High peak-hour grid carbon intensity",
+            "detected_value": "713 gCO2/kWh (India National Grid)",
+            "baseline_threshold": "600 gCO2/kWh target",
+            "recommendation": "Schedule non-urgent batch reconciliation and payroll transfers during lower-carbon off-peak windows.",
+            "expected_benefit": "~8% to 12% reduction in Scope 2 operational carbon footprint",
+            "service": "ledger-service",
+            "status": "OPEN"
+        },
+        {
+            "issue": "Redundant JWT verification queries on auth-service",
+            "detected_value": "42ms latency, 0.12 J/tx",
+            "baseline_threshold": "25ms latency, 0.08 J/tx",
+            "recommendation": "Implement fast in-memory LRU token signature caching for active customer sessions.",
+            "expected_benefit": "~35% latency improvement and ~4% energy savings",
+            "service": "auth-service",
+            "status": "IMPLEMENTED"
+        }
+    ]
+    for r in recs_to_seed:
+        existing = db.query(Recommendation).filter(Recommendation.issue == r["issue"]).first()
+        if not existing:
+            db.add(Recommendation(**r))
 
     # ------------------ 9. Seed Accuracy Baseline & Validation Run ------------------
-    from backend.models.accuracy import BaselineProfile, ValidationRun
     base_profile = db.query(BaselineProfile).filter(BaselineProfile.id == "BASE-DEFAULT-001").first()
     if not base_profile:
         base_profile = BaselineProfile(
@@ -268,14 +349,114 @@ def seed_database(db: Session) -> None:
             status="PASS"
         )
         db.add(val_run)
-        logger.info("Seeded default locked BaselineProfile and 95% Fidelity ValidationRun.")
+
+    # ------------------ 10. Seed Realistic Audited Transactions ------------------
+    sample_txns = [
+        {
+            "id": "TXN-8F9201",
+            "sender": "HDFC9999",
+            "recipient": "MAH123",
+            "amount": 5000.0,
+            "type": "UPI_TRANSFER",
+            "desc": "Inter-bank fund settlement: Vendor supply invoice",
+            "energy_j": 0.684,
+            "minutes_ago": 12
+        },
+        {
+            "id": "TXN-8F9202",
+            "sender": "HDFC9999",
+            "recipient": "IDF892",
+            "amount": 12500.0,
+            "type": "IMPS",
+            "desc": "Inter-bank fund settlement: Cloud server infrastructure",
+            "energy_j": 0.712,
+            "minutes_ago": 28
+        },
+        {
+            "id": "TXN-8F9203",
+            "sender": "ALICE101",
+            "recipient": "SBIN456",
+            "amount": 3200.0,
+            "type": "UPI_TRANSFER",
+            "desc": "Peer-to-peer mobile transfer",
+            "energy_j": 0.655,
+            "minutes_ago": 45
+        },
+        {
+            "id": "TXN-8F9204",
+            "sender": "BOB202",
+            "recipient": "HDFC9999",
+            "amount": 7800.0,
+            "type": "NEFT",
+            "desc": "Contract payment settlement",
+            "energy_j": 0.745,
+            "minutes_ago": 62
+        },
+        {
+            "id": "TXN-8F9205",
+            "sender": "DEMO0001",
+            "recipient": "MAH123",
+            "amount": 1500.0,
+            "type": "UPI_TRANSFER",
+            "desc": "Retail utility bill payment",
+            "energy_j": 0.672,
+            "minutes_ago": 90
+        },
+        {
+            "id": "TXN-8F9206",
+            "sender": "HDFC9999",
+            "recipient": "SBIN456",
+            "amount": 25000.0,
+            "type": "RTGS",
+            "desc": "Institutional treasury transfer",
+            "energy_j": 0.795,
+            "minutes_ago": 120
+        }
+    ]
+
+    for st in sample_txns:
+        existing = db.query(Transaction).filter(Transaction.id == st["id"]).first()
+        if not existing:
+            created_dt = datetime.now() - timedelta(minutes=st["minutes_ago"])
+            carbon_grams = round((st["energy_j"] / 3600000.0) * 713.0, 6)
+            audit_raw = f"{st['id']}:{st['sender']}:{st['recipient']}:{st['amount']}:{st['energy_j']}:{created_dt}"
+            audit_hash = hashlib.sha256(audit_raw.encode("utf-8")).hexdigest()
+
+            txn = Transaction(
+                id=st["id"],
+                description=st["desc"],
+                sender_bank_id=st["sender"],
+                recipient_bank_id=st["recipient"],
+                amount=st["amount"],
+                currency="INR",
+                status="COMPLETED",
+                service="payment-service",
+                transaction_type=st["type"],
+                energy_joules=st["energy_j"],
+                carbon_grams=carbon_grams,
+                fidelity_percent=96.2,
+                audit_hash=audit_hash,
+                created_at=created_dt
+            )
+            db.add(txn)
+
+            telemetry = TransactionTelemetry(
+                transaction_id=st["id"],
+                duration_ms=round(random.uniform(95.0, 160.0), 1),
+                auth_joules=round(st["energy_j"] * 0.15, 4),
+                payment_joules=round(st["energy_j"] * 0.60, 4),
+                ledger_joules=round(st["energy_j"] * 0.25, 4),
+                total_joules=st["energy_j"],
+                carbon_mg=round(carbon_grams * 1000.0, 3),
+                uncertainty_pct=4.8
+            )
+            db.add(telemetry)
 
     db.commit()
-    logger.info("Database seeding successfully completed!")
+    logger.info("Database seeding successfully completed with full demo data!")
 
 
 if __name__ == "__main__":
-    # Allow execution directly as a python script
     db_session = SessionLocal()
     try:
         seed_database(db_session)

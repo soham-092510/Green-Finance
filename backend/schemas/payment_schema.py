@@ -4,7 +4,7 @@
 # =====================================================================
 
 from pydantic import BaseModel, Field
-from typing import Optional, List
+from typing import Optional, List, Dict, Any
 from datetime import datetime
 
 
@@ -56,3 +56,22 @@ class BankAccountResponse(BaseModel):
     username: str
     balance: float
     currency: str = "INR"
+
+
+class StimulateRequest(BaseModel):
+    user_count: int = Field(default=10, ge=1, le=50, description="Number of concurrent simulated users")
+    tx_count: int = Field(default=10, ge=1, le=100, description="Number of transactions to execute across users")
+    min_amount: float = Field(default=100.0, ge=1.0)
+    max_amount: float = Field(default=5000.0, le=50000.0)
+
+
+class StimulateResponse(BaseModel):
+    status: str
+    executed_count: int
+    user_count: int
+    total_amount: float
+    total_energy_joules: float
+    total_carbon_grams: float
+    avg_latency_ms: float
+    synced_to_green_finance_2: bool
+    transactions: List[Dict[str, Any]]

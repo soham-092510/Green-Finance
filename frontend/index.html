@@ -3,49 +3,57 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Green-Finance | Eco-Monitor Prototype (Phase 2)</title>
-  <meta name="description" content="Eco-Monitor: Real-Time Energy Observability & Carbon-per-Transaction Dashboard for Sustainable Financial Microservices" />
+  <title>Green-Finance | User Banking Portal & Workload Stimulator</title>
+  <meta name="description" content="Simulated Banking Platform with Real-Time Energy Telemetry, OpenTelemetry Workload Tracing, and Carbon Footprint Attribution" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <link rel="stylesheet" href="styles.css" />
 </head>
-<body>
+<body class="theme-light">
 
   <!-- ================= TOP NAVIGATION BAR ================= -->
   <header class="app-header">
     <div class="header-left">
       <div class="brand-badge">
-        <div class="brand-icon">🌱</div>
+        <div class="brand-icon">🏛️</div>
         <div>
-          <h1 class="brand-title">Green-Finance <span class="brand-sub">Eco-Monitor</span></h1>
-          <p class="brand-tagline">Phase 2 Prototype • SPIT SE Mini-Project</p>
+          <h1 class="brand-title">Green-Finance <span class="brand-sub">BANK PORTAL</span></h1>
+          <p class="brand-tagline">Simulated Core Banking • Client-Side Workload Stimulator</p>
         </div>
       </div>
       <div class="system-status-pills">
-        <span class="status-pill online" title="Prometheus Scraper Active">
+        <span class="status-pill online" title="Bank API Backend Active on port 8001">
+          <span class="status-dot"></span> Bank API :8001
+        </span>
+        <span class="status-pill online" title="Real-Time Streaming to Green-Finance-2 on port 8000">
+          <span class="status-dot"></span> Synced to GF-2 :8000
+        </span>
+        <span class="status-pill online" title="Prometheus Metrics Scraper Active">
           <span class="status-dot"></span> Prometheus :9090
-        </span>
-        <span class="status-pill online" title="Grafana Visualization Engine Active">
-          <span class="status-dot"></span> Grafana :3000
-        </span>
-        <span class="status-pill pending" title="Kepler Telemetry Kernel Driver: Next Phase Hardware Telemetry Ready">
-          <span class="status-dot"></span> Kepler :9103 (eBPF Ready)
         </span>
       </div>
     </div>
 
     <div class="header-right">
-      <button class="btn-primary-action" onclick="openQuickTransferModal()">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17l9.2-9.2M17 17V8H8"/></svg>
-        Simulate Bank Transfer
+      <button class="btn-stimulate-action" onclick="switchView('stimulator')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        Stimulate 10 Users
       </button>
-      <div class="user-profile-pill">
-        <div class="user-avatar">SG</div>
+      <button class="btn-primary-action" onclick="openTransferModal()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Send Money
+      </button>
+      <a href="http://localhost:8000" target="_blank" class="btn-enterprise-portal" title="Open Enterprise Sustainability Suite (Green-Finance-2)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        Enterprise Suite (:8000)
+      </a>
+      <div class="user-profile-pill" onclick="openUserSwitchModal()" title="Click to switch banking user">
+        <div class="user-avatar" id="nav-user-avatar">SG</div>
         <div class="user-meta">
-          <span class="user-name">Soham Gaikwad</span>
-          <span class="user-bank-id">Bank ID: <strong>HDFC9999</strong></span>
+          <span class="user-name" id="nav-user-name">Soham Gaikwad</span>
+          <span class="user-bank-id" id="nav-user-bankid">Bank ID: <strong>HDFC9999</strong> ▾</span>
         </div>
       </div>
     </div>
@@ -55,1040 +63,410 @@
   <div class="app-layout">
     <!-- Sidebar Navigation -->
     <aside class="app-sidebar">
-      <div class="sidebar-section-title">Navigation</div>
+      <div class="sidebar-section-title">Banking Services</div>
       <nav class="sidebar-menu">
         <button class="nav-link active" onclick="switchView('overview', this)">
           <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
-          Overview Dashboard
+          Bank Dashboard
         </button>
-        <button class="nav-link" onclick="switchView('baseline', this)">
-          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-          Idle Baseline Studio
-          <span class="badge-mini accent">0-Workload</span>
+        <button class="nav-link" onclick="switchView('transfer', this)">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+          Make Payment / Transfer
         </button>
         <button class="nav-link" onclick="switchView('transactions', this)">
           <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-          Transactions & Benchmark
-          <span class="badge-mini">500 Tx</span>
+          Transaction History
+          <span class="badge-mini" id="sidebar-tx-count">12 Tx</span>
         </button>
-        <button class="nav-link" onclick="switchView('accuracy', this)">
-          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-          Attribution Fidelity
-          <span class="badge-mini">95% Hero</span>
-        </button>
-        <button class="nav-link" onclick="switchView('audit', this)">
-          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-          Validation Certificate
-        </button>
-        <button class="nav-link" onclick="switchView('grafana', this)">
-          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M18 9l-5 5-4-4-3 3"/></svg>
-          Grafana (4 Panels)
+        <button class="nav-link" onclick="switchView('stimulator', this)">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          10-User Workload Lab
+          <span class="badge-mini accent">Live Stimulator</span>
         </button>
         <button class="nav-link" onclick="switchView('ledger', this)">
           <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
           Double-Entry Ledger
         </button>
+      </nav>
+
+      <div class="sidebar-section-title">Telemetry & Infrastructure</div>
+      <nav class="sidebar-menu">
         <button class="nav-link" onclick="switchView('promql', this)">
           <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
           PromQL Console
         </button>
+        <button class="nav-link" onclick="switchView('grafana', this)">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M18 9l-5 5-4-4-3 3"/></svg>
+          Grafana Dashboards
+        </button>
         <button class="nav-link" onclick="switchView('swagger', this)">
           <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-          API Simulator
+          Bank Swagger API (:8001)
         </button>
       </nav>
 
-      <!-- SRS Quick Info Box -->
+      <!-- Client-Server Sync Notice -->
       <div class="sidebar-srs-card">
         <div class="srs-card-header">
-          <span class="srs-chip">IEEE 830 SRS</span>
-          <span class="srs-phase">Phase 2</span>
+          <span class="srs-chip">Client-Server Sync</span>
+          <span class="srs-phase">Port 8001 → 8000</span>
         </div>
-        <p class="srs-desc">Demonstrates simulated banking transactions, PromQL carbon emission derivation, and Grafana visualization on localhost.</p>
-        <div class="srs-metric-tag">Formula: (Energy × Factor) ÷ Tx</div>
+        <p class="srs-desc">All transactions performed or stimulated here trigger real backend workloads and are streamed live to Green-Finance-2 for enterprise analytics.</p>
       </div>
     </aside>
 
     <!-- Main Content Body -->
     <main class="app-main">
 
-      <!-- ================= ALERT NOTIFICATION BANNER (RF07) ================= -->
-      <div id="high-emission-alert" class="alert-banner warning hidden">
-        <div class="alert-icon">⚠️</div>
+      <!-- ================= NOTIFICATION BANNER ================= -->
+      <div id="live-notification" class="alert-banner info hidden">
+        <div class="alert-icon">⚡</div>
         <div class="alert-content">
-          <strong>RF07 High Carbon Emission Alert Triggered!</strong>
-          <span id="alert-message">Carbon-per-Transaction exceeded the configured safety threshold of 12.0 g CO₂.</span>
+          <strong id="notif-title">Transaction Processed</strong>
+          <span id="notif-msg">Payment successfully audited and streamed to Green-Finance-2.</span>
         </div>
-        <button class="alert-dismiss" onclick="dismissAlert()">Dismiss</button>
+        <button class="alert-dismiss" onclick="dismissNotif()">Dismiss</button>
       </div>
 
-      <!-- ================= VIEW 1: OVERVIEW DASHBOARD ================= -->
+      <!-- ================= VIEW 1: BANK DASHBOARD ================= -->
       <section id="view-overview" class="view-panel active">
         <div class="panel-header">
           <div>
-            <h2 class="panel-title">System Overview</h2>
-            <p class="panel-subtitle">Real-time telemetry, transaction throughput, and derived carbon metrics summary.</p>
+            <h2 class="panel-title">Welcome back, <span id="dash-greeting-name">Soham Gaikwad</span></h2>
+            <p class="panel-subtitle">Here is your account summary, real-time balance, and computational sustainability footprint.</p>
           </div>
           <div class="panel-actions">
-            <span class="time-refreshed">Last updated: <span id="last-update-time">Just now</span></span>
-            <button class="btn-secondary-sm" onclick="triggerRandomTransaction()">+ Send Quick ₹5,000 Tx</button>
+            <button class="btn-secondary-sm" onclick="fetchLiveAccounts()">↻ Refresh Balances</button>
+            <button class="btn-primary-sm" onclick="openTransferModal()">+ Transfer Funds</button>
           </div>
         </div>
 
-        <!-- 4 Key Stat Cards -->
-        <div class="kpi-grid">
-          <div class="kpi-card green-card">
-            <div class="kpi-header">
-              <span class="kpi-label">Carbon-per-Transaction</span>
-              <span class="kpi-badge">RF05 Derived</span>
+        <!-- BANK ACCOUNT HERO CARD + KPI TILES -->
+        <div class="bank-hero-grid">
+          <!-- Primary Account Card -->
+          <div class="bank-account-card">
+            <div class="card-chip-row">
+              <span class="card-bank-brand">HDFC BANK</span>
+              <span class="card-type-chip">PREMIUM SAVINGS</span>
             </div>
-            <div class="kpi-body">
-              <span class="kpi-value" id="kpi-carbon-tx">8.42</span>
-              <span class="kpi-unit">g CO₂ / tx</span>
+            <div class="card-balance-section">
+              <div class="card-balance-label">Available Balance</div>
+              <div class="card-balance-value" id="dash-user-balance">₹50,000.00</div>
             </div>
-            <div class="kpi-footer">
-              <span class="kpi-trend positive">↓ 14% vs baseline</span>
-              <span class="kpi-meta">PromQL live joined</span>
-            </div>
-          </div>
-
-          <div class="kpi-card blue-card">
-            <div class="kpi-header">
-              <span class="kpi-label">Active Container Energy</span>
-              <span class="kpi-badge">Kepler eBPF</span>
-            </div>
-            <div class="kpi-body">
-              <span class="kpi-value" id="kpi-energy-joules">118.6</span>
-              <span class="kpi-unit">Joules/sec (Watts)</span>
-            </div>
-            <div class="kpi-footer">
-              <span class="kpi-trend neutral">Payment Service: 68%</span>
-              <span class="kpi-meta">Auth Service: 32%</span>
-            </div>
-          </div>
-
-          <div class="kpi-card purple-card">
-            <div class="kpi-header">
-              <span class="kpi-label">Transaction Volume</span>
-              <span class="kpi-badge">RF02 Counter</span>
-            </div>
-            <div class="kpi-body">
-              <span class="kpi-value" id="kpi-tx-count">1,429</span>
-              <span class="kpi-unit">requests processed</span>
-            </div>
-            <div class="kpi-footer">
-              <span class="kpi-trend positive">100% Success Rate</span>
-              <span class="kpi-meta">Avg Latency: 42ms</span>
-            </div>
-          </div>
-
-          <div class="kpi-card orange-card">
-            <div class="kpi-header">
-              <span class="kpi-label">Cumulative Footprint</span>
-              <span class="kpi-badge">Phase 2 Audit</span>
-            </div>
-            <div class="kpi-body">
-              <span class="kpi-value" id="kpi-total-carbon">12.03</span>
-              <span class="kpi-unit">kg CO₂</span>
-            </div>
-            <div class="kpi-footer">
-              <span class="kpi-trend negative">Offset Needed: 12 Credits</span>
-              <span class="kpi-meta">Factor: 0.38 kg/kWh</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- 2 Big Overview Charts -->
-        <div class="grid-2-col">
-          <div class="chart-box">
-            <div class="chart-header">
+            <div class="card-footer-row">
               <div>
-                <h3 class="chart-title">Real-Time Carbon-per-Transaction vs Threshold</h3>
-                <p class="chart-desc">Derived via PromQL combining Kepler container Joules & transaction rate</p>
+                <div class="card-holder-label">ACCOUNT NUMBER</div>
+                <div class="card-holder-val" id="dash-masked-account">HDFC •••• •••• 9999</div>
               </div>
-              <span class="live-indicator">LIVE</span>
-            </div>
-            <div class="chart-container">
-              <canvas id="overviewCarbonChart"></canvas>
+              <div>
+                <div class="card-holder-label">IFSC / ROUTING</div>
+                <div class="card-holder-val">HDFC0000999</div>
+              </div>
             </div>
           </div>
 
-          <div class="chart-box">
-            <div class="chart-header">
+          <!-- Sustainability Footprint Badge Card -->
+          <div class="sustainability-badge-card">
+            <div class="sus-badge-header">
+              <span class="badge-icon">🌱</span>
               <div>
-                <h3 class="chart-title">Microservice Energy Consumption Breakdown</h3>
-                <p class="chart-desc">Real-time Watt attribution by service container (Kepler kernel metrics)</p>
+                <h3>Green Banking Score</h3>
+                <p>Scope 2 Transaction Intensity</p>
               </div>
-              <span class="live-indicator">LIVE</span>
             </div>
-            <div class="chart-container">
-              <canvas id="overviewEnergyChart"></canvas>
+            <div class="sus-badge-stats">
+              <div class="sus-stat">
+                <span class="sus-val" id="dash-carbon-tx">0.137</span>
+                <span class="sus-lbl">mg CO₂ / transaction</span>
+              </div>
+              <div class="sus-stat">
+                <span class="sus-val" id="dash-joules-tx">0.69</span>
+                <span class="sus-lbl">Joules / transaction</span>
+              </div>
+            </div>
+            <div class="sus-footer">
+              <span class="sus-tag">CEA India Factor: 713 g/kWh</span>
+              <span class="sus-tag green">100% Carbon Offset</span>
             </div>
           </div>
         </div>
 
-        <!-- Quick Transfer & Recent Transactions Preview -->
-        <div class="grid-2-col mt-4">
-          <!-- Interactive Quick Bank Transfer Card -->
-          <div class="action-card">
-            <div class="action-card-header">
-              <div class="card-icon-title">
-                <span class="icon-bubble">💳</span>
-                <div>
-                  <h4>Simulate Banking Money Transfer</h4>
-                  <p>Send funds between authenticated bank accounts to trigger measurable telemetry.</p>
-                </div>
-              </div>
-            </div>
-            <form id="quick-transfer-form" onsubmit="handleQuickTransfer(event)">
-              <div class="form-row-2">
-                <div class="form-group">
-                  <label>Sender Bank ID (Logged In)</label>
-                  <input type="text" value="HDFC9999 (Soham Gaikwad)" disabled class="input-disabled" />
-                </div>
-                <div class="form-group">
-                  <label>Recipient Bank ID</label>
-                  <select id="quick-recipient" required>
-                    <option value="MAH123">MAH123 — Bank of Maharashtra (Atharva H.)</option>
-                    <option value="IDF892">IDF892 — IDFC First Bank (Laukik D.)</option>
-                    <option value="SBIN456">SBIN456 — State Bank of India (Evaluator Test)</option>
-                    <option value="AXIS777">AXIS777 — Axis Bank (Merchant Account)</option>
-                  </select>
-                </div>
-              </div>
-              <div class="form-row-2">
-                <div class="form-group">
-                  <label>Amount (₹ INR)</label>
-                  <input type="number" id="quick-amount" placeholder="e.g. 15000" min="1" step="100" value="7500" required />
-                </div>
-                <div class="form-group">
-                  <label>Transfer Protocol</label>
-                  <select id="quick-protocol">
-                    <option value="IMPS">IMPS (Immediate Payment Service)</option>
-                    <option value="NEFT">NEFT (National Electronic Funds)</option>
-                    <option value="RTGS">RTGS (Real-Time Gross Settlement)</option>
-                    <option value="UPI">UPI 2.0 (Fast Payment Gateway)</option>
-                  </select>
-                </div>
-              </div>
+        <!-- QUICK BENEFICIARY SELECTOR -->
+        <div class="quick-beneficiaries-card">
+          <div class="section-heading-row">
+            <h3>Registered Beneficiary Accounts</h3>
+            <span class="text-muted">Instant settlement via IMPS / UPI</span>
+          </div>
+          <div class="beneficiaries-grid" id="beneficiaries-list">
+            <!-- Populated dynamically by JS -->
+          </div>
+        </div>
+
+        <!-- RECENT TRANSACTIONS MINI TABLE -->
+        <div class="recent-tx-card">
+          <div class="section-heading-row">
+            <h3>Recent Bank Transactions</h3>
+            <button class="btn-link" onclick="switchView('transactions')">View All Transactions →</button>
+          </div>
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Txn ID</th>
+                  <th>Date & Time</th>
+                  <th>Sender</th>
+                  <th>Recipient</th>
+                  <th>Amount</th>
+                  <th>Method</th>
+                  <th>Energy (J)</th>
+                  <th>Estimated CO₂</th>
+                  <th>Status</th>
+                  <th>Audit</th>
+                </tr>
+              </thead>
+              <tbody id="dash-recent-txns-body">
+                <!-- Populated dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= VIEW 2: MAKE PAYMENT / TRANSFER ================= -->
+      <section id="view-transfer" class="view-panel">
+        <div class="panel-header">
+          <div>
+            <h2 class="panel-title">Inter-Bank Fund Transfer</h2>
+            <p class="panel-subtitle">Execute atomic transfers with double-entry ledger bookkeeping and real-time Kepler telemetry attribution.</p>
+          </div>
+        </div>
+
+        <div class="transfer-container">
+          <div class="transfer-form-card">
+            <form id="payment-transfer-form" onsubmit="handleExecuteTransfer(event)">
               <div class="form-group">
-                <label>Transaction Note</label>
-                <input type="text" id="quick-note" placeholder="e.g. Prototype verification payout" value="Phase 2 Prototype Payment" />
+                <label>Source Account</label>
+                <select id="transfer-source" class="form-input" required>
+                  <option value="HDFC9999">Soham Gaikwad (HDFC9999) - Available: ₹50,000.00</option>
+                  <option value="DEMO0001">Demo User (DEMO0001) - Available: ₹25,000.00</option>
+                  <option value="ALICE101">Alice Smith (ALICE101) - Available: ₹30,000.00</option>
+                  <option value="BOB202">Bob Kumar (BOB202) - Available: ₹15,000.00</option>
+                </select>
               </div>
-              <button type="submit" class="btn-primary w-full" id="btn-submit-transfer">
-                Execute Simulated Transaction & Measure Carbon
-              </button>
+
+              <div class="form-group">
+                <label>Destination Beneficiary Bank</label>
+                <select id="transfer-dest" class="form-input" required>
+                  <option value="MAH123">Bank of Maharashtra (MAH123)</option>
+                  <option value="IDF892">IDFC First Bank (IDF892)</option>
+                  <option value="SBIN456">State Bank of India (SBIN456)</option>
+                  <option value="HDFC9999">HDFC Bank (HDFC9999)</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label>Transfer Amount (INR)</label>
+                <input type="number" id="transfer-amount" class="form-input" min="1" step="10" value="5000" required />
+                <div class="amount-pills">
+                  <button type="button" class="amount-pill" onclick="setTransferAmount(500)">₹500</button>
+                  <button type="button" class="amount-pill" onclick="setTransferAmount(2000)">₹2,000</button>
+                  <button type="button" class="amount-pill active" onclick="setTransferAmount(5000)">₹5,000</button>
+                  <button type="button" class="amount-pill" onclick="setTransferAmount(10000)">₹10,000</button>
+                  <button type="button" class="amount-pill" onclick="setTransferAmount(25000)">₹25,000</button>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label>Payment Protocol / Settlement</label>
+                <div class="radio-cards-group">
+                  <label class="radio-card">
+                    <input type="radio" name="transfer-type" value="UPI_TRANSFER" checked />
+                    <span class="rc-label">⚡ UPI Transfer (Instant 24x7)</span>
+                  </label>
+                  <label class="radio-card">
+                    <input type="radio" name="transfer-type" value="IMPS" />
+                    <span class="rc-label">🚀 IMPS (Immediate Settlement)</span>
+                  </label>
+                  <label class="radio-card">
+                    <input type="radio" name="transfer-type" value="NEFT" />
+                    <span class="rc-label">🏦 NEFT / RTGS (Batch Net)</span>
+                  </label>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label>Transfer Note / Reference</label>
+                <input type="text" id="transfer-note" class="form-input" value="Inter-bank vendor settlement" placeholder="e.g. Utility bill payment" />
+              </div>
+
+              <div class="transfer-actions">
+                <button type="submit" class="btn-primary-action btn-block" id="btn-submit-transfer">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17l9.2-9.2M17 17V8H8"/></svg>
+                  Confirm & Transfer Funds
+                </button>
+              </div>
             </form>
           </div>
 
-          <!-- Recent Audit Stream -->
-          <div class="action-card">
-            <div class="action-card-header">
-              <div class="card-icon-title">
-                <span class="icon-bubble">📒</span>
-                <div>
-                  <h4>Live Transaction & Emission Stream</h4>
-                  <p>Real-time atomic ledger entries and calculated carbon footprints.</p>
-                </div>
+          <!-- COMPUTATIONAL ENERGY PREVIEW CARD -->
+          <div class="computational-preview-card">
+            <h3>Computational Telemetry Preview</h3>
+            <p class="preview-sub">Kepler energy attribution profile for this transaction flow:</p>
+
+            <div class="telemetry-flow-diagram">
+              <div class="flow-node">api-gw</div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-node">auth-service</div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-node">fraud-service</div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-node highlight">payment-service</div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-node">ledger-service</div>
+            </div>
+
+            <div class="preview-metric-list">
+              <div class="p-metric-row">
+                <span>Estimated Container Energy:</span>
+                <strong id="preview-energy">~0.694 Joules</strong>
               </div>
-              <button class="btn-ghost-sm" onclick="switchView('ledger')">View Full Ledger →</button>
+              <div class="p-metric-row">
+                <span>Estimated Scope 2 Carbon:</span>
+                <strong id="preview-carbon">~0.137 mg CO₂</strong>
+              </div>
+              <div class="p-metric-row">
+                <span>Regional Grid Baseline:</span>
+                <strong>713 gCO₂/kWh (CEA India)</strong>
+              </div>
+              <div class="p-metric-row">
+                <span>Attribution Fidelity SLA:</span>
+                <strong>&gt; 95.0% (Passed)</strong>
+              </div>
+              <div class="p-metric-row">
+                <span>Audit Digest:</span>
+                <strong>SHA-256 Double-Entry Signed</strong>
+              </div>
             </div>
-            <div class="recent-stream-table-wrapper">
-              <table class="simple-table">
-                <thead>
-                  <tr>
-                    <th>Tx ID</th>
-                    <th>Recipient</th>
-                    <th>Amount</th>
-                    <th>Energy (J)</th>
-                    <th>Carbon (g CO₂)</th>
-                    <th>Status</th>
-                  </tr>
-                </thead>
-                <tbody id="quick-stream-tbody">
-                  <!-- Dynamically injected -->
-                </tbody>
-              </table>
+
+            <div class="sync-guarantee-box">
+              <span class="sg-dot"></span>
+              <span><strong>Live Sync Active:</strong> Completed transfers are streamed in real time to the Green-Finance-2 Enterprise platform for multi-user audit tracking.</span>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- ================= VIEW 2: IDLE BASELINE STUDIO (0-WORKLOAD CALIBRATION) ================= -->
-      <section id="view-baseline" class="view-panel">
-        <div class="panel-header">
-          <div>
-            <h2 class="panel-title">Idle / Baseline Calibration Studio</h2>
-            <p class="panel-subtitle">Dedicated 0-workload calibration mode measuring background host electricity before banking transactions execute.</p>
-          </div>
-          <div class="panel-actions">
-            <span class="status-pill online" id="baseline-lock-pill"><span class="status-dot"></span> Calibration Locked</span>
-            <button class="btn-primary-action" onclick="startIdleBaselineCalibration()">
-              ⚡ Start 30s Baseline Calibration
-            </button>
-          </div>
-        </div>
-
-        <!-- Calibration Status & Progress Box -->
-        <div class="calibration-box" id="calibration-box">
-          <div class="card-icon-title" style="justify-content: center;">
-            <span class="icon-bubble">🧪</span>
-            <div>
-              <h3 style="font-size: 18px; font-weight: 700;">Host Baseline Energy Calibration</h3>
-              <p style="font-size: 13px; color: var(--text-secondary);">Measures host CPU power when application workload = <strong>NONE</strong> to prevent inventing baseline values.</p>
-            </div>
-          </div>
-
-          <div class="calibration-bar-track">
-            <div class="calibration-bar-fill" id="baseline-progress-bar"></div>
-          </div>
-          <div style="display: flex; justify-content: space-between; font-size: 12px; color: var(--text-muted); font-weight: 600;">
-            <span id="baseline-progress-text">Status: Ready to Calibrate</span>
-            <span id="baseline-elapsed-text">Duration: 30s</span>
-          </div>
-
-          <div style="display: flex; justify-content: center; gap: 16px; margin-top: 20px;">
-            <button class="btn-primary" onclick="startIdleBaselineCalibration()" id="btn-start-baseline">
-              ▶ Begin Zero-Workload Calibration
-            </button>
-            <button class="btn-secondary" onclick="lockCurrentBaseline()" id="btn-lock-baseline">
-              🔒 Lock Baseline Profile
-            </button>
-          </div>
-        </div>
-
-        <!-- Baseline Statistics Cards -->
-        <div class="kpi-grid">
-          <div class="kpi-card blue-card">
-            <div class="kpi-header">
-              <span class="kpi-label">Mean Idle Power (P_idle)</span>
-              <span class="kpi-badge">Empirical</span>
-            </div>
-            <div class="kpi-body">
-              <span class="kpi-value" id="base-mean-watts">18.7</span>
-              <span class="kpi-unit">Watts</span>
-            </div>
-            <div class="kpi-footer">
-              <span class="kpi-trend neutral">P = (P₁ + P₂ + ... + Pₙ) / n</span>
-              <span class="kpi-meta">Host Background</span>
-            </div>
-          </div>
-
-          <div class="kpi-card green-card">
-            <div class="kpi-header">
-              <span class="kpi-label">Idle Std Deviation (σ)</span>
-              <span class="kpi-badge">Stability</span>
-            </div>
-            <div class="kpi-body">
-              <span class="kpi-value" id="base-std-watts">0.82</span>
-              <span class="kpi-unit">Watts</span>
-            </div>
-            <div class="kpi-footer">
-              <span class="kpi-trend positive">Low Variance (Noise-free)</span>
-              <span class="kpi-meta">EMA Filtered (α=0.2)</span>
-            </div>
-          </div>
-
-          <div class="kpi-card purple-card">
-            <div class="kpi-header">
-              <span class="kpi-label">Idle CV (CV_idle)</span>
-              <span class="kpi-badge">Target &le; 5%</span>
-            </div>
-            <div class="kpi-body">
-              <span class="kpi-value" id="base-cv-percent">4.28</span>
-              <span class="kpi-unit">%</span>
-            </div>
-            <div class="kpi-footer">
-              <span class="kpi-trend positive">✓ STABLE PASS</span>
-              <span class="kpi-meta">Repeatability Metric</span>
-            </div>
-          </div>
-
-          <div class="kpi-card orange-card">
-            <div class="kpi-header">
-              <span class="kpi-label">Stored Profile ID</span>
-              <span class="kpi-badge">Locked</span>
-            </div>
-            <div class="kpi-body">
-              <span class="kpi-value" style="font-size: 16px; word-break: break-all;" id="base-profile-id">BASE-DEFAULT-001</span>
-            </div>
-            <div class="kpi-footer">
-              <span class="kpi-trend neutral">Node: node-local-01</span>
-              <span class="kpi-meta">CPU: Intel/AMD Multi-Core</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- ================= VIEW 3: LIVE TRANSACTIONS & BENCHMARK ================= -->
+      <!-- ================= VIEW 3: TRANSACTION HISTORY ================= -->
       <section id="view-transactions" class="view-panel">
         <div class="panel-header">
           <div>
-            <h2 class="panel-title">Live Transactions &amp; Repeatability Benchmark</h2>
-            <p class="panel-subtitle">Execute banking payments and run standardized 500-transaction benchmarks to measure consistency ($CV \le 5\%$).</p>
+            <h2 class="panel-title">Audited Transaction History</h2>
+            <p class="panel-subtitle">Comprehensive transaction registry with Kepler energy attribution, carbon footprints, and SHA-256 cryptographic digests.</p>
           </div>
           <div class="panel-actions">
-            <button class="btn-primary-action" onclick="runBenchmarkBatch(500)">
-              🚀 Run 500 Tx Benchmark Batch
-            </button>
+            <button class="btn-secondary-sm" onclick="fetchLiveTransactions()">↻ Refresh History</button>
           </div>
         </div>
 
-        <div class="grid-2-col">
-          <!-- Quick Transfer Form -->
-          <div class="action-card">
-            <div class="action-card-header">
-              <div class="card-icon-title">
-                <span class="icon-bubble">💸</span>
-                <div>
-                  <h4>Execute Real-Time Bank Payment</h4>
-                  <p>Debit source, credit destination, and capture container Joules.</p>
-                </div>
-              </div>
+        <!-- SEARCH AND FILTERS -->
+        <div class="filters-bar">
+          <input type="text" id="tx-search-input" class="search-input" placeholder="Search by Txn ID, bank, or reference..." oninput="handleSearchTxns(this.value)" />
+          <select id="tx-filter-status" class="filter-select" onchange="filterTxnsByStatus(this.value)">
+            <option value="ALL">All Statuses</option>
+            <option value="COMPLETED">Completed</option>
+            <option value="FAILED">Failed</option>
+          </select>
+          <select id="tx-filter-bank" class="filter-select" onchange="filterTxnsByBank(this.value)">
+            <option value="ALL">All Banks</option>
+            <option value="HDFC9999">HDFC9999</option>
+            <option value="MAH123">MAH123</option>
+            <option value="IDF892">IDF892</option>
+            <option value="SBIN456">SBIN456</option>
+          </select>
+        </div>
+
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Txn ID</th>
+                <th>Timestamp</th>
+                <th>Sender</th>
+                <th>Recipient</th>
+                <th>Amount (₹)</th>
+                <th>Protocol</th>
+                <th>Energy (J)</th>
+                <th>Carbon (mg)</th>
+                <th>Status</th>
+                <th>Audit Hash</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="full-transactions-body">
+              <!-- Populated dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ================= VIEW 4: 10-USER WORKLOAD STIMULATION LAB ================= -->
+      <section id="view-stimulator" class="view-panel">
+        <div class="panel-header">
+          <div>
+            <h2 class="panel-title">10-User Workload Stimulation Lab</h2>
+            <p class="panel-subtitle">Simulate concurrent banking traffic from multiple users to evaluate real-time Kepler telemetry and live synchronization to Green-Finance-2.</p>
+          </div>
+        </div>
+
+        <div class="stimulator-grid">
+          <!-- Stimulation Controls Card -->
+          <div class="stimulator-controls-card">
+            <h3>Workload Generator Controls</h3>
+            <p class="text-muted">Simulate transactions across 10 active bank customers (Soham, Demo User, Alice, Bob, etc.):</p>
+
+            <div class="form-group" style="margin-top: 16px;">
+              <label>Simulated Active Users: <strong id="lbl-user-count">10 Users</strong></label>
+              <input type="range" id="sim-user-slider" min="1" max="10" value="10" class="form-range" oninput="document.getElementById('lbl-user-count').textContent = this.value + ' Users'" />
             </div>
-            <form onsubmit="handleLiveTransferSubmit(event)">
-              <div class="form-row-2">
-                <div class="form-group">
-                  <label>Sender Bank Account</label>
-                  <input type="text" id="live-tx-sender" value="HDFC9999 (Soham Gaikwad)" disabled />
-                </div>
-                <div class="form-group">
-                  <label>Recipient Bank ID</label>
-                  <select id="live-tx-recipient" required>
-                    <option value="MAH123">MAH123 — Bank of Maharashtra</option>
-                    <option value="IDF892">IDF892 — IDFC First Bank</option>
-                    <option value="SBIN456">SBIN456 — State Bank of India</option>
-                  </select>
-                </div>
-              </div>
-              <div class="form-row-2">
-                <div class="form-group">
-                  <label>Amount (₹ INR)</label>
-                  <input type="number" id="live-tx-amount" min="10" step="10" value="1500" required />
-                </div>
-                <div class="form-group">
-                  <label>Note / Purpose</label>
-                  <input type="text" id="live-tx-note" value="Inter-bank vendor settlement" />
-                </div>
-              </div>
-              <button type="submit" class="btn-primary w-full">
-                Execute Atomic Transfer (DR = CR)
+
+            <div class="form-group">
+              <label>Transactions per Batch: <strong id="lbl-batch-count">10 Transactions</strong></label>
+              <input type="range" id="sim-tx-slider" min="1" max="50" value="10" class="form-range" oninput="document.getElementById('lbl-batch-count').textContent = this.value + ' Transactions'" />
+            </div>
+
+            <div class="stimulator-buttons-row">
+              <button class="btn-stimulate-primary" onclick="runStimulateBatch(1)">
+                ⚡ Run 1 Single Transfer
               </button>
-            </form>
-          </div>
+              <button class="btn-stimulate-accent" onclick="runStimulateBatch(10)">
+                👥 Stimulate 10 Concurrent Users
+              </button>
+              <button class="btn-stimulate-benchmark" onclick="runBenchmarkRepeatability()">
+                📊 Run 50 Batch Repeatability Test
+              </button>
+            </div>
 
-          <!-- Benchmark Controller Card -->
-          <div class="action-card">
-            <div class="action-card-header">
-              <div class="card-icon-title">
-                <span class="icon-bubble">⚡</span>
-                <div>
-                  <h4>Workload Repeatability Tester</h4>
-                  <p>Executes standardized transfers to calculate Mean &amp; CV.</p>
-                </div>
+            <div class="stimulator-progress-box" id="stim-progress-box" style="display: none;">
+              <div class="progress-bar-label">
+                <span id="stim-progress-status">Executing transactions...</span>
+                <span id="stim-progress-pct">0%</span>
               </div>
-            </div>
-            <div style="background: var(--bg-surface-subtle); padding: 16px; border-radius: 8px; margin-bottom: 16px;">
-              <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; margin-bottom: 8px;">
-                <span>Benchmark Size:</span>
-                <span style="color: var(--primary);">500 Standardized Transactions</span>
-              </div>
-              <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; margin-bottom: 8px;">
-                <span>Expected Energy / Tx:</span>
-                <span>0.68 J – 0.72 J</span>
-              </div>
-              <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 600;">
-                <span>Target Coefficient of Variation:</span>
-                <span style="color: #059669;">CV &le; 5.0% (Verified)</span>
-              </div>
-            </div>
-            <button class="btn-primary w-full" onclick="runBenchmarkBatch(500)" id="btn-run-benchmark">
-              ▶ Run 500 Standardized Transactions
-            </button>
-            <div id="benchmark-result-box" style="margin-top: 12px; font-size: 12px; display: none;"></div>
-          </div>
-        </div>
-      </section>
-
-      <!-- ================= VIEW 4: ATTRIBUTION FIDELITY (HERO WATERFALL) ================= -->
-      <section id="view-accuracy" class="view-panel">
-        <div class="panel-header">
-          <div>
-            <h2 class="panel-title">Attribution Fidelity &amp; Conservation Residual</h2>
-            <p class="panel-subtitle">Scientific verification proving that container attribution plus idle baseline accounts for total host energy.</p>
-          </div>
-          <div class="panel-actions">
-            <button class="btn-primary-action" onclick="runAccuracyValidationTest()">
-              🔬 Run Full Validation Cycle
-            </button>
-          </div>
-        </div>
-
-        <!-- The Hero Waterfall Calculation Diagram -->
-        <div class="waterfall-container">
-          <div class="waterfall-step">
-            <div class="waterfall-label">Host CPU Energy</div>
-            <div class="waterfall-val" id="wf-host-energy">1,000 J</div>
-            <div class="waterfall-sub">E_host (RAPL Total)</div>
-          </div>
-          <div class="waterfall-operator">−</div>
-          <div class="waterfall-step">
-            <div class="waterfall-label">Container Energy</div>
-            <div class="waterfall-val" style="color: #2563eb;" id="wf-cont-energy">800 J</div>
-            <div class="waterfall-sub">Auth + Payment + Ledger</div>
-          </div>
-          <div class="waterfall-operator">−</div>
-          <div class="waterfall-step">
-            <div class="waterfall-label">Idle Baseline Energy</div>
-            <div class="waterfall-val" style="color: #7c3aed;" id="wf-idle-energy">150 J</div>
-            <div class="waterfall-sub">P_idle &times; Time (Locked)</div>
-          </div>
-          <div class="waterfall-operator">=</div>
-          <div class="waterfall-step">
-            <div class="waterfall-label">Residual Loss (&Delta;E)</div>
-            <div class="waterfall-val" style="color: #d97706;" id="wf-residual-energy">50 J</div>
-            <div class="waterfall-sub">Residual: 5.0% (&le; 6.0% SLA)</div>
-          </div>
-        </div>
-
-        <!-- Hero Fidelity Badge and Stats -->
-        <div class="grid-2-col" style="margin-top: 16px;">
-          <div class="fidelity-hero-badge">
-            <div style="font-size: 14px; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; opacity: 0.9;">
-              Attribution Fidelity Index
-            </div>
-            <div class="val" id="hero-fidelity-val">95.0%</div>
-            <div class="sub">
-              Formula: Fidelity = [1 &minus; (&Delta;E / E_host)] &times; 100%
-            </div>
-            <div style="margin-top: 12px; font-size: 11px; background: rgba(255,255,255,0.2); padding: 4px 12px; border-radius: 20px; display: inline-block;">
-              ✓ Target Residual Tolerance: &le; 6.0% (PASS)
-            </div>
-          </div>
-
-          <div class="action-card">
-            <div class="action-card-header">
-              <div class="card-icon-title">
-                <span class="icon-bubble">📐</span>
-                <div>
-                  <h4>Statistical Validation Matrix</h4>
-                  <p>Summary of repeatability, baseline variance, and drift.</p>
-                </div>
-              </div>
-            </div>
-            <table class="simple-table">
-              <tbody>
-                <tr>
-                  <td><strong>Transaction Repeatability (CV)</strong></td>
-                  <td class="font-mono text-emerald" id="matrix-tx-cv">3.0%</td>
-                  <td><span class="badge-mini">Target &le; 5.0%</span></td>
-                </tr>
-                <tr>
-                  <td><strong>Idle Baseline CV (CV_idle)</strong></td>
-                  <td class="font-mono" id="matrix-idle-cv">4.28%</td>
-                  <td><span class="badge-mini">Stable</span></td>
-                </tr>
-                <tr>
-                  <td><strong>Baseline Drift (&Delta;)</strong></td>
-                  <td class="font-mono text-emerald" id="matrix-drift">2.1%</td>
-                  <td><span class="badge-mini">&le; 15% Normal</span></td>
-                </tr>
-                <tr>
-                  <td><strong>Telemetry Smoothing Filter</strong></td>
-                  <td class="font-mono">EMA (&alpha; = 0.2)</td>
-                  <td><span class="badge-mini">Noise Damped</span></td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </section>
-
-      <!-- ================= VIEW 5: AUDIT, EXPLAINABILITY & CERTIFICATES ================= -->
-      <section id="view-audit" class="view-panel">
-        <div class="panel-header">
-          <div>
-            <h2 class="panel-title">Audit, Explainability &amp; Validation Certificate</h2>
-            <p class="panel-subtitle">Transparent explainability breakdown answering 'Why is fidelity 95%?' and official auditable report generator.</p>
-          </div>
-          <div class="panel-actions">
-            <button class="btn-primary-action" onclick="openValidationReportModal()">
-              📄 Download Validation Certificate
-            </button>
-          </div>
-        </div>
-
-        <div class="grid-2-col">
-          <!-- Explainability Tree -->
-          <div class="action-card">
-            <div class="action-card-header">
-              <div class="card-icon-title">
-                <span class="icon-bubble">🔍</span>
-                <div>
-                  <h4>Explainability Tree: Why is Fidelity 95%?</h4>
-                  <p>Step-by-step mathematical derivation for auditors.</p>
-                </div>
-              </div>
-            </div>
-            <div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; background: #0f172a; color: #f8fafc; padding: 16px; border-radius: 8px; line-height: 1.8;">
-              <span style="color: #94a3b8;">1. Total Host Package Energy:</span><br/>
-              &nbsp;&nbsp;&rarr; E_host = <strong style="color: #38bdf8;">1000.0 J</strong> (Measured from CPU MSR/RAPL)<br/><br/>
-              <span style="color: #94a3b8;">2. Container Attribution (Kepler eBPF):</span><br/>
-              &nbsp;&nbsp;&rarr; E_containers = <strong style="color: #4ade80;">800.0 J</strong> (Auth + Payment + Ledger)<br/><br/>
-              <span style="color: #94a3b8;">3. Empirical Idle Baseline:</span><br/>
-              &nbsp;&nbsp;&rarr; E_idle = <strong style="color: #c084fc;">150.0 J</strong> (Locked Profile BASE-DEFAULT-001)<br/><br/>
-              <span style="color: #94a3b8;">4. Accounted Energy:</span><br/>
-              &nbsp;&nbsp;&rarr; E_accounted = 800.0J + 150.0J = <strong>950.0 J</strong><br/><br/>
-              <span style="color: #94a3b8;">5. Conservation Residual:</span><br/>
-              &nbsp;&nbsp;&rarr; &Delta;E = 1000.0J - 950.0J = <strong style="color: #fbbf24;">50.0 J (5.0%)</strong><br/><br/>
-              <span style="color: #94a3b8;">6. Attribution Fidelity Certification:</span><br/>
-              &nbsp;&nbsp;&rarr; Fidelity = (1 - 50/1000) &times; 100% = <strong style="color: #34d399;">95.0% (VERIFIED)</strong>
-            </div>
-          </div>
-
-          <!-- Environmental Metadata Card -->
-          <div class="action-card">
-            <div class="action-card-header">
-              <div class="card-icon-title">
-                <span class="icon-bubble">🖥️</span>
-                <div>
-                  <h4>Environmental &amp; Host Metadata</h4>
-                  <p>Hardware and runtime conditions captured during calibration.</p>
-                </div>
-              </div>
-            </div>
-            <table class="simple-table">
-              <tbody>
-                <tr>
-                  <td>Machine ID</td>
-                  <td class="font-mono">node-local-01 (Workstation)</td>
-                </tr>
-                <tr>
-                  <td>CPU Model</td>
-                  <td class="font-mono">Intel/AMD Multi-Core Architecture</td>
-                </tr>
-                <tr>
-                  <td>Kepler Driver</td>
-                  <td class="font-mono">v0.7.2 (eBPF Kernel Probes)</td>
-                </tr>
-                <tr>
-                  <td>Prometheus Daemon</td>
-                  <td class="font-mono">v2.45.0 (15s Scrape Loop)</td>
-                </tr>
-                <tr>
-                  <td>Audit Signature</td>
-                  <td class="font-mono text-muted" style="font-size: 10px;" id="meta-audit-sig">SHA-256: 7f83b1657ff1...</td>
-                </tr>
-              </tbody>
-            </table>
-            <button class="btn-primary w-full" style="margin-top: 16px;" onclick="openValidationReportModal()">
-              View &amp; Print Official Validation Report
-            </button>
-          </div>
-        </div>
-      </section>
-
-      <!-- ================= VIEW 6: GRAFANA OBSERVABILITY DASHBOARD ================= -->
-      <section id="view-grafana" class="view-panel">
-        <!-- Grafana Toolbar Header -->
-        <div class="grafana-toolbar">
-          <div class="grafana-brand">
-            <div class="grafana-logo">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="#F47C20"><circle cx="12" cy="12" r="10"/></svg>
-            </div>
-            <div>
-              <span class="grafana-title">Grafana Observability / Green-Finance Dashboard</span>
-              <span class="grafana-subtitle">Datasource: Prometheus (http://localhost:9090) • Org: SPIT Sustainable Computing</span>
-            </div>
-          </div>
-          <div class="grafana-controls">
-            <div class="grafana-control-item">
-              <label>Time Range:</label>
-              <select id="grafana-timerange" onchange="updateGrafanaTimeRange()">
-                <option value="5m">Last 5 minutes</option>
-                <option value="15m" selected>Last 15 minutes</option>
-                <option value="1h">Last 1 hour</option>
-                <option value="24h">Last 24 hours</option>
-              </select>
-            </div>
-            <div class="grafana-control-item">
-              <label>Refresh:</label>
-              <select id="grafana-refresh" onchange="toggleGrafanaRefresh()">
-                <option value="5">Every 5s</option>
-                <option value="10" selected>Every 10s</option>
-                <option value="30">Every 30s</option>
-                <option value="0">Paused</option>
-              </select>
-            </div>
-            <button class="btn-secondary-sm" onclick="manualGrafanaRefresh()">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
-              Refresh
-            </button>
-          </div>
-        </div>
-
-        <!-- Grafana KPI Stat Tiles -->
-        <div class="grafana-stat-row">
-          <div class="grafana-stat-tile">
-            <div class="grafana-stat-title">CURRENT CARBON INTENSITY</div>
-            <div class="grafana-stat-value text-emerald" id="grafana-stat-carbon">8.42 <span class="unit">g CO₂/tx</span></div>
-            <div class="grafana-stat-sub">PromQL: carbon_per_transaction</div>
-          </div>
-          <div class="grafana-stat-tile">
-            <div class="grafana-stat-title">AVG LATENCY (P99)</div>
-            <div class="grafana-stat-value text-blue" id="grafana-stat-latency">46 <span class="unit">ms</span></div>
-            <div class="grafana-stat-sub">SLA Target: &lt; 2000ms (Passed)</div>
-          </div>
-          <div class="grafana-stat-tile">
-            <div class="grafana-stat-title">ACTIVE POWER DRAW</div>
-            <div class="grafana-stat-value text-amber" id="grafana-stat-power">118.6 <span class="unit">Watts</span></div>
-            <div class="grafana-stat-sub">Kepler container attribution</div>
-          </div>
-          <div class="grafana-stat-tile">
-            <div class="grafana-stat-title">TOP HOTSPOT SERVICE</div>
-            <div class="grafana-stat-value text-rose">payment-service</div>
-            <div class="grafana-stat-sub">68.4% of container energy</div>
-          </div>
-        </div>
-
-        <!-- Grafana 4-Panel Grid -->
-        <div class="grafana-dashboard-grid">
-          <!-- Panel 1: Carbon-per-Transaction Over Time -->
-          <div class="grafana-panel">
-            <div class="panel-bar">
-              <span class="panel-name">Panel 1: Carbon-per-Transaction (g CO₂ / tx)</span>
-              <span class="promql-badge">PromQL: derived</span>
-            </div>
-            <div class="panel-canvas-wrap">
-              <canvas id="grafanaCarbonPanel"></canvas>
-            </div>
-          </div>
-
-          <!-- Panel 2: Microservice Power Allocation -->
-          <div class="grafana-panel">
-            <div class="panel-bar">
-              <span class="panel-name">Panel 2: Container Energy Rate (Watts)</span>
-              <span class="promql-badge">rate(kepler_container_joules_total[1m])</span>
-            </div>
-            <div class="panel-canvas-wrap">
-              <canvas id="grafanaEnergyPanel"></canvas>
-            </div>
-          </div>
-
-          <!-- Panel 3: Request Throughput & Error Rate -->
-          <div class="grafana-panel">
-            <div class="panel-bar">
-              <span class="panel-name">Panel 3: Request Throughput &amp; Error Rate</span>
-              <span class="promql-badge">rate(http_requests_total[1m])</span>
-            </div>
-            <div class="panel-canvas-wrap">
-              <canvas id="grafanaThroughputPanel"></canvas>
-            </div>
-          </div>
-
-          <!-- Panel 4: Hotspot Ranking Table -->
-          <div class="grafana-panel">
-            <div class="panel-bar">
-              <span class="panel-name">Panel 4: Service Energy Hotspot Ranking (RF06)</span>
-              <span class="promql-badge">ranked by Joules</span>
-            </div>
-            <div class="panel-table-wrap">
-              <table class="grafana-table">
-                <thead>
-                  <tr>
-                    <th>Rank</th>
-                    <th>Container / Service</th>
-                    <th>Energy (Watts)</th>
-                    <th>% Total</th>
-                    <th>CO₂ Rate (g/hr)</th>
-                    <th>ESG Rating</th>
-                  </tr>
-                </thead>
-                <tbody id="grafana-hotspot-tbody">
-                  <tr>
-                    <td><span class="rank-badge rank-1">#1</span></td>
-                    <td><strong>payment-service</strong></td>
-                    <td>81.2 W</td>
-                    <td>68.4%</td>
-                    <td>30.85 g/h</td>
-                    <td><span class="esg-pill moderate">Moderate</span></td>
-                  </tr>
-                  <tr>
-                    <td><span class="rank-badge rank-2">#2</span></td>
-                    <td><strong>auth-service</strong></td>
-                    <td>37.4 W</td>
-                    <td>31.6%</td>
-                    <td>14.21 g/h</td>
-                    <td><span class="esg-pill good">Efficient</span></td>
-                  </tr>
-                  <tr>
-                    <td><span class="rank-badge rank-3">#3</span></td>
-                    <td><strong>postgres-ledger-db</strong></td>
-                    <td>18.5 W</td>
-                    <td>15.6%</td>
-                    <td>7.03 g/h</td>
-                    <td><span class="esg-pill good">Efficient</span></td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- ================= VIEW 3: PROMQL CONSOLE ================= -->
-      <section id="view-promql" class="view-panel">
-        <div class="panel-header">
-          <div>
-            <h2 class="panel-title">Prometheus &amp; PromQL Query Engine</h2>
-            <p class="panel-subtitle">Execute and evaluate live PromQL queries to join Kepler energy telemetry with FastAPI transaction metrics.</p>
-          </div>
-          <div class="panel-actions">
-            <span class="status-pill online"><span class="status-dot"></span> Scrape Interval: 15s</span>
-          </div>
-        </div>
-
-        <div class="promql-editor-card">
-          <div class="promql-card-top">
-            <div class="promql-preset-picker">
-              <label>Select Pre-configured PromQL Query (from SRS):</label>
-              <select id="promql-presets" onchange="loadPromQLPreset()">
-                <option value="carbon_per_tx">(RF05) Carbon-per-Transaction: (Energy Joules × Factor) ÷ Transaction Count</option>
-                <option value="kepler_joules">Kepler: Container Energy Rate (Watts) by Service</option>
-                <option value="http_requests">FastAPI: Total Request Rate per Second</option>
-                <option value="latency_p99">Latency: 99th Percentile HTTP Request Latency</option>
-                <option value="payment_joules_increase">Delta Joules consumed during payment-service runs</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="promql-input-box">
-            <div class="promql-prompt">&gt;</div>
-            <textarea id="promql-query-input" rows="3" spellcheck="false"></textarea>
-          </div>
-
-          <div class="promql-actions-bar">
-            <div class="promql-explain" id="promql-explanation">
-              Combines Kepler kernel Joules and transaction throughput into human-interpretable grams of CO₂ per bank transfer.
-            </div>
-            <button class="btn-promql-run" onclick="executePromQLQuery()">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-              Execute PromQL
-            </button>
-          </div>
-        </div>
-
-        <!-- PromQL Execution Results -->
-        <div class="promql-results-grid">
-          <!-- Result Chart -->
-          <div class="chart-box">
-            <div class="chart-header">
-              <h3 class="chart-title" id="promql-chart-title">Query Evaluation Time Series</h3>
-              <span class="promql-status-tag" id="promql-exec-time">Eval: 12ms</span>
-            </div>
-            <div class="chart-container">
-              <canvas id="promqlResultChart"></canvas>
-            </div>
-          </div>
-
-          <!-- Raw Prometheus Metric Table & JSON Output -->
-          <div class="chart-box">
-            <div class="chart-header">
-              <h3 class="chart-title">Prometheus Vector Response (JSON)</h3>
-              <span class="badge-mini">status: success</span>
-            </div>
-            <div class="promql-json-box">
-              <pre id="promql-json-output">
-{
-  "status": "success",
-  "data": {
-    "resultType": "vector",
-    "result": [
-      {
-        "metric": {
-          "service": "payment-service",
-          "unit": "grams_CO2_per_tx"
-        },
-        "value": [1726402400.123, "8.4215"]
-      }
-    ]
-  }
-}
-              </pre>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- ================= VIEW 4: SWAGGER UI SIMULATOR ================= -->
-      <section id="view-swagger" class="view-panel">
-        <div class="panel-header">
-          <div>
-            <h2 class="panel-title">FastAPI Swagger UI &amp; API Simulator</h2>
-            <p class="panel-subtitle">Interactive OpenAPI specification and live endpoint tester simulating authentic bank money transfers.</p>
-          </div>
-          <div class="panel-actions">
-            <a href="http://127.0.0.1:8000/docs" target="_blank" class="btn-secondary-sm">Open Native /docs ↗</a>
-          </div>
-        </div>
-
-        <div class="swagger-container">
-          <!-- Swagger Header Spec -->
-          <div class="swagger-info-card">
-            <div class="swagger-title-row">
-              <h3>Green-Finance Banking &amp; Telemetry API</h3>
-              <span class="swagger-version">1.0.0</span>
-              <span class="swagger-oas">OAS 3.0</span>
-            </div>
-            <p class="swagger-description">
-              Simulated banking microservices with integrated Kepler energy telemetry. Every executed money transfer creates double-entry balance updates, increments Prometheus request counters, and calculates carbon intensity.
-            </p>
-            <div class="swagger-meta-links">
-              <span>Base URL: <code>http://localhost:8000</code></span>
-              <span>OpenAPI JSON: <code>/openapi.json</code></span>
-            </div>
-          </div>
-
-          <!-- Endpoint 1: POST /auth/login -->
-          <div class="api-endpoint-card">
-            <div class="endpoint-header" onclick="toggleEndpoint('ep-login')">
-              <span class="http-method post">POST</span>
-              <span class="endpoint-path">/auth/login</span>
-              <span class="endpoint-desc">User Authentication &amp; JWT Token Generation (RF01)</span>
-              <span class="expand-arrow">▼</span>
-            </div>
-            <div id="ep-login" class="endpoint-body hidden">
-              <p>Authenticates bank customer and returns a signed JWT access token containing User ID and registered Bank ID.</p>
-              <div class="swagger-param-box">
-                <strong>Request Body:</strong>
-                <pre><code>{
-  "username": "demo_user",
-  "password": "password123"
-}</code></pre>
-              </div>
-              <button class="btn-try-sm" onclick="tryLoginEndpoint()">Execute Request</button>
-              <div class="response-preview" id="res-login">
-                <strong>Response [200 OK]:</strong>
-                <pre><code>{
-  "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-  "token_type": "bearer",
-  "bank_id": "HDFC9999",
-  "username": "demo_user"
-}</code></pre>
+              <div class="progress-track">
+                <div class="progress-fill" id="stim-progress-fill" style="width: 0%;"></div>
               </div>
             </div>
           </div>
 
-          <!-- Endpoint 2: POST /payment/transfer (MAIN REQUIREMENT) -->
-          <div class="api-endpoint-card open">
-            <div class="endpoint-header" onclick="toggleEndpoint('ep-transfer')">
-              <span class="http-method post">POST</span>
-              <span class="endpoint-path">/payment/transfer</span>
-              <span class="endpoint-desc">Simulated Bank Money Transfer with Controlled Amount &amp; Bank IDs (RF02)</span>
-              <span class="expand-arrow">▼</span>
+          <!-- Live Workload Telemetry Stream Log -->
+          <div class="stimulator-log-card">
+            <div class="section-heading-row">
+              <h3>Live Telemetry & Ingestion Stream</h3>
+              <span class="badge-mini green" id="stream-status-badge">Stream Active</span>
             </div>
-            <div id="ep-transfer" class="endpoint-body">
-              <p>Transfers fiat funds to another authenticated bank ID, posts double-entry debits/credits, and triggers Kepler container energy telemetry attribution.</p>
-              
-              <div class="interactive-tester-form">
-                <div class="form-row-3">
-                  <div class="form-group">
-                    <label>Sender Bank ID</label>
-                    <input type="text" id="swag-sender" value="HDFC9999" class="input-readonly" readonly />
-                  </div>
-                  <div class="form-group">
-                    <label>Recipient Bank ID</label>
-                    <select id="swag-recipient">
-                      <option value="MAH123">MAH123 (Bank of Maharashtra)</option>
-                      <option value="IDF892">IDF892 (IDFC First Bank)</option>
-                      <option value="SBIN456">SBIN456 (State Bank of India)</option>
-                      <option value="HDFC9999">HDFC9999 (Self Transfer / Same Bank)</option>
-                    </select>
-                  </div>
-                  <div class="form-group">
-                    <label>Transfer Amount (₹)</label>
-                    <input type="number" id="swag-amount" value="12500" min="1" step="100" />
-                  </div>
-                </div>
-
-                <div class="form-group">
-                  <label>Description / Purpose</label>
-                  <input type="text" id="swag-desc" value="Inter-bank client vendor settlement" />
-                </div>
-
-                <button class="btn-primary-action" onclick="executeSwaggerTransfer()">
-                  Execute Transfer via Swagger UI
-                </button>
-              </div>
-
-              <div class="response-preview" id="res-transfer">
-                <strong>Live API Response [200 OK]:</strong>
-                <pre id="swag-response-json">{
-  "status": "COMPLETED",
-  "transaction_id": "TX-99824-A1B2",
-  "sender_bank_id": "HDFC9999",
-  "recipient_bank_id": "MAH123",
-  "amount_transferred": 12500.00,
-  "currency": "INR",
-  "telemetry": {
-    "container": "payment-service",
-    "joules_consumed": 24.15,
-    "carbon_emissions_grams": 2.548,
-    "promql_metric": "carbon_per_transaction"
-  },
-  "ledger": {
-    "debit_account": "HDFC9999_cash_wallet (-12500)",
-    "credit_account": "MAH123_cash_wallet (+12500)"
-  }
-}</pre>
-              </div>
-            </div>
-          </div>
-
-          <!-- Endpoint 3: GET /telemetry/realtime -->
-          <div class="api-endpoint-card">
-            <div class="endpoint-header" onclick="toggleEndpoint('ep-telemetry')">
-              <span class="http-method get">GET</span>
-              <span class="endpoint-path">/telemetry/realtime</span>
-              <span class="endpoint-desc">Read Active Energy Telemetry &amp; Carbon Emission Rate (RF03 / RF05)</span>
-              <span class="expand-arrow">▼</span>
-            </div>
-            <div id="ep-telemetry" class="endpoint-body hidden">
-              <p>Queries Prometheus via PromQL to return active Watts draw and container breakdown.</p>
-              <button class="btn-try-sm" onclick="tryTelemetryEndpoint()">Execute Request</button>
-              <div class="response-preview" id="res-telemetry">
-                <strong>Response [200 OK]:</strong>
-                <pre><code>{
-  "platform_power_watts": 145.8,
-  "container_power_watts": 118.6,
-  "container_breakdown_watts": [
-    {"name": "payment-service", "watts": 81.2},
-    {"name": "auth-service", "watts": 37.4}
-  ],
-  "carbon_emission_rate_kg_per_hour": 0.04506
-}</code></pre>
-              </div>
-            </div>
-          </div>
-
-          <!-- Endpoint 4: GET /metrics -->
-          <div class="api-endpoint-card">
-            <div class="endpoint-header" onclick="toggleEndpoint('ep-metrics')">
-              <span class="http-method get">GET</span>
-              <span class="endpoint-path">/metrics</span>
-              <span class="endpoint-desc">Prometheus Metrics Exporter Scraping Endpoint (RF04)</span>
-              <span class="expand-arrow">▼</span>
-            </div>
-            <div id="ep-metrics" class="endpoint-body hidden">
-              <p>Exposes open standard Prometheus metrics formatted for scraping.</p>
-              <div class="response-preview">
-                <pre><code># HELP http_requests_total Total number of HTTP requests made.
-# TYPE http_requests_total counter
-http_requests_total{handler="/payment/transfer",method="POST",status="200"} 1429
-# HELP kepler_container_joules_total Energy in joules consumed by containers.
-# TYPE kepler_container_joules_total counter
-kepler_container_joules_total{container_name="payment-service"} 34219.45</code></pre>
-              </div>
+            <div class="stream-terminal" id="stream-log-container">
+              <div class="term-line info">[SYSTEM] Workload Stimulator initialized on port 8001.</div>
+              <div class="term-line info">[TARGET] Green-Finance-2 Enterprise endpoint configured at http://localhost:8000.</div>
+              <div class="term-line success">[READY] 10 simulated user accounts armed for transaction generation.</div>
             </div>
           </div>
         </div>
@@ -1098,149 +476,293 @@ kepler_container_joules_total{container_name="payment-service"} 34219.45</code><
       <section id="view-ledger" class="view-panel">
         <div class="panel-header">
           <div>
-            <h2 class="panel-title">Double-Entry Financial &amp; Carbon Ledger</h2>
-            <p class="panel-subtitle">Strict bookkeeping balance sheet ensuring every transfer registers balanced debits, credits, and carbon liabilities.</p>
+            <h2 class="panel-title">Double-Entry Ledger Journal</h2>
+            <p class="panel-subtitle">Mathematical proof of balanced debit and credit entries (Total Debits = Total Credits) satisfying institutional financial auditability.</p>
           </div>
           <div class="panel-actions">
-            <button class="btn-secondary-sm" onclick="exportLedgerCSV()">Export CSV</button>
+            <span class="status-pill online"><span class="status-dot"></span> DR = CR Balanced</span>
           </div>
         </div>
 
-        <div class="table-card">
-          <div class="table-responsive">
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>Timestamp</th>
-                  <th>Tx Reference</th>
-                  <th>Sender Bank ID</th>
-                  <th>Recipient Bank ID</th>
-                  <th>Type</th>
-                  <th>Amount (₹)</th>
-                  <th>Energy (Joules)</th>
-                  <th>Carbon Footprint</th>
-                  <th>Ledger Balance Proof</th>
-                </tr>
-              </thead>
-              <tbody id="ledger-full-tbody">
-                <!-- Dynamically populated -->
-              </tbody>
-            </table>
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Entry ID</th>
+                <th>Txn ID</th>
+                <th>Account ID</th>
+                <th>Type</th>
+                <th>Amount (₹)</th>
+                <th>Running Balance (₹)</th>
+                <th>Timestamp</th>
+              </tr>
+            </thead>
+            <tbody id="ledger-entries-body">
+              <!-- Populated dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ================= VIEW 6: PROMQL CONSOLE ================= -->
+      <section id="view-promql" class="view-panel">
+        <div class="panel-header">
+          <div>
+            <h2 class="panel-title">PromQL Telemetry Console</h2>
+            <p class="panel-subtitle">Execute real-time Prometheus Query Language formulas against live Kepler kernel metrics and banking request counters.</p>
+          </div>
+        </div>
+
+        <div class="promql-container">
+          <div class="promql-card">
+            <div class="form-group">
+              <label>Select Preset PromQL Formula (IEEE 830 Specification):</label>
+              <select id="promql-preset-select" class="form-input" onchange="loadPromQLPreset(this.value)">
+                <option value="carbon_per_tx">Carbon per Transaction: (sum(rate(kepler_container_joules_total[1m])) * 0.713) / sum(rate(http_requests_total[1m]))</option>
+                <option value="kepler_joules">Kepler Container Power (Watts): sum(rate(kepler_container_joules_total[1m])) by (container_name)</option>
+                <option value="http_requests">Banking Request Rate (req/sec): sum(rate(http_requests_total[1m]))</option>
+                <option value="payment_joules">Payment Service 5-Min Energy Delta: sum(increase(kepler_container_joules_total{container_name="payment-service"}[5m]))</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>PromQL Query String:</label>
+              <textarea id="promql-input" class="form-input monospace" rows="3">(sum(rate(kepler_container_joules_total[1m])) * 0.713) / sum(rate(http_requests_total[1m]))</textarea>
+            </div>
+
+            <div class="promql-actions">
+              <button class="btn-primary-action" onclick="executeCurrentPromQL()">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                Execute PromQL Query
+              </button>
+            </div>
+
+            <div class="promql-result-box" id="promql-result-box">
+              <div class="res-heading">Query Result:</div>
+              <pre id="promql-raw-output">Click "Execute PromQL Query" to evaluate formula against Prometheus :9090.</pre>
+            </div>
           </div>
         </div>
       </section>
 
-      <!-- ================= VIEW 6: SETTINGS & THRESHOLD ALERTS ================= -->
-      <section id="view-settings" class="view-panel">
+      <!-- ================= VIEW 7: GRAFANA PANELS ================= -->
+      <section id="view-grafana" class="view-panel">
         <div class="panel-header">
           <div>
-            <h2 class="panel-title">System Configuration &amp; Alert Rules (RF07 / RF10)</h2>
-            <p class="panel-subtitle">Configurable environment parameters and ESG thresholds in accordance with IEEE 830 specification.</p>
+            <h2 class="panel-title">Grafana Infrastructure Monitoring</h2>
+            <p class="panel-subtitle">Access live time-series dashboards provisioned in Grafana (:3000) for Kepler RAPL counters and microservice request latencies.</p>
+          </div>
+          <div class="panel-actions">
+            <a href="http://localhost:3000" target="_blank" class="btn-primary-action">
+              Open Grafana in New Tab (:3000) →
+            </a>
           </div>
         </div>
 
-        <div class="settings-grid">
-          <!-- Config Card 1 -->
-          <div class="action-card">
-            <h4 class="settings-card-heading">Regional Carbon Intensity Factor</h4>
-            <p class="settings-card-sub">Multiplier converting electric kilowatt-hours to grams/kg of CO₂ emissions.</p>
-            
-            <div class="form-group mt-3">
-              <label>Grid Region Emission Factor (kg CO₂ / kWh)</label>
-              <input type="number" id="cfg-emission-factor" value="0.38" step="0.01" min="0.05" />
-              <span class="input-hint">India National Grid Average benchmark is approx. 0.38–0.42 kg CO₂/kWh.</span>
+        <div class="grafana-cards-grid">
+          <div class="grafana-preview-card">
+            <h4>Panel 1: Host Platform vs Container Power (Watts)</h4>
+            <p>Monitors hardware RAPL platform power alongside dynamic microservice cgroups.</p>
+            <div class="grafana-mock-visual blue">
+              <span>Kepler RAPL eBPF Driver [9103]</span>
             </div>
-
-            <div class="form-group">
-              <label>Prometheus Scrape Interval (seconds)</label>
-              <input type="number" id="cfg-scrape-interval" value="15" min="1" max="60" />
-              <span class="input-hint">Default is 15s per SRS specification (RNF05).</span>
-            </div>
-
-            <button class="btn-primary-action mt-2" onclick="saveESGConfig()">Save Configuration</button>
           </div>
-
-          <!-- Config Card 2 -->
-          <div class="action-card">
-            <h4 class="settings-card-heading">RF07 Carbon Threshold Alerts</h4>
-            <p class="settings-card-sub">Threshold that triggers automated alerts in Grafana and UI notification banners.</p>
-            
-            <div class="form-group mt-3">
-              <label>High Emission Alert Threshold (g CO₂ / transaction)</label>
-              <input type="number" id="cfg-carbon-threshold" value="12.0" step="0.5" />
-              <span class="input-hint">Transactions generating more than this threshold trigger immediate warning banners.</span>
+          <div class="grafana-preview-card">
+            <h4>Panel 2: Carbon-per-Transaction Over Time</h4>
+            <p>Derived time series: PromQL division of container energy rate by request throughput.</p>
+            <div class="grafana-mock-visual green">
+              <span>gCO₂ / transaction (0.137 mg avg)</span>
             </div>
-
-            <div class="form-group">
-              <label>Alert Routing Action</label>
-              <select id="cfg-alert-action">
-                <option value="banner">Display Dashboard Warning Banner</option>
-                <option value="grafana">Raise Grafana Alertmanager Notification</option>
-                <option value="both">Both (UI Banner + Grafana Alert)</option>
-              </select>
-            </div>
-
-            <button class="btn-primary-action mt-2" onclick="saveAlertRules()">Apply Alert Threshold</button>
           </div>
+          <div class="grafana-preview-card">
+            <h4>Panel 3: Microservice Workload Share</h4>
+            <p>Payment-service (58%) vs Auth-service (9%) vs Ledger-service (15%) breakdown.</p>
+            <div class="grafana-mock-visual purple">
+              <span>Container Attribution Breakdown</span>
+            </div>
+          </div>
+          <div class="grafana-preview-card">
+            <h4>Panel 4: HTTP Request Rate & Latency</h4>
+            <p>Prometheus FastAPI instrumentator tracking request throughput and p99 latency.</p>
+            <div class="grafana-mock-visual orange">
+              <span>Throughput: ~28 req/sec | p99: 42ms</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= VIEW 8: SWAGGER SIMULATOR ================= -->
+      <section id="view-swagger" class="view-panel">
+        <div class="panel-header">
+          <div>
+            <h2 class="panel-title">Interactive API Documentation</h2>
+            <p class="panel-subtitle">Swagger UI and OpenAPI 3.0 documentation for all simulated banking routes and Prometheus endpoints.</p>
+          </div>
+          <div class="panel-actions">
+            <a href="http://localhost:8001/docs" target="_blank" class="btn-primary-action">
+              Open Bank Swagger UI (:8001/docs) →
+            </a>
+          </div>
+        </div>
+        <div class="swagger-frame-container">
+          <iframe src="/docs" style="width: 100%; height: 750px; border: 1px solid var(--border-subtle); border-radius: var(--radius-md);"></iframe>
         </div>
       </section>
 
     </main>
   </div>
 
-  <!-- Quick Transfer Modal -->
-  <div id="quick-transfer-modal" class="modal-backdrop hidden">
+  <!-- ================= MODALS ================= -->
+
+  <!-- 1. QUICK TRANSFER MODAL -->
+  <div class="modal-overlay hidden" id="transfer-modal">
     <div class="modal-card">
       <div class="modal-header">
-        <h3>Simulate Bank Money Transfer</h3>
-        <button class="modal-close" onclick="closeQuickTransferModal()">✕</button>
+        <h3>Instant Inter-Bank Transfer</h3>
+        <button class="modal-close" onclick="closeTransferModal()">✕</button>
       </div>
-      <form onsubmit="handleModalTransfer(event)">
+      <div class="modal-body">
         <div class="form-group">
-          <label>Sender Bank ID</label>
-          <input type="text" value="HDFC9999 (Authenticated)" disabled class="input-disabled" />
-        </div>
-        <div class="form-group">
-          <label>Recipient Bank ID</label>
-          <select id="modal-recipient" required>
-            <option value="MAH123">MAH123 — Bank of Maharashtra (Atharva H.)</option>
-            <option value="IDF892">IDF892 — IDFC First Bank (Laukik D.)</option>
-            <option value="SBIN456">SBIN456 — State Bank of India (Evaluator Test)</option>
-            <option value="AXIS777">AXIS777 — Axis Bank (Merchant Account)</option>
+          <label>Recipient Beneficiary</label>
+          <select id="modal-dest-bank" class="form-input">
+            <option value="MAH123">Bank of Maharashtra (MAH123)</option>
+            <option value="IDF892">IDFC First Bank (IDF892)</option>
+            <option value="SBIN456">State Bank of India (SBIN456)</option>
           </select>
         </div>
         <div class="form-group">
-          <label>Amount (₹ INR)</label>
-          <input type="number" id="modal-amount" placeholder="e.g. 25000" min="1" step="100" value="10000" required />
+          <label>Transfer Amount (INR)</label>
+          <input type="number" id="modal-transfer-amt" class="form-input" value="5000" min="1" />
         </div>
         <div class="form-group">
-          <label>Transaction Note</label>
-          <input type="text" id="modal-note" value="Simulated Phase 2 Payout" />
+          <label>Reference Note</label>
+          <input type="text" id="modal-transfer-note" class="form-input" value="Inter-bank fund settlement" />
         </div>
-        <div class="modal-actions">
-          <button type="button" class="btn-secondary-sm" onclick="closeQuickTransferModal()">Cancel</button>
-          <button type="submit" class="btn-primary-action">Send Transfer &amp; Measure</button>
+        <div class="preview-mini-banner">
+          <span>⚡ Estimated Workload Energy: <strong>~0.69 Joules</strong></span>
+          <span>🌱 Scope 2 Carbon: <strong>~0.137 mg CO₂</strong></span>
         </div>
-      </form>
-  <!-- Validation Report Certificate Modal -->
-  <div id="validation-report-modal" class="modal-backdrop hidden">
-    <div class="report-modal-content">
-      <div class="report-header">
-        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-          <div>
-            <span class="report-stamp">Official Certificate</span>
-            <h2 style="font-size: 18px; font-weight: 800; color: #0f172a; margin-top: 8px;">ENERGY OBSERVABILITY VALIDATION REPORT</h2>
-            <p style="font-size: 12px; color: #64748b;" id="report-modal-id">Report ID: EVR-VAL-001 • Evaluated at: Just now</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary-action" onclick="closeTransferModal()">Cancel</button>
+        <button class="btn-primary-action" onclick="executeModalTransfer()">Send ₹5,000 Now</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. TRANSACTION RECEIPT MODAL -->
+  <div class="modal-overlay hidden" id="receipt-modal">
+    <div class="modal-card receipt-card">
+      <div class="receipt-check-icon">✓</div>
+      <h3 class="receipt-title">Payment Successful!</h3>
+      <p class="receipt-sub">Atomic double-entry transfer committed and audited.</p>
+
+      <div class="receipt-details-list">
+        <div class="r-row">
+          <span>Transaction ID:</span>
+          <strong id="receipt-tx-id" class="monospace">TXN-8F9201</strong>
+        </div>
+        <div class="r-row">
+          <span>Amount Transferred:</span>
+          <strong id="receipt-amount" class="text-green">₹5,000.00</strong>
+        </div>
+        <div class="r-row">
+          <span>From Account:</span>
+          <strong id="receipt-sender">HDFC9999</strong>
+        </div>
+        <div class="r-row">
+          <span>To Beneficiary:</span>
+          <strong id="receipt-recipient">MAH123</strong>
+        </div>
+        <div class="r-row">
+          <span>Timestamp:</span>
+          <span id="receipt-time">2026-10-06 10:45:12</span>
+        </div>
+        <div class="r-row">
+          <span>New Account Balance:</span>
+          <strong id="receipt-balance">₹45,000.00</strong>
+        </div>
+        <div class="r-divider"></div>
+        <div class="r-row">
+          <span>Kepler Energy Attributed:</span>
+          <strong id="receipt-joules">0.694 Joules</strong>
+        </div>
+        <div class="r-row">
+          <span>Estimated CO₂ Footprint:</span>
+          <strong id="receipt-carbon">0.137 mg CO₂</strong>
+        </div>
+        <div class="r-row">
+          <span>Cryptographic Hash:</span>
+          <span id="receipt-hash" class="monospace text-xs truncate">e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855</span>
+        </div>
+      </div>
+
+      <div class="receipt-sync-badge">
+        <span class="sync-dot"></span>
+        <span>Streamed in real time to Green-Finance-2 Enterprise Suite (:8000)</span>
+      </div>
+
+      <div class="modal-footer" style="justify-content: center; margin-top: 20px;">
+        <button class="btn-primary-action" onclick="closeReceiptModal()">Done & View History</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. TRANSACTION DETAILS INSPECTION MODAL -->
+  <div class="modal-overlay hidden" id="tx-detail-modal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>Transaction Telemetry Inspection</h3>
+        <button class="modal-close" onclick="closeTxDetailModal()">✕</button>
+      </div>
+      <div class="modal-body" id="tx-detail-content">
+        <!-- Rendered dynamically -->
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary-action" onclick="closeTxDetailModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. USER SWITCH MODAL -->
+  <div class="modal-overlay hidden" id="user-switch-modal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>Switch Banking Profile</h3>
+        <button class="modal-close" onclick="closeUserSwitchModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <p class="text-muted" style="margin-bottom: 16px;">Select a simulated customer profile to view balance and execute payments:</p>
+        <div class="user-switch-list">
+          <div class="user-switch-item active" onclick="switchActiveUser('soham_gaikwad')">
+            <div class="u-avatar">SG</div>
+            <div class="u-info">
+              <strong>Soham Gaikwad (Admin)</strong>
+              <span>Bank ID: HDFC9999 • Balance: ₹50,000.00</span>
+            </div>
           </div>
-          <button class="modal-close" onclick="closeValidationReportModal()">✕</button>
+          <div class="user-switch-item" onclick="switchActiveUser('demo_user')">
+            <div class="u-avatar">DU</div>
+            <div class="u-info">
+              <strong>Demo User (Investor)</strong>
+              <span>Bank ID: DEMO0001 • Balance: ₹25,000.00</span>
+            </div>
+          </div>
+          <div class="user-switch-item" onclick="switchActiveUser('alice_smith')">
+            <div class="u-avatar">AS</div>
+            <div class="u-info">
+              <strong>Alice Smith (Customer)</strong>
+              <span>Bank ID: ALICE101 • Balance: ₹30,000.00</span>
+            </div>
+          </div>
+          <div class="user-switch-item" onclick="switchActiveUser('bob_kumar')">
+            <div class="u-avatar">BK</div>
+            <div class="u-info">
+              <strong>Bob Kumar (Customer)</strong>
+              <span>Bank ID: BOB202 • Balance: ₹15,000.00</span>
+            </div>
+          </div>
         </div>
-      </div>
-      <div id="report-modal-body" style="font-size: 12px; line-height: 1.6; color: #334155;">
-        <!-- Injected via JavaScript -->
-      </div>
-      <div class="modal-actions" style="margin-top: 20px;">
-        <button type="button" class="btn-secondary-sm" onclick="closeValidationReportModal()">Close</button>
-        <button type="button" class="btn-primary-action" onclick="window.print()">🖨️ Print / Save PDF</button>
       </div>
     </div>
   </div>

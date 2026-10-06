@@ -68,19 +68,32 @@ class Settings(BaseSettings):
     # How long a refresh session token remains valid (in days). Defaults to 7.
     refresh_token_expire_days: int = 7
 
-    # 🔹 Force SQLite Validator Function
-    # This function is marked with "@model_validator(mode='after')" which means it runs
-    # immediately after the settings are loaded from the ".env" file.
-    # Why it exists: Kepler's new setup removed the PostgreSQL server. To make sure the app
-    # works smoothly, this guard checks if the database URL points to PostgreSQL and silently
-    # replaces it with a local SQLite database configuration ("sqlite:///test.db").
+    green_finance_2_url: str = "http://localhost:8000"
+    port: int = 8001
+
     @model_validator(mode="after")
-    def force_sqlite_url(self) -> "Settings":
-        # Check if the database URL does NOT start with "sqlite" (meaning it probably points to postgresql)
-        if not self.database_url.startswith("sqlite"):
-            # Replace the address with the local SQLite file database "test.db"
+    def resolve_database_url(self) -> "Settings":
+        import os
+        if os.environ.get("USE_SQLITE", "").lower() in ("true", "1") or self.database_url.startswith("sqlite"):
             self.database_url = "sqlite:///test.db"
-        # Return the corrected settings object
+            return self
+
+        if self.database_url.startswith("postgresql"):
+            try:
+                import psycopg2
+                import urllib.parse
+                url = urllib.parse.urlparse(self.database_url)
+                conn = psycopg2.connect(
+                    dbname=url.path.lstrip("/"),
+                    user=url.username,
+                    password=url.password,
+                    host=url.hostname or "localhost",
+                    port=url.port or 5432,
+                    connect_timeout=1
+                )
+                conn.close()
+            except Exception:
+                self.database_url = "sqlite:///test.db"
         return self
 
 

@@ -1,20 +1,16 @@
 # =====================================================================
-# ECO MONITOR — TRANSACTION.PY (MODEL)
+# ECO MONITOR / GREEN-FINANCE — TRANSACTION.PY (MODEL)
 # Purpose: Defines the SQLAlchemy ORM schema for the "transactions" table.
 #          A Transaction is a header grouping multiple balanced LedgerEntries.
 # =====================================================================
 
-# Import Base from db setup
 from backend.db.base import Base
-
-# Import SQLAlchemy column types
 from sqlalchemy import Column, String, DateTime, Float
 from sqlalchemy import func
 import uuid
 
 
 class Transaction(Base):
-    # Map class to database table name
     __tablename__ = "transactions"
 
     # UUID Primary Key
@@ -34,6 +30,10 @@ class Transaction(Base):
     amount = Column(Float, nullable=True, default=0.0)
     currency = Column(String(10), nullable=False, default="INR")
     status = Column(String(20), nullable=False, default="COMPLETED")
+
+    # Processing Service & Transaction Protocol
+    service = Column(String(50), nullable=False, default="payment-service")
+    transaction_type = Column(String(50), nullable=False, default="TRANSFER")
 
     # Energy & Carbon Attribution (Kepler Telemetry)
     energy_joules = Column(Float, nullable=False, default=0.0)

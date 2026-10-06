@@ -128,6 +128,22 @@ app.include_router(payment.router)   # Registers Simulated Banking Microservices
 # Exposes Prometheus tracking metrics under "/metrics" endpoint
 Instrumentator().instrument(app).expose(app)
 
+import os
+from fastapi.responses import FileResponse
+frontend_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "frontend"))
+
+@app.get("/", include_in_schema=False)
+def serve_index():
+    return FileResponse(os.path.join(frontend_dir, "index.html"))
+
+@app.get("/styles.css", include_in_schema=False)
+def serve_css():
+    return FileResponse(os.path.join(frontend_dir, "styles.css"))
+
+@app.get("/app.js", include_in_schema=False)
+def serve_js():
+    return FileResponse(os.path.join(frontend_dir, "app.js"))
+
 
 # =====================================================================
 # ⚙️ STARTUP EVENT LOGIC
