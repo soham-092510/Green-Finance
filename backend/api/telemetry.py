@@ -22,7 +22,7 @@ from sqlalchemy.orm import Session
 
 # 🔹 Import Dict
 # A dictionary data structure description.
-from typing import Dict
+from typing import Dict, Optional
 
 # 🔹 Import get_db
 # A helper function that opens a database connection session and closes it when the request is done.
@@ -107,6 +107,47 @@ def auto_log_emissions(
         
     # 3. Return the created ledger records summary
     return log_summary
+
+
+@router.get(
+    "/mode",
+    summary="Get current telemetry mode (OBSERVED/SIMULATED/CALCULATED)"
+)
+def get_telemetry_mode():
+    """Returns the current telemetry source mode and Kepler availability."""
+    return {
+        "telemetry_mode": telemetry_service.get_telemetry_mode(),
+        "kepler_available": telemetry_service.KEPLER_AVAILABLE,
+        "description": "OBSERVED = Physical Kepler RAPL counters; SIMULATED = High-fidelity model; CALCULATED = Derived from formula"
+    }
+
+
+@router.post(
+    "/calculate-carbon",
+    summary="Calculate carbon from energy joules with explicit labeling"
+)
+def calculate_transaction_carbon(
+    energy_joules: float,
+    factor_gco2_per_kwh: float = 713.0,
+    current_user: User = Depends(get_current_user)
+):
+    """Calculate carbon footprint from energy with full methodology transparency."""
+    return telemetry_service.calculate_transaction_carbon(energy_joules, factor_gco2_per_kwh)
+
+
+@router.get(
+    "/promql",
+    summary="Execute raw PromQL query against Prometheus"
+)
+def execute_promql(
+    query: str,
+    current_user: User = Depends(get_current_user)
+):
+    """Execute a raw PromQL query and return results."""
+    result = telemetry_service.query_prometheus(query)
+    if result:
+        return result
+    return {"status": "error", "message": "Query failed or returned no data"}
 
 
 # =====================================================================

@@ -52,7 +52,7 @@ from backend.db.database import init_db
 
 # 🔹 Import API routers
 # Registers the different pages/sections of our application.
-from backend.api import health, auth, user, carbon, credits, ledger, portfolio, telemetry, baseline, accuracy, payment
+from backend.api import health, auth, user, carbon, credits, ledger, portfolio, telemetry, baseline, accuracy, payment, sustainability
 
 # 🔹 Import CORSMiddleware
 # CORS (Cross-Origin Resource Sharing) is a browser security mechanism.
@@ -119,6 +119,7 @@ app.include_router(telemetry.router) # Registers the Kepler PromQL telemetry pat
 app.include_router(baseline.router)  # Registers Idle Baseline Calibration endpoints
 app.include_router(accuracy.router)  # Registers Attribution Fidelity & Accuracy endpoints
 app.include_router(payment.router)   # Registers Simulated Banking Microservices endpoints
+app.include_router(sustainability.router)  # Registers Enterprise Sustainability Analytics endpoints
 
 
 # =====================================================================
@@ -130,11 +131,50 @@ Instrumentator().instrument(app).expose(app)
 
 import os
 from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
+
 frontend_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "frontend"))
+shared_dir = os.path.join(frontend_dir, "shared")
+bank_dir = os.path.join(frontend_dir, "bank")
+investigator_dir = os.path.join(frontend_dir, "investigator")
 
 @app.get("/", include_in_schema=False)
 def serve_index():
     return FileResponse(os.path.join(frontend_dir, "index.html"))
+
+@app.get("/bank", include_in_schema=False)
+@app.get("/bank/", include_in_schema=False)
+def serve_bank():
+    return FileResponse(os.path.join(bank_dir, "index.html"))
+
+@app.get("/bank/{file_path:path}", include_in_schema=False)
+def serve_bank_file(file_path: str):
+    fpath = os.path.join(bank_dir, file_path)
+    if os.path.isfile(fpath):
+        return FileResponse(fpath)
+    return FileResponse(os.path.join(bank_dir, "index.html"))
+
+@app.get("/investigator", include_in_schema=False)
+@app.get("/investigator/", include_in_schema=False)
+def serve_investigator():
+    return FileResponse(os.path.join(investigator_dir, "index.html"))
+
+@app.get("/investigator/{file_path:path}", include_in_schema=False)
+def serve_investigator_file(file_path: str):
+    fpath = os.path.join(investigator_dir, file_path)
+    if os.path.isfile(fpath):
+        return FileResponse(fpath)
+    return FileResponse(os.path.join(investigator_dir, "index.html"))
+
+@app.get("/shared/{file_path:path}", include_in_schema=False)
+def serve_shared_file(file_path: str):
+    fpath = os.path.join(shared_dir, file_path)
+    if os.path.isfile(fpath):
+        return FileResponse(fpath)
+    fpath_root = os.path.join(frontend_dir, file_path)
+    if os.path.isfile(fpath_root):
+        return FileResponse(fpath_root)
+    return FileResponse(os.path.join(shared_dir, "styles.css"))
 
 @app.get("/styles.css", include_in_schema=False)
 def serve_css():
@@ -143,6 +183,22 @@ def serve_css():
 @app.get("/app.js", include_in_schema=False)
 def serve_js():
     return FileResponse(os.path.join(frontend_dir, "app.js"))
+
+@app.get("/bank.css", include_in_schema=False)
+def serve_bank_css():
+    return FileResponse(os.path.join(bank_dir, "bank.css"))
+
+@app.get("/bank.js", include_in_schema=False)
+def serve_bank_js():
+    return FileResponse(os.path.join(bank_dir, "bank.js"))
+
+@app.get("/investigator.css", include_in_schema=False)
+def serve_inv_css():
+    return FileResponse(os.path.join(investigator_dir, "investigator.css"))
+
+@app.get("/investigator.js", include_in_schema=False)
+def serve_inv_js():
+    return FileResponse(os.path.join(investigator_dir, "investigator.js"))
 
 
 # =====================================================================

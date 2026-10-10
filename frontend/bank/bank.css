@@ -1,0 +1,1193 @@
+/* =====================================================================
+   GREEN FINANCE — BANKING APPLICATION (MOVA REFERENCE DESIGN)
+   Strict visual implementation of Reference Image 1:
+   - Left Sidebar with curved leaf brand logo, mint green active pill,
+     clean menu items, bottom user avatar circle + name + "Premium"
+   - Top Header with "Good morning, Olivia!" (or active user), search pill
+   - Hero Cards: Dark "Total balance" card with glowing green sparkline,
+     Violet "Main account" card with VISA logo and card number
+   - 4 Action Pill Buttons: Transfer (Mint), Pay bills (Amber),
+     Top up (Coral), Exchange (Black)
+   - Bottom Cards: White "Recent transactions" list with circular icons,
+     Dark "Spending overview" card with vertical mint green pillar bars
+   - Interactive modals for Transfer Money (with live carbon preview),
+     Receipts (SHA-256), and Beneficiaries
+   ===================================================================== */
+
+:root {
+  --bank-bg-app: #0e1117; /* Dark framing as in the reference screenshot */
+  --bank-canvas: #f6f8fa; /* Inner clean light canvas */
+  --bank-sidebar-bg: #ffffff;
+  --bank-card-white: #ffffff;
+  --bank-card-dark: #12161c;
+  --bank-card-purple: linear-gradient(135deg, #6c5dd3 0%, #7e57c2 50%, #9066d8 100%);
+  --bank-mint: #52bd89;
+  --bank-mint-hover: #43a575;
+  --bank-amber: #f7b944;
+  --bank-coral: #f05d5e;
+  --bank-black: #12161c;
+  --bank-border: #e9edf2;
+  --bank-text-main: #14181f;
+  --bank-text-muted: #7e8b9b;
+  --bank-text-light: #f8fafc;
+  --bank-font: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --bank-font-mono: 'JetBrains Mono', monospace;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--bank-bg-app);
+  font-family: var(--bank-font);
+  color: var(--bank-text-main);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 24px;
+}
+
+/* Outer Desktop Frame (Exact match to reference tablet/desktop viewport) */
+.mova-window {
+  width: 100%;
+  max-width: 1280px;
+  min-height: 820px;
+  background: var(--bank-canvas);
+  border-radius: 28px;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.45);
+  display: flex;
+  overflow: hidden;
+  position: relative;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* -------------------------------------------------------------------
+   1. LEFT SIDEBAR
+   ------------------------------------------------------------------- */
+.mova-sidebar {
+  width: 240px;
+  background: var(--bank-sidebar-bg);
+  border-right: 1px solid var(--bank-border);
+  display: flex;
+  flex-direction: column;
+  padding: 32px 20px 28px;
+  flex-shrink: 0;
+}
+
+.mova-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 36px;
+  text-decoration: none;
+  color: inherit;
+  padding-left: 6px;
+}
+
+.mova-brand-curve {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mova-curve-svg {
+  width: 24px;
+  height: 24px;
+}
+
+.mova-brand-name {
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--bank-text-main);
+}
+
+/* Navigation Menu */
+.mova-nav {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+
+.mova-nav-item {
+  width: 100%;
+}
+
+.mova-nav-link {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 18px;
+  border-radius: 14px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #556171;
+  text-decoration: none;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+  transition: all 0.18s ease;
+}
+
+.mova-nav-link:hover {
+  background: #f4f6f8;
+  color: var(--bank-text-main);
+}
+
+.mova-nav-link.active {
+  background: var(--bank-mint);
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(82, 189, 137, 0.35);
+}
+
+.mova-nav-link.active svg {
+  stroke: #ffffff;
+}
+
+.mova-nav-icon {
+  width: 20px;
+  height: 20px;
+  stroke: currentColor;
+  stroke-width: 2;
+  fill: none;
+}
+
+/* Sidebar User Footer */
+.mova-user-footer {
+  margin-top: auto;
+  padding-top: 20px;
+  border-top: 1px solid var(--bank-border);
+}
+
+.mova-user-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  padding: 6px 8px;
+  border-radius: 12px;
+  transition: background 0.15s;
+}
+
+.mova-user-card:hover {
+  background: #f4f6f8;
+}
+
+.mova-avatar-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #52bd89;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.mova-user-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.mova-user-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--bank-text-main);
+}
+
+.mova-user-tier {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--bank-mint);
+}
+
+.mova-logout-btn {
+  background: transparent;
+  border: none;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--bank-text-muted);
+  cursor: pointer;
+  padding: 4px 8px;
+  text-align: left;
+  transition: color 0.15s;
+}
+
+.mova-logout-btn:hover {
+  color: #e53e3e;
+}
+
+/* -------------------------------------------------------------------
+   2. MAIN CONTENT AREA
+   ------------------------------------------------------------------- */
+.mova-main {
+  flex: 1;
+  padding: 32px 36px 40px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Top Header Bar */
+.mova-top-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 6px;
+}
+
+.mova-greeting {
+  display: flex;
+  flex-direction: column;
+}
+
+.mova-greet-sub {
+  font-size: 14px;
+  color: var(--bank-text-muted);
+  font-weight: 500;
+}
+
+.mova-greet-name {
+  font-size: 30px;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  color: var(--bank-text-main);
+  margin-top: 2px;
+}
+
+.mova-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* Search Bar Pill */
+.mova-search-box {
+  display: flex;
+  align-items: center;
+  background: #ffffff;
+  border: 1px solid var(--bank-border);
+  border-radius: 24px;
+  padding: 10px 18px;
+  width: 260px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+}
+
+.mova-search-input {
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: 13px;
+  color: var(--bank-text-main);
+  width: 100%;
+}
+
+.mova-search-input::placeholder {
+  color: #a0aec0;
+}
+
+.mova-bell-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 1px solid var(--bank-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.15s;
+}
+
+.mova-bell-btn:hover {
+  background: #f4f6f8;
+}
+
+.mova-bell-dot {
+  position: absolute;
+  top: 10px;
+  right: 11px;
+  width: 6px;
+  height: 6px;
+  background: #f05d5e;
+  border-radius: 50%;
+}
+
+/* Link to Investigator */
+.btn-investigator-pill {
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 700;
+  background: #ecfdf5;
+  color: #059669;
+  border: 1px solid #a7f3d0;
+  padding: 8px 14px;
+  border-radius: 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.15s;
+}
+
+.btn-investigator-pill:hover {
+  background: #d1fae5;
+  transform: translateY(-1px);
+}
+
+/* -------------------------------------------------------------------
+   3. HERO CARDS ROW (Exact match to Reference 1)
+   ------------------------------------------------------------------- */
+.mova-hero-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  gap: 20px;
+}
+
+/* Card 1: Total Balance Dark Card */
+.mova-dark-balance-card {
+  background: var(--bank-card-dark);
+  border-radius: 22px;
+  padding: 26px 28px 18px;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 12px 24px -4px rgba(18, 22, 28, 0.4);
+}
+
+.card-label-subtle {
+  font-size: 13px;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+.card-amount-huge {
+  font-size: 34px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin: 6px 0 6px;
+  font-family: var(--bank-font);
+}
+
+.card-trend-badge {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--bank-mint);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 12px;
+}
+
+/* Glowing Neon Sparkline */
+.mova-sparkline-canvas {
+  width: 100%;
+  height: 60px;
+  margin-top: auto;
+}
+
+/* Card 2: Main Account Purple Card */
+.mova-purple-card {
+  background: var(--bank-card-purple);
+  border-radius: 22px;
+  padding: 26px 28px;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 12px 24px -4px rgba(108, 93, 211, 0.35);
+}
+
+/* Translucent pill graphics in background */
+.purple-deco-pill-1 {
+  position: absolute;
+  right: -10px;
+  top: 15px;
+  width: 110px;
+  height: 170px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 55px;
+  pointer-events: none;
+}
+
+.purple-deco-pill-2 {
+  position: absolute;
+  left: 20px;
+  bottom: -30px;
+  width: 90px;
+  height: 120px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 45px;
+  pointer-events: none;
+}
+
+.card-top-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  z-index: 1;
+}
+
+.card-acc-label {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 500;
+}
+
+.card-mask-num {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+  letter-spacing: 0.1em;
+  font-family: var(--bank-font-mono);
+}
+
+.purple-balance-val {
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin-top: 18px;
+  z-index: 1;
+}
+
+.card-bottom-row {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  z-index: 1;
+  margin-top: 14px;
+}
+
+.card-visa-logo {
+  font-size: 16px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  font-style: italic;
+  color: #ffffff;
+}
+
+/* -------------------------------------------------------------------
+   4. FOUR ACTION PILL BUTTONS (Exact match to Reference 1)
+   ------------------------------------------------------------------- */
+.mova-action-bar {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr 1fr 1fr;
+  gap: 16px;
+}
+
+.mova-action-btn {
+  height: 56px;
+  border-radius: 16px;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  font-size: 14px;
+  font-weight: 700;
+  transition: all 0.18s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
+}
+
+.mova-action-btn:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.05);
+}
+
+/* 1. Transfer (Mint Green) */
+.btn-mova-transfer {
+  background: var(--bank-mint);
+  color: #12161c;
+}
+
+/* 2. Pay Bills (Golden Amber) */
+.btn-mova-paybills {
+  background: var(--bank-amber);
+  color: #12161c;
+}
+
+/* 3. Top Up (Coral Red) */
+.btn-mova-topup {
+  background: var(--bank-coral);
+  color: #ffffff;
+}
+
+/* 4. Exchange (Charcoal Black) */
+.btn-mova-exchange {
+  background: var(--bank-black);
+  color: #ffffff;
+}
+
+.action-btn-icon {
+  width: 18px;
+  height: 18px;
+  stroke: currentColor;
+  stroke-width: 2.2;
+}
+
+/* -------------------------------------------------------------------
+   5. BOTTOM TWO CARDS (Exact match to Reference 1)
+   ------------------------------------------------------------------- */
+.mova-bottom-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  gap: 20px;
+  flex: 1;
+}
+
+/* Card 3: Recent Transactions White Card */
+.mova-tx-card {
+  background: var(--bank-card-white);
+  border: 1px solid var(--bank-border);
+  border-radius: 22px;
+  padding: 24px 26px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+}
+
+.tx-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.tx-card-title {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--bank-text-main);
+}
+
+.tx-view-all-link {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--bank-mint);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.tx-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.tx-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 0;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background 0.15s;
+}
+
+.tx-item:hover {
+  background: #f8fafc;
+}
+
+.tx-item-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.tx-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 15px;
+  flex-shrink: 0;
+}
+
+.tx-avatar.amazon { background: #fdf2e9; color: #111; border: 1px solid #fde0c8; }
+.tx-avatar.spotify { background: #e8f8f0; color: #1db954; border: 1px solid #bbf0d4; }
+.tx-avatar.salary { background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0; }
+.tx-avatar.starbucks { background: #e6f4ea; color: #00704a; border: 1px solid #b7e1cd; }
+.tx-avatar.bank { background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe; }
+
+.tx-meta {
+  display: flex;
+  flex-direction: column;
+}
+
+.tx-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--bank-text-main);
+}
+
+.tx-time {
+  font-size: 11px;
+  color: var(--bank-text-muted);
+}
+
+.tx-amount {
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.tx-amount.negative {
+  color: var(--bank-text-main);
+}
+
+.tx-amount.positive {
+  color: var(--bank-mint);
+}
+
+/* Card 4: Spending Overview Dark Card with Pillar Bars */
+.mova-overview-card {
+  background: var(--bank-card-dark);
+  border-radius: 22px;
+  padding: 24px 28px;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 12px 24px -4px rgba(18, 22, 28, 0.4);
+}
+
+.overview-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.overview-title {
+  font-size: 14px;
+  color: #94a3b8;
+  font-weight: 600;
+}
+
+.overview-period-btn {
+  font-size: 12px;
+  color: #94a3b8;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.overview-val-big {
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin-bottom: 20px;
+}
+
+/* Vertical Pillar Bar Chart */
+.mova-pillars-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  height: 140px;
+  margin-top: auto;
+  padding-bottom: 6px;
+}
+
+.pillar-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 28px;
+}
+
+.pillar-bar {
+  width: 14px;
+  background: var(--bank-mint);
+  border-radius: 10px;
+  transition: height 0.4s ease;
+}
+
+.pillar-bar:hover {
+  background: #6fe4a9;
+}
+
+.pillar-day {
+  font-size: 10px;
+  color: #64748b;
+  font-weight: 600;
+}
+
+/* -------------------------------------------------------------------
+   6. INTERACTIVE MODALS (Transfer, Receipt, Switch User)
+   ------------------------------------------------------------------- */
+.mova-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(14, 17, 23, 0.65);
+  backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.mova-modal-overlay.hidden {
+  display: none;
+}
+
+.mova-modal-card {
+  background: #ffffff;
+  border-radius: 24px;
+  width: 90%;
+  max-width: 520px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
+  animation: movaPop 0.2s ease-out;
+}
+
+@keyframes movaPop {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.mova-modal-header {
+  padding: 22px 26px 16px;
+  border-bottom: 1px solid var(--bank-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.mova-modal-title {
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--bank-text-main);
+}
+
+.mova-modal-close {
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: var(--bank-text-muted);
+}
+
+.mova-modal-body {
+  padding: 22px 26px;
+}
+
+.mova-modal-footer {
+  padding: 16px 26px 22px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+/* Form inputs */
+.mova-form-group {
+  margin-bottom: 16px;
+}
+
+.mova-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--bank-text-main);
+  margin-bottom: 6px;
+}
+
+.mova-input, .mova-select {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--bank-border);
+  background: #f8fafc;
+  color: var(--bank-text-main);
+  font-size: 14px;
+  font-family: inherit;
+  outline: none;
+  transition: all 0.15s;
+}
+
+.mova-input:focus, .mova-select:focus {
+  border-color: var(--bank-mint);
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(82, 189, 137, 0.15);
+}
+
+/* Carbon preview inside transfer modal */
+.mova-carbon-preview-box {
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-top: 14px;
+}
+
+.carbon-preview-header {
+  font-size: 11px;
+  font-weight: 800;
+  color: #059669;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.carbon-preview-stats {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+}
+
+.btn-mova-submit {
+  width: 100%;
+  padding: 14px;
+  border-radius: 12px;
+  background: var(--bank-mint);
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 800;
+  border: none;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.btn-mova-submit:hover {
+  background: var(--bank-mint-hover);
+}
+
+/* Modal Form Elements & Helpers */
+.mova-form-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--bank-text-main);
+  margin-bottom: 6px;
+}
+
+.mova-form-input, .mova-form-select {
+  width: 100%;
+  padding: 11px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--bank-border);
+  background: #f8fafc;
+  color: var(--bank-text-main);
+  font-size: 14px;
+  font-family: inherit;
+  outline: none;
+  transition: all 0.15s;
+}
+
+.mova-form-input:focus, .mova-form-select:focus {
+  border-color: var(--bank-mint);
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(82, 189, 137, 0.15);
+}
+
+.mova-amount-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.amount-pill {
+  padding: 6px 12px;
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #475569;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.amount-pill:hover {
+  background: #ecfdf5;
+  color: #059669;
+  border-color: #a7f3d0;
+}
+
+.mova-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.mova-btn-primary {
+  padding: 12px 22px;
+  border-radius: 12px;
+  background: var(--bank-mint);
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.mova-btn-primary:hover {
+  background: var(--bank-mint-hover);
+}
+
+.mova-btn-secondary {
+  padding: 12px 18px;
+  border-radius: 12px;
+  background: #f1f5f9;
+  color: #475569;
+  font-weight: 700;
+  font-size: 14px;
+  border: 1px solid #e2e8f0;
+  cursor: pointer;
+}
+
+.mova-btn-secondary:hover {
+  background: #e2e8f0;
+}
+
+/* Carbon preview card inside transfer modal */
+.carbon-preview-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  font-weight: 800;
+  color: #059669;
+  margin-bottom: 10px;
+}
+
+.preview-badge.simulated {
+  font-size: 10px;
+  padding: 3px 7px;
+  background: #fef3c7;
+  color: #92400e;
+  border-radius: 6px;
+  font-weight: 700;
+}
+
+.carbon-preview-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.c-meta-label {
+  display: block;
+  font-size: 11px;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.c-meta-val {
+  font-size: 13px;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.text-success {
+  color: #059669;
+}
+
+/* Receipt Modal Styles */
+.receipt-success-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  padding: 10px 14px;
+  border-radius: 12px;
+  margin-bottom: 16px;
+}
+
+.receipt-amount-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 12px 0 16px;
+  border-bottom: 1px solid #f1f5f9;
+  margin-bottom: 16px;
+}
+
+.receipt-amt-huge {
+  font-size: 32px;
+  font-weight: 900;
+  color: #0f172a;
+}
+
+.receipt-status-pill {
+  background: #ecfdf5;
+  color: #059669;
+  border: 1px solid #a7f3d0;
+  padding: 4px 10px;
+  border-radius: 16px;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.receipt-meta-table {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.receipt-meta-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+}
+
+.receipt-label {
+  color: #64748b;
+  font-weight: 600;
+}
+
+.receipt-value {
+  color: #0f172a;
+  font-weight: 700;
+  text-align: right;
+}
+
+.font-mono {
+  font-family: var(--bank-font-mono);
+}
+
+/* User switcher modal */
+.user-switch-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.user-switch-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid #e2e8f0;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.user-switch-item:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+.user-tier-badge {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 8px;
+  background: #f1f5f9;
+  color: #475569;
+  border-radius: 12px;
+}
+
+/* Bill categories grid */
+.bill-categories-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.bill-cat-card {
+  padding: 16px;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.bill-cat-card:hover {
+  background: #f8fafc;
+  border-color: var(--bank-mint);
+  transform: translateY(-2px);
+}
+
+/* Exchange bench grid */
+.exchange-bench-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.bench-btn {
+  padding: 14px 18px;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 3px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.bench-btn:hover {
+  background: #f8fafc;
+  border-color: #0f172a;
+}
+
+.bench-btn strong {
+  font-size: 14px;
+  color: #0f172a;
+}
+
+.bench-btn span {
+  font-size: 11px;
+  color: #64748b;
+}
+
+/* Toast container */
+#mova-toast-container {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 2000;
+}
+
+.mova-toast {
+  background: #12161c;
+  color: #ffffff;
+  padding: 12px 18px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 600;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+  animation: movaPop 0.2s ease-out;
+}

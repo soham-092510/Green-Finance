@@ -12,3 +12,4 @@ redis==5.0.8
 prometheus-fastapi-instrumentator==7.0.0
 email-validator==2.3.0
 python-multipart==0.0.32
+fpdf2==2.7.4

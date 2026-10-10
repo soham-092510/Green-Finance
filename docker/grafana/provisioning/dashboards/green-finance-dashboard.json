@@ -1,0 +1,370 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": "-- Grafana --",
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "gnetId": null,
+  "graphTooltip": 0,
+  "id": null,
+  "iteration": 1657248852032,
+  "links": [],
+  "panels": [
+    {
+      "datasource": "Prometheus",
+      "fieldConfig": {
+        "defaults": {
+          "color": {"mode": "palette-classic"},
+          "custom": {"lineWidth": 2},
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {"color": "green", "value": null},
+              {"color": "red", "value": 12}
+            ]
+          },
+          "unit": "g"
+        },
+        "overrides": []
+      },
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 0},
+      "id": 1,
+      "options": {
+        "legend": {"calcs": ["mean", "max"], "displayMode": "table", "placement": "bottom"},
+        "tooltip": {"mode": "single"}
+      },
+      "targets": [
+        {
+          "expr": "(sum(rate(kepler_container_joules_total[1m])) * 713 / 3600000) / sum(rate(http_requests_total{handler=~\"/payment.*\"}[1m])) * 1000",
+          "legendFormat": "Carbon per Transaction (mg CO₂)",
+          "refId": "A"
+        }
+      ],
+      "title": "Carbon per Transaction (mg CO₂) - Real-time",
+      "type": "timeseries"
+    },
+    {
+      "datasource": "Prometheus",
+      "fieldConfig": {
+        "defaults": {
+          "color": {"mode": "palette-classic"},
+          "custom": {"lineWidth": 2},
+          "mappings": [],
+          "thresholds": {"mode": "absolute", "steps": [{"color": "green", "value": null}]},
+          "unit": "watt"
+        },
+        "overrides": []
+      },
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 0},
+      "id": 2,
+      "options": {
+        "legend": {"calcs": ["mean", "max"], "displayMode": "table", "placement": "bottom"},
+        "tooltip": {"mode": "single"}
+      },
+      "targets": [
+        {
+          "expr": "sum(rate(kepler_container_joules_total{container_name!=\"\"}[1m])) by (container_name)",
+          "legendFormat": "{{container_name}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Container Power Allocation (Watts) - Kepler Telemetry",
+      "type": "timeseries"
+    },
+    {
+      "datasource": "Prometheus",
+      "fieldConfig": {
+        "defaults": {
+          "color": {"mode": "thresholds"},
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {"color": "green", "value": null},
+              {"color": "yellow", "value": 94},
+              {"color": "red", "value": 90}
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {"h": 8, "w": 6, "x": 0, "y": 8},
+      "id": 3,
+      "options": {"orientation": "auto", "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false}, "showThresholdLabels": true, "showThresholdMarkers": true},
+      "targets": [
+        {
+          "expr": "(1 - (sum(rate(kepler_node_platform_joules_total[1m])) - (sum(rate(kepler_container_joules_total[1m])) + 18.7)) / sum(rate(kepler_node_platform_joules_total[1m]))) * 100",
+          "legendFormat": "Attribution Fidelity %",
+          "refId": "A"
+        }
+      ],
+      "title": "Energy Attribution Fidelity (%)",
+      "type": "gauge"
+    },
+    {
+      "datasource": "Prometheus",
+      "fieldConfig": {
+        "defaults": {
+          "color": {"mode": "thresholds"},
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {"color": "green", "value": null},
+              {"color": "yellow", "value": 4},
+              {"color": "red", "value": 6}
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {"h": 8, "w": 6, "x": 6, "y": 8},
+      "id": 4,
+      "options": {"orientation": "auto", "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false}, "showThresholdLabels": true, "showThresholdMarkers": true},
+      "targets": [
+        {
+          "expr": "(sum(rate(kepler_node_platform_joules_total[1m])) - (sum(rate(kepler_container_joules_total[1m])) + 18.7)) / sum(rate(kepler_node_platform_joules_total[1m])) * 100",
+          "legendFormat": "Residual Loss %",
+          "refId": "A"
+        }
+      ],
+      "title": "Residual Energy Loss (%) - Target ≤6%",
+      "type": "gauge"
+    },
+    {
+      "datasource": "Prometheus",
+      "fieldConfig": {
+        "defaults": {
+          "color": {"mode": "palette-classic"},
+          "custom": {"lineWidth": 2},
+          "mappings": [],
+          "thresholds": {"mode": "absolute", "steps": [{"color": "green", "value": null}]},
+          "unit": "reqps"
+        },
+        "overrides": []
+      },
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 8},
+      "id": 5,
+      "options": {
+        "legend": {"calcs": ["mean", "max"], "displayMode": "table", "placement": "bottom"},
+        "tooltip": {"mode": "single"}
+      },
+      "targets": [
+        {
+          "expr": "sum(rate(http_requests_total[1m]))",
+          "legendFormat": "Total Request Rate",
+          "refId": "A"
+        },
+        {
+          "expr": "sum(rate(http_requests_total{handler=~\"/payment.*\"}[1m]))",
+          "legendFormat": "Payment API Rate",
+          "refId": "B"
+        }
+      ],
+      "title": "HTTP Request Throughput (req/sec)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": "Prometheus",
+      "fieldConfig": {
+        "defaults": {
+          "color": {"mode": "palette-classic"},
+          "custom": {"lineWidth": 2},
+          "mappings": [],
+          "thresholds": {"mode": "absolute", "steps": [{"color": "green", "value": null}]},
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 16},
+      "id": 6,
+      "options": {
+        "legend": {"calcs": ["mean", "max"], "displayMode": "table", "placement": "bottom"},
+        "tooltip": {"mode": "single"}
+      },
+      "targets": [
+        {
+          "expr": "histogram_quantile(0.99, sum(rate(http_request_duration_seconds_bucket[5m])) by (le, handler))",
+          "legendFormat": "P99 Latency",
+          "refId": "A"
+        },
+        {
+          "expr": "histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket[5m])) by (le, handler))",
+          "legendFormat": "P95 Latency",
+          "refId": "B"
+        },
+        {
+          "expr": "histogram_quantile(0.50, sum(rate(http_request_duration_seconds_bucket[5m])) by (le, handler))",
+          "legendFormat": "P50 Latency",
+          "refId": "C"
+        }
+      ],
+      "title": "Request Latency (seconds) - P50/P95/P99",
+      "type": "timeseries"
+    },
+    {
+      "datasource": "Prometheus",
+      "fieldConfig": {
+        "defaults": {
+          "color": {"mode": "thresholds"},
+          "mappings": [{"type": "value", "options": {"0": {"color": "red", "index": 0, "text": "DOWN"}, "1": {"color": "green", "index": 1, "text": "UP"}}}],
+          "thresholds": {"mode": "absolute", "steps": [{"color": "red", "value": null}, {"color": "green", "value": 1}]}
+        },
+        "overrides": []
+      },
+      "gridPos": {"h": 4, "w": 6, "x": 12, "y": 16},
+      "id": 7,
+      "options": {"colorMode": "value", "graphMode": "none", "justifyMode": "auto", "orientation": "auto", "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false}, "textMode": "auto"},
+      "targets": [
+        {
+          "expr": "up{job=~\"auth-service|payment-service|kepler\"}",
+          "legendFormat": "{{job}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Service Health Status",
+      "type": "stat"
+    },
+    {
+      "datasource": "Prometheus",
+      "fieldConfig": {
+        "defaults": {
+          "color": {"mode": "palette-classic"},
+          "custom": {"align": "auto", "displayMode": "auto", "filterable": false},
+          "mappings": [],
+          "thresholds": {"mode": "absolute", "steps": [{"color": "green", "value": null}]}
+        },
+        "overrides": []
+      },
+      "gridPos": {"h": 4, "w": 6, "x": 18, "y": 16},
+      "id": 8,
+      "options": {"showHeader": true},
+      "targets": [
+        {
+          "expr": "sum(rate(kepler_container_joules_total{container_name!=\"\"}[5m])) by (container_name)",
+          "format": "table",
+          "legendFormat": "{{container_name}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Container Energy Rate (Watts) - 5min Window",
+      "type": "table"
+    },
+    {
+      "datasource": "Prometheus",
+      "fieldConfig": {
+        "defaults": {
+          "color": {"mode": "thresholds"},
+          "custom": {"align": "auto", "displayMode": "auto"},
+          "mappings": [],
+          "thresholds": {"mode": "absolute", "steps": [{"color": "green", "value": null}]},
+          "unit": "joules"
+        },
+        "overrides": []
+      },
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 20},
+      "id": 9,
+      "options": {"showHeader": true},
+      "targets": [
+        {
+          "expr": "sum(increase(kepler_container_joules_total{container_name!=\"\"}[1h])) by (container_name)",
+          "format": "table",
+          "legendFormat": "{{container_name}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Hourly Energy Consumption by Service (Joules)",
+      "type": "table"
+    },
+    {
+      "datasource": "Prometheus",
+      "fieldConfig": {
+        "defaults": {
+          "color": {"mode": "thresholds"},
+          "custom": {"align": "auto", "displayMode": "auto"},
+          "mappings": [],
+          "thresholds": {"mode": "absolute", "steps": [{"color": "green", "value": null}]},
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 20},
+      "id": 10,
+      "options": {"showHeader": true},
+      "targets": [
+        {
+          "expr": "sum(rate(bank_transactions_total[5m])) by (status, transaction_type)",
+          "format": "table",
+          "legendFormat": "{{status}} - {{transaction_type}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Transaction Rate by Status & Type (5min)",
+      "type": "table"
+    },
+    {
+      "datasource": "Prometheus",
+      "fieldConfig": {
+        "defaults": {
+          "color": {"mode": "thresholds"},
+          "custom": {"align": "auto", "displayMode": "auto"},
+          "mappings": [],
+          "thresholds": {"mode": "absolute", "steps": [{"color": "green", "value": null}]},
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {"h": 4, "w": 24, "x": 0, "y": 28},
+      "id": 11,
+      "options": {"showHeader": true},
+      "targets": [
+        {
+          "expr": "sum(increase(bank_transactions_total[1h]))",
+          "legendFormat": "Total Transactions (1h)",
+          "refId": "A"
+        },
+        {
+          "expr": "sum(increase(bank_transactions_total{status=\"COMPLETED\"}[1h]))",
+          "legendFormat": "Completed (1h)",
+          "refId": "B"
+        },
+        {
+          "expr": "sum(increase(bank_transactions_total{status=\"FAILED\"}[1h]))",
+          "legendFormat": "Failed (1h)",
+          "refId": "C"
+        },
+        {
+          "expr": "sum(increase(bank_transaction_energy_joules_total[1h]))",
+          "legendFormat": "Total Energy Joules (1h)",
+          "refId": "D"
+        }
+      ],
+      "title": "Hourly Summary Stats",
+      "type": "stat"
+    }
+  ],
+  "refresh": "10s",
+  "schemaVersion": 38,
+  "style": "dark",
+  "tags": ["green-finance", "banking", "carbon", "kepler", "energy"],
+  "templating": {"list": []},
+  "time": {"from": "now-1h", "to": "now"},
+  "timepicker": {},
+  "timezone": "",
+  "title": "Green Finance - Energy & Carbon Observability",
+  "uid": "green-finance-observability",
+  "version": 1,
+  "weekStart": ""
+}

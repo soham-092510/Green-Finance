@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Green Finance | Banking Portal</title>
+  <meta name="description" content="MOVA Carbon-Aware Digital Banking Application with Real-Time Energy Attribution in INR (₹)" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/bank/bank.css" />
+</head>
+<body>
+
+  <!-- Outer Desktop Window Container (Strict match to Reference Image 1) -->
+  <div class="mova-window">
+
+    <!-- ================= 1. LEFT SIDEBAR ================= -->
+    <aside class="mova-sidebar" role="navigation" aria-label="Main Navigation">
+      <!-- MOVA Brand Logo -->
+      <a href="/bank" class="mova-brand" aria-label="MOVA Banking Portal">
+        <div class="mova-brand-curve">
+          <svg class="mova-curve-svg" viewBox="0 0 32 32" fill="none">
+            <path d="M6 13C6 19.6274 11.3726 25 18 25C24.6274 25 28 20 28 20" stroke="#52bd89" stroke-width="4.5" stroke-linecap="round"/>
+            <path d="M10 9C10 9 12 11 16 11C20 11 24 8 24 8" stroke="#52bd89" stroke-width="3" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <span class="mova-brand-name">MOVA</span>
+      </a>
+
+      <!-- Navigation Menu Items -->
+      <ul class="mova-nav">
+        <li class="mova-nav-item">
+          <button class="mova-nav-link active" onclick="switchNav('home', this)">
+            <svg class="mova-nav-icon" viewBox="0 0 24 24">
+              <path d="M3 10.5L12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1v-9.5z"/>
+            </svg>
+            <span>Home</span>
+          </button>
+        </li>
+        <li class="mova-nav-item">
+          <button class="mova-nav-link" onclick="openCardsModal()">
+            <svg class="mova-nav-icon" viewBox="0 0 24 24">
+              <rect x="2" y="5" width="20" height="14" rx="3"/>
+              <line x1="2" y1="10" x2="22" y2="10"/>
+            </svg>
+            <span>Cards</span>
+          </button>
+        </li>
+        <li class="mova-nav-item">
+          <button class="mova-nav-link" onclick="openTransferModal()">
+            <svg class="mova-nav-icon" viewBox="0 0 24 24">
+              <rect x="2" y="6" width="20" height="12" rx="2"/>
+              <circle cx="12" cy="12" r="2.5"/>
+              <path d="M6 12h.01M18 12h.01"/>
+            </svg>
+            <span>Payments</span>
+          </button>
+        </li>
+        <li class="mova-nav-item">
+          <button class="mova-nav-link" onclick="openAnalyticsModal()">
+            <svg class="mova-nav-icon" viewBox="0 0 24 24">
+              <line x1="18" y1="20" x2="18" y2="10"/>
+              <line x1="12" y1="20" x2="12" y2="4"/>
+              <line x1="6" y1="20" x2="6" y2="14"/>
+            </svg>
+            <span>Analytics</span>
+          </button>
+        </li>
+        <li class="mova-nav-item">
+          <button class="mova-nav-link" onclick="openUserModal()">
+            <svg class="mova-nav-icon" viewBox="0 0 24 24">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+              <circle cx="12" cy="7" r="4"/>
+            </svg>
+            <span>Profile</span>
+          </button>
+        </li>
+        <li class="mova-nav-item">
+          <button class="mova-nav-link" onclick="openSettingsModal()">
+            <svg class="mova-nav-icon" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="3"/>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+            </svg>
+            <span>Settings</span>
+          </button>
+        </li>
+        <li class="mova-nav-item">
+          <button class="mova-nav-link" onclick="openSupportModal()">
+            <svg class="mova-nav-icon" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+              <line x1="12" y1="17" x2="12.01" y2="17"/>
+            </svg>
+            <span>Support</span>
+          </button>
+        </li>
+      </ul>
+
+      <!-- User Card Footer -->
+      <div class="mova-user-footer">
+        <div class="mova-user-card" onclick="openUserModal()" title="Switch User or View Account Details">
+          <div class="mova-avatar-circle" id="sidebar-avatar">O</div>
+          <div class="mova-user-info">
+            <span class="mova-user-name" id="sidebar-user-name">Olivia Rhye</span>
+            <span class="mova-user-tier" id="sidebar-user-tier">Premium</span>
+          </div>
+        </div>
+        <button class="mova-logout-btn" onclick="logoutUser()">
+          Log out
+        </button>
+      </div>
+    </aside>
+
+    <!-- ================= 2. MAIN CONTENT ================= -->
+    <main class="mova-main">
+
+      <!-- Top Header Row -->
+      <header class="mova-top-header">
+        <div class="mova-greeting">
+          <span class="mova-greet-sub">Good morning,</span>
+          <h1 class="mova-greet-name" id="header-greet-name">Olivia!</h1>
+        </div>
+
+        <div class="mova-header-actions">
+          <!-- Search Pill Bar -->
+          <div class="mova-search-box">
+            <input type="text" class="mova-search-input" id="global-search" placeholder="Search..." oninput="handleGlobalSearch(this.value)" />
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#a0aec0" stroke-width="2" style="flex-shrink:0;">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+          </div>
+
+          <!-- Notification Bell -->
+          <button class="mova-bell-btn" onclick="toggleNotifications()" title="Notifications" aria-label="Notifications">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#556171" stroke-width="2">
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+              <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+            </svg>
+            <span class="mova-bell-dot"></span>
+          </button>
+
+          <!-- Quick Portal Switcher to Sustainability Investigator -->
+          <a href="/investigator" class="btn-investigator-pill" title="Open Sustainability Investigator Dashboard">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M12 2a10 10 0 0 1 10 10c0 5.52-4.48 10-10 10S2 17.52 2 12 6.48 2 12 2z"></path>
+              <path d="M12 6v6l4 2"></path>
+            </svg>
+            <span>Investigator</span>
+          </a>
+        </div>
+      </header>
+
+      <!-- HERO ROW: 2 Cards (Exact match to Reference Image 1) -->
+      <section class="mova-hero-grid" aria-label="Account Overview Cards">
+
+        <!-- Card 1: Total Balance Dark Card with Glowing Neon Sparkline -->
+        <div class="mova-dark-balance-card">
+          <div class="card-label-subtle">Total balance</div>
+          <div class="card-amount-huge" id="total-balance-display">₹24,560.00</div>
+          <div class="card-trend-badge" id="balance-trend">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+              <polyline points="18 15 12 9 6 15"></polyline>
+            </svg>
+            <span>12.5% from last month</span>
+          </div>
+
+          <!-- Glowing Neon Green Sparkline Canvas -->
+          <canvas class="mova-sparkline-canvas" id="sparkline-canvas" width="460" height="70"></canvas>
+        </div>
+
+        <!-- Card 2: Main Account Purple Card with VISA Logo -->
+        <div class="mova-purple-card">
+          <div class="purple-deco-pill-1"></div>
+          <div class="purple-deco-pill-2"></div>
+
+          <div class="card-top-meta">
+            <span class="card-acc-label">Main account</span>
+            <span class="card-mask-num" id="card-masked-num">•••• 5678</span>
+          </div>
+
+          <div class="purple-balance-val" id="main-account-balance">₹9,560.00</div>
+
+          <div class="card-bottom-row">
+            <span class="card-visa-logo">VISA</span>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- FOUR ACTION PILL BUTTONS (Exact match to Reference Image 1) -->
+      <section class="mova-action-bar" aria-label="Quick Actions">
+        <!-- 1. Transfer (Mint Green) -->
+        <button class="mova-action-btn btn-mova-transfer" onclick="openTransferModal()">
+          <span>Transfer</span>
+          <svg class="action-btn-icon" viewBox="0 0 24 24">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </button>
+
+        <!-- 2. Pay bills (Amber / Gold) -->
+        <button class="mova-action-btn btn-mova-paybills" onclick="openPayBillsModal()">
+          <span>Pay bills</span>
+          <svg class="action-btn-icon" viewBox="0 0 24 24">
+            <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+            <line x1="6" y1="8" x2="10" y2="8"></line>
+            <line x1="6" y1="12" x2="14" y2="12"></line>
+            <line x1="6" y1="16" x2="18" y2="16"></line>
+          </svg>
+        </button>
+
+        <!-- 3. Top up (Coral / Red) -->
+        <button class="mova-action-btn btn-mova-topup" onclick="openTopUpModal()">
+          <span>Top up</span>
+          <svg class="action-btn-icon" viewBox="0 0 24 24">
+            <polyline points="17 1 21 5 17 9"></polyline>
+            <path d="M3 11V9a4 4 0 0 1 4-4h14"></path>
+            <polyline points="7 23 3 19 7 15"></polyline>
+            <path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
+          </svg>
+        </button>
+
+        <!-- 4. Exchange (Charcoal Black) -->
+        <button class="mova-action-btn btn-mova-exchange" onclick="openExchangeModal()">
+          <span>Exchange</span>
+          <svg class="action-btn-icon" viewBox="0 0 24 24">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+        </button>
+      </section>
+
+      <!-- BOTTOM ROW: 2 Cards (Exact match to Reference Image 1) -->
+      <section class="mova-bottom-grid" aria-label="Transactions and Spending Overview">
+
+        <!-- Card 3: Recent Transactions White Card -->
+        <div class="mova-tx-card">
+          <div class="tx-card-header">
+            <span class="tx-card-title">Recent transactions</span>
+            <button class="tx-view-all-link" onclick="openAllTransactionsModal()" style="background:none;border:none;">View all</button>
+          </div>
+
+          <ul class="tx-list" id="recent-transactions-list">
+            <!-- 1. Amazon -->
+            <li class="tx-item" onclick="showStaticReceipt('Amazon', -78.90, 'Amazon Marketplace e-Commerce')">
+              <div class="tx-item-left">
+                <div class="tx-avatar amazon">a</div>
+                <div class="tx-meta">
+                  <span class="tx-name">Amazon</span>
+                  <span class="tx-time">7 Aug, 20:24</span>
+                </div>
+              </div>
+              <span class="tx-amount negative">- ₹78.90</span>
+            </li>
+
+            <!-- 2. Spotify -->
+            <li class="tx-item" onclick="showStaticReceipt('Spotify', -9.99, 'Spotify Premium Monthly Subscription')">
+              <div class="tx-item-left">
+                <div class="tx-avatar spotify">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                    <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/>
+                    <path d="M8 11.5c3-1 6-0.8 8.5.5M8.5 14.2c2.5-.8 5-.6 7 .4M9 17c2-.6 4-.5 5.5.3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                  </svg>
+                </div>
+                <div class="tx-meta">
+                  <span class="tx-name">Spotify</span>
+                  <span class="tx-time">13 Aug, 20:24</span>
+                </div>
+              </div>
+              <span class="tx-amount negative">- ₹9.99</span>
+            </li>
+
+            <!-- 3. Salary -->
+            <li class="tx-item" onclick="showStaticReceipt('Salary', 2450.00, 'Direct Corporate Salary Credit')">
+              <div class="tx-item-left">
+                <div class="tx-avatar salary">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                    <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                  </svg>
+                </div>
+                <div class="tx-meta">
+                  <span class="tx-name">Salary</span>
+                  <span class="tx-time">7 Aug, 20:24</span>
+                </div>
+              </div>
+              <span class="tx-amount positive">+ ₹2,450.00</span>
+            </li>
+
+            <!-- 4. Starbucks -->
+            <li class="tx-item" onclick="showStaticReceipt('Starbucks', -4.50, 'Starbucks Coffee POS Payment')">
+              <div class="tx-item-left">
+                <div class="tx-avatar starbucks">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                    <circle cx="12" cy="12" r="10"/>
+                    <path d="M12 6a6 6 0 0 0-6 6c0 3.3 2.7 6 6 6s6-2.7 6-6a6 6 0 0 0-6-6zm0 10a4 4 0 1 1 0-8 4 4 0 0 1 0 8z" fill="#ffffff"/>
+                  </svg>
+                </div>
+                <div class="tx-meta">
+                  <span class="tx-name">Starbucks</span>
+                  <span class="tx-time">7 Aug, 20:24</span>
+                </div>
+              </div>
+              <span class="tx-amount negative">- ₹4.50</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Card 4: Spending Overview Dark Card with Vertical Mint Pillar Bars -->
+        <div class="mova-overview-card">
+          <div class="overview-header">
+            <span class="overview-title">Spending overview</span>
+            <button class="overview-period-btn" onclick="cycleSpendingPeriod()">
+              <span id="spending-period-label">This month</span>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </button>
+          </div>
+
+          <div class="overview-val-big" id="spending-total-val">₹1,820.00</div>
+
+          <!-- 7 Vertical Mint Green Pillar Bars (Mon to Sun) -->
+          <div class="mova-pillars-container" id="pillars-container">
+            <div class="pillar-col">
+              <div class="pillar-bar" style="height: 38px;" title="Mon: ₹380"></div>
+              <span class="pillar-day">Mon</span>
+            </div>
+            <div class="pillar-col">
+              <div class="pillar-bar" style="height: 58px;" title="Tue: ₹580"></div>
+              <span class="pillar-day">Tue</span>
+            </div>
+            <div class="pillar-col">
+              <div class="pillar-bar" style="height: 86px;" title="Wed: ₹860"></div>
+              <span class="pillar-day">Wed</span>
+            </div>
+            <div class="pillar-col">
+              <div class="pillar-bar" style="height: 52px;" title="Thu: ₹520"></div>
+              <span class="pillar-day">Thu</span>
+            </div>
+            <div class="pillar-col">
+              <div class="pillar-bar" style="height: 104px;" title="Fri: ₹1,040"></div>
+              <span class="pillar-day">Fri</span>
+            </div>
+            <div class="pillar-col">
+              <div class="pillar-bar" style="height: 128px;" title="Sat: ₹1,280"></div>
+              <span class="pillar-day">Sat</span>
+            </div>
+            <div class="pillar-col">
+              <div class="pillar-bar" style="height: 74px;" title="Sun: ₹740"></div>
+              <span class="pillar-day">Sun</span>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+    </main>
+
+  </div>
+
+  <!-- ================= 3. INTERACTIVE MODALS ================= -->
+
+  <!-- MODAL 1: TRANSFER MONEY (With Real-Time Carbon Preview) -->
+  <div class="mova-modal-overlay hidden" id="modal-transfer">
+    <div class="mova-modal-card">
+      <div class="mova-modal-header">
+        <h3 class="mova-modal-title">Transfer Money</h3>
+        <button class="mova-modal-close" onclick="closeModal('modal-transfer')">&times;</button>
+      </div>
+      <div class="mova-modal-body">
+        <form id="transfer-form" onsubmit="handleTransferSubmit(event)">
+          <div class="mova-form-group">
+            <label class="mova-form-label">Debit From Account</label>
+            <select class="mova-form-select" id="transfer-source-acc">
+              <option value="HDFC9999">Main Account • HDFC9999 (₹9,560.00)</option>
+              <option value="DEMO0001">Investor Account • DEMO0001 (₹45,000.00)</option>
+              <option value="ALICE101">Alice Smith • ALICE101 (₹18,200.00)</option>
+            </select>
+          </div>
+
+          <div class="mova-form-group">
+            <label class="mova-form-label">Recipient Account / Beneficiary</label>
+            <select class="mova-form-select" id="transfer-dest-acc" onchange="handleRecipientSelect(this.value)">
+              <option value="MAH123">Bank of Maharashtra • MAH123 (IFSC: MAHB0001234)</option>
+              <option value="IDF892">IDFC FIRST Bank • IDF892 (IFSC: IDFB0004567)</option>
+              <option value="SBIN456">State Bank of India • SBIN456 (IFSC: SBIN0000888)</option>
+              <option value="BOB202">Bob Kumar • BOB202 (ICICI Bank)</option>
+              <option value="manual">Enter Manual Bank ID / UPI...</option>
+            </select>
+          </div>
+
+          <div class="mova-form-group hidden" id="manual-recipient-group">
+            <label class="mova-form-label">Manual Recipient Bank ID</label>
+            <input type="text" class="mova-form-input" id="manual-recipient-id" placeholder="e.g. ICIC5500 or user@upi" />
+          </div>
+
+          <div class="mova-form-group">
+            <label class="mova-form-label">Transfer Amount (INR ₹)</label>
+            <input type="number" class="mova-form-input" id="transfer-amount-input" step="1" min="1" max="1000000" value="1250" oninput="updateCarbonPreview()" required />
+            <div class="mova-amount-pills">
+              <button type="button" class="amount-pill" onclick="setQuickAmount(500)">₹500</button>
+              <button type="button" class="amount-pill" onclick="setQuickAmount(1250)">₹1,250</button>
+              <button type="button" class="amount-pill" onclick="setQuickAmount(2500)">₹2,500</button>
+              <button type="button" class="amount-pill" onclick="setQuickAmount(5000)">₹5,000</button>
+              <button type="button" class="amount-pill" onclick="setQuickAmount(10000)">₹10,000</button>
+            </div>
+          </div>
+
+          <div class="mova-form-group">
+            <label class="mova-form-label">Transfer Method</label>
+            <select class="mova-form-select" id="transfer-payment-type" onchange="updateCarbonPreview()">
+              <option value="UPI_TRANSFER">UPI Transfer (Instant • Low Footprint)</option>
+              <option value="IMPS">IMPS Immediate Payment (Real-Time)</option>
+              <option value="NEFT">NEFT National Electronic Funds</option>
+              <option value="RTGS">RTGS Real Time Gross Settlement</option>
+            </select>
+          </div>
+
+          <div class="mova-form-group">
+            <label class="mova-form-label">Transaction Note</label>
+            <input type="text" class="mova-form-input" id="transfer-note" placeholder="e.g. Consulting fees, utility invoice" value="Project milestone payment" />
+          </div>
+
+          <!-- Real-Time Carbon Preview Card -->
+          <div class="mova-carbon-preview-box">
+            <div class="carbon-preview-title">
+              <span>🌱 Computational Carbon Footprint Preview</span>
+              <span class="preview-badge simulated">SIMULATED TELEMETRY</span>
+            </div>
+            <div class="carbon-preview-grid">
+              <div>
+                <span class="c-meta-label">Attributed Energy</span>
+                <span class="c-meta-val" id="prev-energy">0.695 Joules</span>
+              </div>
+              <div>
+                <span class="c-meta-label">Scope 2 CO₂ Footprint</span>
+                <span class="c-meta-val" id="prev-carbon">0.138 mg CO₂</span>
+              </div>
+              <div>
+                <span class="c-meta-label">Grid Factor (CEA India)</span>
+                <span class="c-meta-val">713.0 g/kWh</span>
+              </div>
+              <div>
+                <span class="c-meta-label">Ledger Integrity</span>
+                <span class="c-meta-val text-success">SHA-256 Digest</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="mova-form-actions">
+            <button type="button" class="mova-btn-secondary" onclick="closeModal('modal-transfer')">Cancel</button>
+            <button type="submit" class="mova-btn-primary" id="btn-submit-transfer">Authorize Transfer →</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 2: TRANSACTION DIGITAL RECEIPT (With SHA-256 Audit Verification) -->
+  <div class="mova-modal-overlay hidden" id="modal-receipt">
+    <div class="mova-modal-card">
+      <div class="mova-modal-header">
+        <h3 class="mova-modal-title">Transaction Digital Receipt</h3>
+        <button class="mova-modal-close" onclick="closeModal('modal-receipt')">&times;</button>
+      </div>
+      <div class="mova-modal-body">
+        <div class="receipt-success-badge">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.5">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+          </svg>
+          <span style="font-weight: 700; color:#059669;">Transaction Successfully Executed & Audited</span>
+        </div>
+
+        <div class="receipt-amount-row">
+          <span class="receipt-amt-huge" id="rcpt-amount">₹1,250.00</span>
+          <span class="receipt-status-pill">COMPLETED</span>
+        </div>
+
+        <div class="receipt-meta-table">
+          <div class="receipt-meta-row">
+            <span class="receipt-label">Transaction ID:</span>
+            <span class="receipt-value" id="rcpt-txid">9a81d666-dbb4-4770-987a</span>
+          </div>
+          <div class="receipt-meta-row">
+            <span class="receipt-label">Timestamp:</span>
+            <span class="receipt-value" id="rcpt-time">2026-10-10 19:04:37 IST</span>
+          </div>
+          <div class="receipt-meta-row">
+            <span class="receipt-label">Sender Account:</span>
+            <span class="receipt-value" id="rcpt-sender">HDFC9999 (Soham Gaikwad)</span>
+          </div>
+          <div class="receipt-meta-row">
+            <span class="receipt-label">Recipient Account:</span>
+            <span class="receipt-value" id="rcpt-recipient">MAH123 (Bank of Maharashtra)</span>
+          </div>
+          <div class="receipt-meta-row">
+            <span class="receipt-label">Attributed Workload Energy:</span>
+            <span class="receipt-value" id="rcpt-energy">0.6952 Joules (1.93e-7 kWh)</span>
+          </div>
+          <div class="receipt-meta-row">
+            <span class="receipt-label">Computational Carbon Footprint:</span>
+            <span class="receipt-value" id="rcpt-carbon">0.138 mg CO₂ (0.00014 g)</span>
+          </div>
+          <div class="receipt-meta-row">
+            <span class="receipt-label">Telemetry Basis:</span>
+            <span class="receipt-value">CEA India v20.0 • 713 g/kWh [SIMULATED]</span>
+          </div>
+          <div class="receipt-meta-row">
+            <span class="receipt-label">Cryptographic Audit Hash:</span>
+            <span class="receipt-value font-mono" id="rcpt-hash" style="word-break:break-all; font-size:11px;">d3e87443725e8f8e9348140a88e8a58ec63ab14be3014a71249d5848c3d5d6e2</span>
+          </div>
+        </div>
+
+        <div class="mova-form-actions">
+          <a href="/sustainability/report/pdf" target="_blank" class="mova-btn-secondary" style="text-decoration:none; display:inline-flex; align-items:center; gap:6px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+            Download PDF Report
+          </a>
+          <button type="button" class="mova-btn-primary" onclick="closeModal('modal-receipt')">Done</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 3: SWITCH USER / PROFILE -->
+  <div class="mova-modal-overlay hidden" id="modal-user">
+    <div class="mova-modal-card">
+      <div class="mova-modal-header">
+        <h3 class="mova-modal-title">Select User Account</h3>
+        <button class="mova-modal-close" onclick="closeModal('modal-user')">&times;</button>
+      </div>
+      <div class="mova-modal-body">
+        <p style="font-size:13px; color:#64748b; margin-bottom:16px;">Switch active demo account to test customer transfers, balances, and multi-user telemetry:</p>
+        <div class="user-switch-list">
+          <div class="user-switch-item" onclick="switchUser('soham_gaikwad')">
+            <div class="mova-avatar-circle" style="background:#52bd89;">SG</div>
+            <div style="flex:1;">
+              <strong>Soham Gaikwad (Admin)</strong>
+              <div style="font-size:12px; color:#64748b;">HDFC9999 • ₹26,289.38</div>
+            </div>
+            <span class="user-tier-badge">Admin</span>
+          </div>
+
+          <div class="user-switch-item" onclick="switchUser('olivia_rhye')">
+            <div class="mova-avatar-circle" style="background:#6c5dd3;">OR</div>
+            <div style="flex:1;">
+              <strong>Olivia Rhye (Reference)</strong>
+              <div style="font-size:12px; color:#64748b;">OLIV5678 • ₹24,560.00</div>
+            </div>
+            <span class="user-tier-badge" style="background:#ecfdf5; color:#059669;">Premium</span>
+          </div>
+
+          <div class="user-switch-item" onclick="switchUser('demo_user')">
+            <div class="mova-avatar-circle" style="background:#f7b944; color:#12161c;">DU</div>
+            <div style="flex:1;">
+              <strong>Demo User (Investor)</strong>
+              <div style="font-size:12px; color:#64748b;">DEMO0001 • ₹45,000.00</div>
+            </div>
+            <span class="user-tier-badge">Investor</span>
+          </div>
+
+          <div class="user-switch-item" onclick="switchUser('alice_smith')">
+            <div class="mova-avatar-circle" style="background:#f05d5e;">AS</div>
+            <div style="flex:1;">
+              <strong>Alice Smith</strong>
+              <div style="font-size:12px; color:#64748b;">ALICE101 • ₹18,200.00</div>
+            </div>
+            <span class="user-tier-badge">Personal</span>
+          </div>
+
+          <div class="user-switch-item" onclick="switchUser('bob_kumar')">
+            <div class="mova-avatar-circle" style="background:#3b82f6;">BK</div>
+            <div style="flex:1;">
+              <strong>Bob Kumar</strong>
+              <div style="font-size:12px; color:#64748b;">BOB202 • ₹12,400.00</div>
+            </div>
+            <span class="user-tier-badge">Personal</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 4: PAY BILLS -->
+  <div class="mova-modal-overlay hidden" id="modal-paybills">
+    <div class="mova-modal-card">
+      <div class="mova-modal-header">
+        <h3 class="mova-modal-title">Pay Bills</h3>
+        <button class="mova-modal-close" onclick="closeModal('modal-paybills')">&times;</button>
+      </div>
+      <div class="mova-modal-body">
+        <div class="bill-categories-grid">
+          <div class="bill-cat-card" onclick="quickPayBill('Electricity Bill - Tata Power', 1850)">
+            <span style="font-size:24px;">⚡</span>
+            <strong>Electricity</strong>
+            <span style="font-size:11px; color:#64748b;">Tata Power</span>
+          </div>
+          <div class="bill-cat-card" onclick="quickPayBill('Water Utility - BMC Water', 420)">
+            <span style="font-size:24px;">💧</span>
+            <strong>Water</strong>
+            <span style="font-size:11px; color:#64748b;">Municipal Corp</span>
+          </div>
+          <div class="bill-cat-card" onclick="quickPayBill('Broadband Bill - Jio Fiber', 999)">
+            <span style="font-size:24px;">🌐</span>
+            <strong>Internet</strong>
+            <span style="font-size:11px; color:#64748b;">Jio Fiber</span>
+          </div>
+          <div class="bill-cat-card" onclick="quickPayBill('Mobile Postpaid - Airtel', 599)">
+            <span style="font-size:24px;">📱</span>
+            <strong>Mobile</strong>
+            <span style="font-size:11px; color:#64748b;">Airtel Postpaid</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 5: TOP UP -->
+  <div class="mova-modal-overlay hidden" id="modal-topup">
+    <div class="mova-modal-card">
+      <div class="mova-modal-header">
+        <h3 class="mova-modal-title">Top Up Account Balance</h3>
+        <button class="mova-modal-close" onclick="closeModal('modal-topup')">&times;</button>
+      </div>
+      <div class="mova-modal-body">
+        <div class="mova-form-group">
+          <label class="mova-form-label">Select Deposit Amount (INR ₹)</label>
+          <input type="number" class="mova-form-input" id="topup-amount" value="5000" min="100" />
+        </div>
+        <div class="mova-form-actions">
+          <button type="button" class="mova-btn-secondary" onclick="closeModal('modal-topup')">Cancel</button>
+          <button type="button" class="mova-btn-primary" onclick="executeTopUp()">Deposit Funds →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 6: WORKLOAD EXCHANGE / SIMULATOR -->
+  <div class="mova-modal-overlay hidden" id="modal-exchange">
+    <div class="mova-modal-card">
+      <div class="mova-modal-header">
+        <h3 class="mova-modal-title">Workload Exchange & Traffic Bench</h3>
+        <button class="mova-modal-close" onclick="closeModal('modal-exchange')">&times;</button>
+      </div>
+      <div class="mova-modal-body">
+        <p style="font-size:13px; color:#64748b; margin-bottom:16px;">
+          Generate multi-transaction batches to simulate real-world computational load, measure CPU wattage, and drive live Prometheus & Grafana metrics:
+        </p>
+        <div class="exchange-bench-grid">
+          <button class="bench-btn" onclick="executeBatchSimulation(5)">
+            <strong>Generate 5 Transactions</strong>
+            <span>Quick Smoke Test (3.5 Joules)</span>
+          </button>
+          <button class="bench-btn" onclick="executeBatchSimulation(10)">
+            <strong>Generate 10 Transactions</strong>
+            <span>Multi-User Load (7.0 Joules)</span>
+          </button>
+          <button class="bench-btn" onclick="executeBatchSimulation(25)">
+            <strong>Generate 25 Transactions</strong>
+            <span>High Concurrency Stress Test</span>
+          </button>
+        </div>
+        <div id="exchange-feedback" style="margin-top:14px; font-size:12px; color:#059669; font-weight:600;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notification Toast Container -->
+  <div id="mova-toast-container"></div>
+
+  <!-- Bank Script Controller -->
+  <script src="/bank/bank.js"></script>
+</body>
+</html>

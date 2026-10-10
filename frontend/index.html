@@ -3,770 +3,714 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Green-Finance | User Banking Portal & Workload Stimulator</title>
-  <meta name="description" content="Simulated Banking Platform with Real-Time Energy Telemetry, OpenTelemetry Workload Tracing, and Carbon Footprint Attribution" />
+  <title>Green Finance | Financial Workload Energy &amp; Carbon Intelligence</title>
+  <meta name="description" content="Dual-Platform System: Simulated Digital Banking and Sustainability Investigator for Computational Energy & Carbon Footprint Analysis." />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared/styles.css" />
+  <style>
+    /* Executive Gateway Hub Styling */
+    body {
+      background: #f8fafc;
+      color: #0f172a;
+      font-family: 'Inter', -apple-system, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    .hub-header {
+      background: #ffffff;
+      border-bottom: 1px solid #e2e8f0;
+      padding: 16px 36px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .hub-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .hub-logo {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: #ecfdf5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      border: 1px solid #a7f3d0;
+    }
+
+    .hub-title {
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .hub-subtitle {
+      font-size: 11px;
+      color: #64748b;
+    }
+
+    .hub-status-pills {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .hub-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      background: #f1f5f9;
+      border: 1px solid #e2e8f0;
+      color: #475569;
+    }
+
+    .hub-pill.green {
+      background: #ecfdf5;
+      color: #059669;
+      border-color: #a7f3d0;
+    }
+
+    .hub-pill.amber {
+      background: #fffbeb;
+      color: #d97706;
+      border-color: #fde68a;
+    }
+
+    .hub-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    .hub-main {
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+    }
+
+    .hero-banner {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .hero-tag {
+      display: inline-block;
+      padding: 4px 14px;
+      border-radius: 20px;
+      background: #ecfdf5;
+      color: #059669;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      border: 1px solid #a7f3d0;
+    }
+
+    .hero-heading {
+      font-size: 38px;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      color: #0f172a;
+      line-height: 1.15;
+      margin-bottom: 14px;
+    }
+
+    .hero-desc {
+      font-size: 16px;
+      color: #475569;
+      max-width: 800px;
+      margin: 0 auto 28px;
+      line-height: 1.6;
+    }
+
+    /* Live Telemetry Bar */
+    .telemetry-bar {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 40px;
+      box-shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.05);
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 20px;
+    }
+
+    .t-item {
+      border-right: 1px solid #e2e8f0;
+      padding-right: 16px;
+    }
+
+    .t-item:last-child {
+      border-right: none;
+      padding-right: 0;
+    }
+
+    .t-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: #64748b;
+      letter-spacing: 0.04em;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .t-val {
+      font-size: 26px;
+      font-weight: 800;
+      font-family: 'JetBrains Mono', monospace;
+      color: #0f172a;
+    }
+
+    .t-sub {
+      font-size: 11px;
+      color: #94a3b8;
+      margin-top: 4px;
+    }
+
+    /* Dual Application Hero Cards */
+    .apps-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+      margin-bottom: 40px;
+    }
+
+    .app-card {
+      background: #ffffff;
+      border: 2px solid #e2e8f0;
+      border-radius: 20px;
+      padding: 32px;
+      transition: all 0.25s ease;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 10px 15px -3px rgba(15, 23, 42, 0.04);
+    }
+
+    .app-card:hover {
+      border-color: #059669;
+      transform: translateY(-4px);
+      box-shadow: 0 20px 25px -5px rgba(5, 150, 105, 0.1);
+    }
+
+    .app-card.bank-card {
+      border-top: 6px solid #2563eb;
+    }
+
+    .app-card.investigator-card {
+      border-top: 6px solid #059669;
+    }
+
+    .app-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 16px;
+    }
+
+    .app-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+    }
+
+    .bank-card .app-icon {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+    }
+
+    .investigator-card .app-icon {
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+    }
+
+    .app-chip {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .bank-card .app-chip {
+      background: #eff6ff;
+      color: #2563eb;
+    }
+
+    .investigator-card .app-chip {
+      background: #ecfdf5;
+      color: #059669;
+    }
+
+    .app-name {
+      font-size: 22px;
+      font-weight: 800;
+      color: #0f172a;
+      margin-bottom: 8px;
+    }
+
+    .app-tagline {
+      font-size: 13px;
+      color: #64748b;
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+
+    .feature-list {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .feature-item {
+      font-size: 13px;
+      color: #334155;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .feature-check {
+      color: #059669;
+      font-weight: 800;
+    }
+
+    .btn-launch {
+      margin-top: auto;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 14px 24px;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .btn-launch.bank {
+      background: #2563eb;
+      color: #ffffff;
+    }
+
+    .btn-launch.bank:hover {
+      background: #1d4ed8;
+    }
+
+    .btn-launch.investigator {
+      background: #059669;
+      color: #ffffff;
+    }
+
+    .btn-launch.investigator:hover {
+      background: #047857;
+    }
+
+    /* Live Action Test Bench */
+    .bench-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 28px;
+      margin-bottom: 40px;
+    }
+
+    .bench-title {
+      font-size: 18px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .bench-desc {
+      font-size: 13px;
+      color: #64748b;
+      margin-bottom: 20px;
+    }
+
+    .bench-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .btn-bench {
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid #cbd5e1;
+      background: #ffffff;
+      color: #0f172a;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s;
+    }
+
+    .btn-bench:hover {
+      background: #f1f5f9;
+      border-color: #94a3b8;
+    }
+
+    .btn-bench.primary {
+      background: #059669;
+      color: #ffffff;
+      border-color: #059669;
+    }
+
+    .btn-bench.primary:hover {
+      background: #047857;
+    }
+
+    .dev-links-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .dev-card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 16px;
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.15s;
+    }
+
+    .dev-card:hover {
+      background: #ffffff;
+      border-color: #059669;
+      transform: translateY(-2px);
+    }
+
+    .dev-card strong {
+      display: block;
+      font-size: 14px;
+      color: #0f172a;
+      margin-bottom: 4px;
+    }
+
+    .dev-card span {
+      font-size: 12px;
+      color: #64748b;
+    }
+
+    .hub-footer {
+      text-align: center;
+      font-size: 12px;
+      color: #94a3b8;
+      border-top: 1px solid #e2e8f0;
+      padding-top: 24px;
+    }
+  </style>
 </head>
-<body class="theme-light">
+<body>
 
-  <!-- ================= TOP NAVIGATION BAR ================= -->
-  <header class="app-header">
-    <div class="header-left">
-      <div class="brand-badge">
-        <div class="brand-icon">🏛️</div>
-        <div>
-          <h1 class="brand-title">Green-Finance <span class="brand-sub">BANK PORTAL</span></h1>
-          <p class="brand-tagline">Simulated Core Banking • Client-Side Workload Stimulator</p>
-        </div>
+  <!-- Top Header -->
+  <header class="hub-header">
+    <a href="/" class="hub-brand">
+      <div class="hub-logo">🌱</div>
+      <div>
+        <div class="hub-title">Green Finance</div>
+        <div class="hub-subtitle">Software Engineering TE Sem V • S.P.I.T. Mumbai • Group 13</div>
       </div>
-      <div class="system-status-pills">
-        <span class="status-pill online" title="Bank API Backend Active on port 8001">
-          <span class="status-dot"></span> Bank API :8001
-        </span>
-        <span class="status-pill online" title="Real-Time Streaming to Green-Finance-2 on port 8000">
-          <span class="status-dot"></span> Synced to GF-2 :8000
-        </span>
-        <span class="status-pill online" title="Prometheus Metrics Scraper Active">
-          <span class="status-dot"></span> Prometheus :9090
-        </span>
-      </div>
-    </div>
+    </a>
 
-    <div class="header-right">
-      <button class="btn-stimulate-action" onclick="switchView('stimulator')">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-        Stimulate 10 Users
-      </button>
-      <button class="btn-primary-action" onclick="openTransferModal()">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        Send Money
-      </button>
-      <a href="http://localhost:8000" target="_blank" class="btn-enterprise-portal" title="Open Enterprise Sustainability Suite (Green-Finance-2)">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-        Enterprise Suite (:8000)
-      </a>
-      <div class="user-profile-pill" onclick="openUserSwitchModal()" title="Click to switch banking user">
-        <div class="user-avatar" id="nav-user-avatar">SG</div>
-        <div class="user-meta">
-          <span class="user-name" id="nav-user-name">Soham Gaikwad</span>
-          <span class="user-bank-id" id="nav-user-bankid">Bank ID: <strong>HDFC9999</strong> ▾</span>
-        </div>
-      </div>
+    <div class="hub-status-pills">
+      <span class="hub-pill green">
+        <span class="hub-dot"></span> Backend: Connected (:8000)
+      </span>
+      <span class="hub-pill amber">
+        <span class="hub-dot"></span> Telemetry: <strong>SIMULATED</strong>
+      </span>
+      <span class="hub-pill">
+        <span class="hub-dot" style="background:#059669;"></span> Grid: <strong>713 g/kWh (CEA India)</strong>
+      </span>
+      <span class="hub-pill green">
+        <span class="hub-dot"></span> Scraper: Prometheus (:9090)
+      </span>
     </div>
   </header>
 
-  <!-- ================= MAIN APPLICATION LAYOUT ================= -->
-  <div class="app-layout">
-    <!-- Sidebar Navigation -->
-    <aside class="app-sidebar">
-      <div class="sidebar-section-title">Banking Services</div>
-      <nav class="sidebar-menu">
-        <button class="nav-link active" onclick="switchView('overview', this)">
-          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
-          Bank Dashboard
-        </button>
-        <button class="nav-link" onclick="switchView('transfer', this)">
-          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
-          Make Payment / Transfer
-        </button>
-        <button class="nav-link" onclick="switchView('transactions', this)">
-          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-          Transaction History
-          <span class="badge-mini" id="sidebar-tx-count">12 Tx</span>
-        </button>
-        <button class="nav-link" onclick="switchView('stimulator', this)">
-          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-          10-User Workload Lab
-          <span class="badge-mini accent">Live Stimulator</span>
-        </button>
-        <button class="nav-link" onclick="switchView('ledger', this)">
-          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-          Double-Entry Ledger
-        </button>
-      </nav>
+  <!-- Main Container -->
+  <main class="hub-main">
 
-      <div class="sidebar-section-title">Telemetry & Infrastructure</div>
-      <nav class="sidebar-menu">
-        <button class="nav-link" onclick="switchView('promql', this)">
-          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
-          PromQL Console
-        </button>
-        <button class="nav-link" onclick="switchView('grafana', this)">
-          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M18 9l-5 5-4-4-3 3"/></svg>
-          Grafana Dashboards
-        </button>
-        <button class="nav-link" onclick="switchView('swagger', this)">
-          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-          Bank Swagger API (:8001)
-        </button>
-      </nav>
+    <!-- Hero Title -->
+    <div class="hero-banner">
+      <span class="hero-tag">IEEE 830-1998 Engineering Framework</span>
+      <h1 class="hero-heading">Real-Time Energy Observability &amp; Computational Carbon Intelligence</h1>
+      <p class="hero-desc">
+        A unified dual-platform ecosystem connecting simulated financial banking transactions with container-level kernel telemetry, marginal carbon estimation, and regulatory ESG auditing.
+      </p>
+    </div>
 
-      <!-- Client-Server Sync Notice -->
-      <div class="sidebar-srs-card">
-        <div class="srs-card-header">
-          <span class="srs-chip">Client-Server Sync</span>
-          <span class="srs-phase">Port 8001 → 8000</span>
+    <!-- Live Telemetry KPI Bar -->
+    <div class="telemetry-bar">
+      <div class="t-item">
+        <div class="t-label">
+          <span>Completed Tx</span>
+          <span style="color:#059669;">OBSERVED</span>
         </div>
-        <p class="srs-desc">All transactions performed or stimulated here trigger real backend workloads and are streamed live to Green-Finance-2 for enterprise analytics.</p>
-      </div>
-    </aside>
-
-    <!-- Main Content Body -->
-    <main class="app-main">
-
-      <!-- ================= NOTIFICATION BANNER ================= -->
-      <div id="live-notification" class="alert-banner info hidden">
-        <div class="alert-icon">⚡</div>
-        <div class="alert-content">
-          <strong id="notif-title">Transaction Processed</strong>
-          <span id="notif-msg">Payment successfully audited and streamed to Green-Finance-2.</span>
-        </div>
-        <button class="alert-dismiss" onclick="dismissNotif()">Dismiss</button>
+        <div class="t-val" id="hub-tx-count">—</div>
+        <div class="t-sub" id="hub-volume-inr">₹0.00 Volume</div>
       </div>
 
-      <!-- ================= VIEW 1: BANK DASHBOARD ================= -->
-      <section id="view-overview" class="view-panel active">
-        <div class="panel-header">
-          <div>
-            <h2 class="panel-title">Welcome back, <span id="dash-greeting-name">Soham Gaikwad</span></h2>
-            <p class="panel-subtitle">Here is your account summary, real-time balance, and computational sustainability footprint.</p>
-          </div>
-          <div class="panel-actions">
-            <button class="btn-secondary-sm" onclick="fetchLiveAccounts()">↻ Refresh Balances</button>
-            <button class="btn-primary-sm" onclick="openTransferModal()">+ Transfer Funds</button>
-          </div>
+      <div class="t-item">
+        <div class="t-label">
+          <span>Attributed Energy</span>
+          <span style="color:#d97706;">SIMULATED</span>
         </div>
-
-        <!-- BANK ACCOUNT HERO CARD + KPI TILES -->
-        <div class="bank-hero-grid">
-          <!-- Primary Account Card -->
-          <div class="bank-account-card">
-            <div class="card-chip-row">
-              <span class="card-bank-brand">HDFC BANK</span>
-              <span class="card-type-chip">PREMIUM SAVINGS</span>
-            </div>
-            <div class="card-balance-section">
-              <div class="card-balance-label">Available Balance</div>
-              <div class="card-balance-value" id="dash-user-balance">₹50,000.00</div>
-            </div>
-            <div class="card-footer-row">
-              <div>
-                <div class="card-holder-label">ACCOUNT NUMBER</div>
-                <div class="card-holder-val" id="dash-masked-account">HDFC •••• •••• 9999</div>
-              </div>
-              <div>
-                <div class="card-holder-label">IFSC / ROUTING</div>
-                <div class="card-holder-val">HDFC0000999</div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Sustainability Footprint Badge Card -->
-          <div class="sustainability-badge-card">
-            <div class="sus-badge-header">
-              <span class="badge-icon">🌱</span>
-              <div>
-                <h3>Green Banking Score</h3>
-                <p>Scope 2 Transaction Intensity</p>
-              </div>
-            </div>
-            <div class="sus-badge-stats">
-              <div class="sus-stat">
-                <span class="sus-val" id="dash-carbon-tx">0.137</span>
-                <span class="sus-lbl">mg CO₂ / transaction</span>
-              </div>
-              <div class="sus-stat">
-                <span class="sus-val" id="dash-joules-tx">0.69</span>
-                <span class="sus-lbl">Joules / transaction</span>
-              </div>
-            </div>
-            <div class="sus-footer">
-              <span class="sus-tag">CEA India Factor: 713 g/kWh</span>
-              <span class="sus-tag green">100% Carbon Offset</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- QUICK BENEFICIARY SELECTOR -->
-        <div class="quick-beneficiaries-card">
-          <div class="section-heading-row">
-            <h3>Registered Beneficiary Accounts</h3>
-            <span class="text-muted">Instant settlement via IMPS / UPI</span>
-          </div>
-          <div class="beneficiaries-grid" id="beneficiaries-list">
-            <!-- Populated dynamically by JS -->
-          </div>
-        </div>
-
-        <!-- RECENT TRANSACTIONS MINI TABLE -->
-        <div class="recent-tx-card">
-          <div class="section-heading-row">
-            <h3>Recent Bank Transactions</h3>
-            <button class="btn-link" onclick="switchView('transactions')">View All Transactions →</button>
-          </div>
-          <div class="table-responsive">
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>Txn ID</th>
-                  <th>Date & Time</th>
-                  <th>Sender</th>
-                  <th>Recipient</th>
-                  <th>Amount</th>
-                  <th>Method</th>
-                  <th>Energy (J)</th>
-                  <th>Estimated CO₂</th>
-                  <th>Status</th>
-                  <th>Audit</th>
-                </tr>
-              </thead>
-              <tbody id="dash-recent-txns-body">
-                <!-- Populated dynamically -->
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </section>
-
-      <!-- ================= VIEW 2: MAKE PAYMENT / TRANSFER ================= -->
-      <section id="view-transfer" class="view-panel">
-        <div class="panel-header">
-          <div>
-            <h2 class="panel-title">Inter-Bank Fund Transfer</h2>
-            <p class="panel-subtitle">Execute atomic transfers with double-entry ledger bookkeeping and real-time Kepler telemetry attribution.</p>
-          </div>
-        </div>
-
-        <div class="transfer-container">
-          <div class="transfer-form-card">
-            <form id="payment-transfer-form" onsubmit="handleExecuteTransfer(event)">
-              <div class="form-group">
-                <label>Source Account</label>
-                <select id="transfer-source" class="form-input" required>
-                  <option value="HDFC9999">Soham Gaikwad (HDFC9999) - Available: ₹50,000.00</option>
-                  <option value="DEMO0001">Demo User (DEMO0001) - Available: ₹25,000.00</option>
-                  <option value="ALICE101">Alice Smith (ALICE101) - Available: ₹30,000.00</option>
-                  <option value="BOB202">Bob Kumar (BOB202) - Available: ₹15,000.00</option>
-                </select>
-              </div>
-
-              <div class="form-group">
-                <label>Destination Beneficiary Bank</label>
-                <select id="transfer-dest" class="form-input" required>
-                  <option value="MAH123">Bank of Maharashtra (MAH123)</option>
-                  <option value="IDF892">IDFC First Bank (IDF892)</option>
-                  <option value="SBIN456">State Bank of India (SBIN456)</option>
-                  <option value="HDFC9999">HDFC Bank (HDFC9999)</option>
-                </select>
-              </div>
-
-              <div class="form-group">
-                <label>Transfer Amount (INR)</label>
-                <input type="number" id="transfer-amount" class="form-input" min="1" step="10" value="5000" required />
-                <div class="amount-pills">
-                  <button type="button" class="amount-pill" onclick="setTransferAmount(500)">₹500</button>
-                  <button type="button" class="amount-pill" onclick="setTransferAmount(2000)">₹2,000</button>
-                  <button type="button" class="amount-pill active" onclick="setTransferAmount(5000)">₹5,000</button>
-                  <button type="button" class="amount-pill" onclick="setTransferAmount(10000)">₹10,000</button>
-                  <button type="button" class="amount-pill" onclick="setTransferAmount(25000)">₹25,000</button>
-                </div>
-              </div>
-
-              <div class="form-group">
-                <label>Payment Protocol / Settlement</label>
-                <div class="radio-cards-group">
-                  <label class="radio-card">
-                    <input type="radio" name="transfer-type" value="UPI_TRANSFER" checked />
-                    <span class="rc-label">⚡ UPI Transfer (Instant 24x7)</span>
-                  </label>
-                  <label class="radio-card">
-                    <input type="radio" name="transfer-type" value="IMPS" />
-                    <span class="rc-label">🚀 IMPS (Immediate Settlement)</span>
-                  </label>
-                  <label class="radio-card">
-                    <input type="radio" name="transfer-type" value="NEFT" />
-                    <span class="rc-label">🏦 NEFT / RTGS (Batch Net)</span>
-                  </label>
-                </div>
-              </div>
-
-              <div class="form-group">
-                <label>Transfer Note / Reference</label>
-                <input type="text" id="transfer-note" class="form-input" value="Inter-bank vendor settlement" placeholder="e.g. Utility bill payment" />
-              </div>
-
-              <div class="transfer-actions">
-                <button type="submit" class="btn-primary-action btn-block" id="btn-submit-transfer">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17l9.2-9.2M17 17V8H8"/></svg>
-                  Confirm & Transfer Funds
-                </button>
-              </div>
-            </form>
-          </div>
-
-          <!-- COMPUTATIONAL ENERGY PREVIEW CARD -->
-          <div class="computational-preview-card">
-            <h3>Computational Telemetry Preview</h3>
-            <p class="preview-sub">Kepler energy attribution profile for this transaction flow:</p>
-
-            <div class="telemetry-flow-diagram">
-              <div class="flow-node">api-gw</div>
-              <div class="flow-arrow">→</div>
-              <div class="flow-node">auth-service</div>
-              <div class="flow-arrow">→</div>
-              <div class="flow-node">fraud-service</div>
-              <div class="flow-arrow">→</div>
-              <div class="flow-node highlight">payment-service</div>
-              <div class="flow-arrow">→</div>
-              <div class="flow-node">ledger-service</div>
-            </div>
-
-            <div class="preview-metric-list">
-              <div class="p-metric-row">
-                <span>Estimated Container Energy:</span>
-                <strong id="preview-energy">~0.694 Joules</strong>
-              </div>
-              <div class="p-metric-row">
-                <span>Estimated Scope 2 Carbon:</span>
-                <strong id="preview-carbon">~0.137 mg CO₂</strong>
-              </div>
-              <div class="p-metric-row">
-                <span>Regional Grid Baseline:</span>
-                <strong>713 gCO₂/kWh (CEA India)</strong>
-              </div>
-              <div class="p-metric-row">
-                <span>Attribution Fidelity SLA:</span>
-                <strong>&gt; 95.0% (Passed)</strong>
-              </div>
-              <div class="p-metric-row">
-                <span>Audit Digest:</span>
-                <strong>SHA-256 Double-Entry Signed</strong>
-              </div>
-            </div>
-
-            <div class="sync-guarantee-box">
-              <span class="sg-dot"></span>
-              <span><strong>Live Sync Active:</strong> Completed transfers are streamed in real time to the Green-Finance-2 Enterprise platform for multi-user audit tracking.</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- ================= VIEW 3: TRANSACTION HISTORY ================= -->
-      <section id="view-transactions" class="view-panel">
-        <div class="panel-header">
-          <div>
-            <h2 class="panel-title">Audited Transaction History</h2>
-            <p class="panel-subtitle">Comprehensive transaction registry with Kepler energy attribution, carbon footprints, and SHA-256 cryptographic digests.</p>
-          </div>
-          <div class="panel-actions">
-            <button class="btn-secondary-sm" onclick="fetchLiveTransactions()">↻ Refresh History</button>
-          </div>
-        </div>
-
-        <!-- SEARCH AND FILTERS -->
-        <div class="filters-bar">
-          <input type="text" id="tx-search-input" class="search-input" placeholder="Search by Txn ID, bank, or reference..." oninput="handleSearchTxns(this.value)" />
-          <select id="tx-filter-status" class="filter-select" onchange="filterTxnsByStatus(this.value)">
-            <option value="ALL">All Statuses</option>
-            <option value="COMPLETED">Completed</option>
-            <option value="FAILED">Failed</option>
-          </select>
-          <select id="tx-filter-bank" class="filter-select" onchange="filterTxnsByBank(this.value)">
-            <option value="ALL">All Banks</option>
-            <option value="HDFC9999">HDFC9999</option>
-            <option value="MAH123">MAH123</option>
-            <option value="IDF892">IDF892</option>
-            <option value="SBIN456">SBIN456</option>
-          </select>
-        </div>
-
-        <div class="table-responsive">
-          <table class="data-table">
-            <thead>
-              <tr>
-                <th>Txn ID</th>
-                <th>Timestamp</th>
-                <th>Sender</th>
-                <th>Recipient</th>
-                <th>Amount (₹)</th>
-                <th>Protocol</th>
-                <th>Energy (J)</th>
-                <th>Carbon (mg)</th>
-                <th>Status</th>
-                <th>Audit Hash</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody id="full-transactions-body">
-              <!-- Populated dynamically -->
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-      <!-- ================= VIEW 4: 10-USER WORKLOAD STIMULATION LAB ================= -->
-      <section id="view-stimulator" class="view-panel">
-        <div class="panel-header">
-          <div>
-            <h2 class="panel-title">10-User Workload Stimulation Lab</h2>
-            <p class="panel-subtitle">Simulate concurrent banking traffic from multiple users to evaluate real-time Kepler telemetry and live synchronization to Green-Finance-2.</p>
-          </div>
-        </div>
-
-        <div class="stimulator-grid">
-          <!-- Stimulation Controls Card -->
-          <div class="stimulator-controls-card">
-            <h3>Workload Generator Controls</h3>
-            <p class="text-muted">Simulate transactions across 10 active bank customers (Soham, Demo User, Alice, Bob, etc.):</p>
-
-            <div class="form-group" style="margin-top: 16px;">
-              <label>Simulated Active Users: <strong id="lbl-user-count">10 Users</strong></label>
-              <input type="range" id="sim-user-slider" min="1" max="10" value="10" class="form-range" oninput="document.getElementById('lbl-user-count').textContent = this.value + ' Users'" />
-            </div>
-
-            <div class="form-group">
-              <label>Transactions per Batch: <strong id="lbl-batch-count">10 Transactions</strong></label>
-              <input type="range" id="sim-tx-slider" min="1" max="50" value="10" class="form-range" oninput="document.getElementById('lbl-batch-count').textContent = this.value + ' Transactions'" />
-            </div>
-
-            <div class="stimulator-buttons-row">
-              <button class="btn-stimulate-primary" onclick="runStimulateBatch(1)">
-                ⚡ Run 1 Single Transfer
-              </button>
-              <button class="btn-stimulate-accent" onclick="runStimulateBatch(10)">
-                👥 Stimulate 10 Concurrent Users
-              </button>
-              <button class="btn-stimulate-benchmark" onclick="runBenchmarkRepeatability()">
-                📊 Run 50 Batch Repeatability Test
-              </button>
-            </div>
-
-            <div class="stimulator-progress-box" id="stim-progress-box" style="display: none;">
-              <div class="progress-bar-label">
-                <span id="stim-progress-status">Executing transactions...</span>
-                <span id="stim-progress-pct">0%</span>
-              </div>
-              <div class="progress-track">
-                <div class="progress-fill" id="stim-progress-fill" style="width: 0%;"></div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Live Workload Telemetry Stream Log -->
-          <div class="stimulator-log-card">
-            <div class="section-heading-row">
-              <h3>Live Telemetry & Ingestion Stream</h3>
-              <span class="badge-mini green" id="stream-status-badge">Stream Active</span>
-            </div>
-            <div class="stream-terminal" id="stream-log-container">
-              <div class="term-line info">[SYSTEM] Workload Stimulator initialized on port 8001.</div>
-              <div class="term-line info">[TARGET] Green-Finance-2 Enterprise endpoint configured at http://localhost:8000.</div>
-              <div class="term-line success">[READY] 10 simulated user accounts armed for transaction generation.</div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- ================= VIEW 5: DOUBLE-ENTRY LEDGER ================= -->
-      <section id="view-ledger" class="view-panel">
-        <div class="panel-header">
-          <div>
-            <h2 class="panel-title">Double-Entry Ledger Journal</h2>
-            <p class="panel-subtitle">Mathematical proof of balanced debit and credit entries (Total Debits = Total Credits) satisfying institutional financial auditability.</p>
-          </div>
-          <div class="panel-actions">
-            <span class="status-pill online"><span class="status-dot"></span> DR = CR Balanced</span>
-          </div>
-        </div>
-
-        <div class="table-responsive">
-          <table class="data-table">
-            <thead>
-              <tr>
-                <th>Entry ID</th>
-                <th>Txn ID</th>
-                <th>Account ID</th>
-                <th>Type</th>
-                <th>Amount (₹)</th>
-                <th>Running Balance (₹)</th>
-                <th>Timestamp</th>
-              </tr>
-            </thead>
-            <tbody id="ledger-entries-body">
-              <!-- Populated dynamically -->
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-      <!-- ================= VIEW 6: PROMQL CONSOLE ================= -->
-      <section id="view-promql" class="view-panel">
-        <div class="panel-header">
-          <div>
-            <h2 class="panel-title">PromQL Telemetry Console</h2>
-            <p class="panel-subtitle">Execute real-time Prometheus Query Language formulas against live Kepler kernel metrics and banking request counters.</p>
-          </div>
-        </div>
-
-        <div class="promql-container">
-          <div class="promql-card">
-            <div class="form-group">
-              <label>Select Preset PromQL Formula (IEEE 830 Specification):</label>
-              <select id="promql-preset-select" class="form-input" onchange="loadPromQLPreset(this.value)">
-                <option value="carbon_per_tx">Carbon per Transaction: (sum(rate(kepler_container_joules_total[1m])) * 0.713) / sum(rate(http_requests_total[1m]))</option>
-                <option value="kepler_joules">Kepler Container Power (Watts): sum(rate(kepler_container_joules_total[1m])) by (container_name)</option>
-                <option value="http_requests">Banking Request Rate (req/sec): sum(rate(http_requests_total[1m]))</option>
-                <option value="payment_joules">Payment Service 5-Min Energy Delta: sum(increase(kepler_container_joules_total{container_name="payment-service"}[5m]))</option>
-              </select>
-            </div>
-
-            <div class="form-group">
-              <label>PromQL Query String:</label>
-              <textarea id="promql-input" class="form-input monospace" rows="3">(sum(rate(kepler_container_joules_total[1m])) * 0.713) / sum(rate(http_requests_total[1m]))</textarea>
-            </div>
-
-            <div class="promql-actions">
-              <button class="btn-primary-action" onclick="executeCurrentPromQL()">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-                Execute PromQL Query
-              </button>
-            </div>
-
-            <div class="promql-result-box" id="promql-result-box">
-              <div class="res-heading">Query Result:</div>
-              <pre id="promql-raw-output">Click "Execute PromQL Query" to evaluate formula against Prometheus :9090.</pre>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- ================= VIEW 7: GRAFANA PANELS ================= -->
-      <section id="view-grafana" class="view-panel">
-        <div class="panel-header">
-          <div>
-            <h2 class="panel-title">Grafana Infrastructure Monitoring</h2>
-            <p class="panel-subtitle">Access live time-series dashboards provisioned in Grafana (:3000) for Kepler RAPL counters and microservice request latencies.</p>
-          </div>
-          <div class="panel-actions">
-            <a href="http://localhost:3000" target="_blank" class="btn-primary-action">
-              Open Grafana in New Tab (:3000) →
-            </a>
-          </div>
-        </div>
-
-        <div class="grafana-cards-grid">
-          <div class="grafana-preview-card">
-            <h4>Panel 1: Host Platform vs Container Power (Watts)</h4>
-            <p>Monitors hardware RAPL platform power alongside dynamic microservice cgroups.</p>
-            <div class="grafana-mock-visual blue">
-              <span>Kepler RAPL eBPF Driver [9103]</span>
-            </div>
-          </div>
-          <div class="grafana-preview-card">
-            <h4>Panel 2: Carbon-per-Transaction Over Time</h4>
-            <p>Derived time series: PromQL division of container energy rate by request throughput.</p>
-            <div class="grafana-mock-visual green">
-              <span>gCO₂ / transaction (0.137 mg avg)</span>
-            </div>
-          </div>
-          <div class="grafana-preview-card">
-            <h4>Panel 3: Microservice Workload Share</h4>
-            <p>Payment-service (58%) vs Auth-service (9%) vs Ledger-service (15%) breakdown.</p>
-            <div class="grafana-mock-visual purple">
-              <span>Container Attribution Breakdown</span>
-            </div>
-          </div>
-          <div class="grafana-preview-card">
-            <h4>Panel 4: HTTP Request Rate & Latency</h4>
-            <p>Prometheus FastAPI instrumentator tracking request throughput and p99 latency.</p>
-            <div class="grafana-mock-visual orange">
-              <span>Throughput: ~28 req/sec | p99: 42ms</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- ================= VIEW 8: SWAGGER SIMULATOR ================= -->
-      <section id="view-swagger" class="view-panel">
-        <div class="panel-header">
-          <div>
-            <h2 class="panel-title">Interactive API Documentation</h2>
-            <p class="panel-subtitle">Swagger UI and OpenAPI 3.0 documentation for all simulated banking routes and Prometheus endpoints.</p>
-          </div>
-          <div class="panel-actions">
-            <a href="http://localhost:8001/docs" target="_blank" class="btn-primary-action">
-              Open Bank Swagger UI (:8001/docs) →
-            </a>
-          </div>
-        </div>
-        <div class="swagger-frame-container">
-          <iframe src="/docs" style="width: 100%; height: 750px; border: 1px solid var(--border-subtle); border-radius: var(--radius-md);"></iframe>
-        </div>
-      </section>
-
-    </main>
-  </div>
-
-  <!-- ================= MODALS ================= -->
-
-  <!-- 1. QUICK TRANSFER MODAL -->
-  <div class="modal-overlay hidden" id="transfer-modal">
-    <div class="modal-card">
-      <div class="modal-header">
-        <h3>Instant Inter-Bank Transfer</h3>
-        <button class="modal-close" onclick="closeTransferModal()">✕</button>
+        <div class="t-val" id="hub-energy-joules">—</div>
+        <div class="t-sub" id="hub-energy-kwh">— kWh Total</div>
       </div>
-      <div class="modal-body">
-        <div class="form-group">
-          <label>Recipient Beneficiary</label>
-          <select id="modal-dest-bank" class="form-input">
-            <option value="MAH123">Bank of Maharashtra (MAH123)</option>
-            <option value="IDF892">IDFC First Bank (IDF892)</option>
-            <option value="SBIN456">State Bank of India (SBIN456)</option>
-          </select>
+
+      <div class="t-item">
+        <div class="t-label">
+          <span>Scope 2 CO₂</span>
+          <span style="color:#2563eb;">CALCULATED</span>
         </div>
-        <div class="form-group">
-          <label>Transfer Amount (INR)</label>
-          <input type="number" id="modal-transfer-amt" class="form-input" value="5000" min="1" />
-        </div>
-        <div class="form-group">
-          <label>Reference Note</label>
-          <input type="text" id="modal-transfer-note" class="form-input" value="Inter-bank fund settlement" />
-        </div>
-        <div class="preview-mini-banner">
-          <span>⚡ Estimated Workload Energy: <strong>~0.69 Joules</strong></span>
-          <span>🌱 Scope 2 Carbon: <strong>~0.137 mg CO₂</strong></span>
-        </div>
+        <div class="t-val" id="hub-carbon-grams">—</div>
+        <div class="t-sub" id="hub-carbon-kg">— kg CO₂</div>
       </div>
-      <div class="modal-footer">
-        <button class="btn-secondary-action" onclick="closeTransferModal()">Cancel</button>
-        <button class="btn-primary-action" onclick="executeModalTransfer()">Send ₹5,000 Now</button>
+
+      <div class="t-item">
+        <div class="t-label">
+          <span>Avg CO₂ / Tx</span>
+          <span style="color:#059669;">SLA PASS</span>
+        </div>
+        <div class="t-val" id="hub-avg-co2">—</div>
+        <div class="t-sub">Target &le; 0.20 mg/tx</div>
+      </div>
+
+      <div class="t-item">
+        <div class="t-label">
+          <span>Attribution Fidelity</span>
+          <span style="color:#059669;">96.2%</span>
+        </div>
+        <div class="t-val">96.2%</div>
+        <div class="t-sub">Residual &le; 4.8%</div>
       </div>
     </div>
-  </div>
 
-  <!-- 2. TRANSACTION RECEIPT MODAL -->
-  <div class="modal-overlay hidden" id="receipt-modal">
-    <div class="modal-card receipt-card">
-      <div class="receipt-check-icon">✓</div>
-      <h3 class="receipt-title">Payment Successful!</h3>
-      <p class="receipt-sub">Atomic double-entry transfer committed and audited.</p>
+    <!-- Dual Applications Showcase -->
+    <div class="apps-grid">
 
-      <div class="receipt-details-list">
-        <div class="r-row">
-          <span>Transaction ID:</span>
-          <strong id="receipt-tx-id" class="monospace">TXN-8F9201</strong>
+      <!-- APP 1: Banking Application -->
+      <div class="app-card bank-card">
+        <div class="app-header-row">
+          <div class="app-icon">🏛️</div>
+          <span class="app-chip">Client Portal</span>
         </div>
-        <div class="r-row">
-          <span>Amount Transferred:</span>
-          <strong id="receipt-amount" class="text-green">₹5,000.00</strong>
-        </div>
-        <div class="r-row">
-          <span>From Account:</span>
-          <strong id="receipt-sender">HDFC9999</strong>
-        </div>
-        <div class="r-row">
-          <span>To Beneficiary:</span>
-          <strong id="receipt-recipient">MAH123</strong>
-        </div>
-        <div class="r-row">
-          <span>Timestamp:</span>
-          <span id="receipt-time">2026-10-06 10:45:12</span>
-        </div>
-        <div class="r-row">
-          <span>New Account Balance:</span>
-          <strong id="receipt-balance">₹45,000.00</strong>
-        </div>
-        <div class="r-divider"></div>
-        <div class="r-row">
-          <span>Kepler Energy Attributed:</span>
-          <strong id="receipt-joules">0.694 Joules</strong>
-        </div>
-        <div class="r-row">
-          <span>Estimated CO₂ Footprint:</span>
-          <strong id="receipt-carbon">0.137 mg CO₂</strong>
-        </div>
-        <div class="r-row">
-          <span>Cryptographic Hash:</span>
-          <span id="receipt-hash" class="monospace text-xs truncate">e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855</span>
-        </div>
+        <h2 class="app-name">Banking Application</h2>
+        <p class="app-tagline">
+          Dedicated customer-facing banking experience following official banking UI references. Execute INR transfers, verify double-entry balances, and inspect real-time energy imprints.
+        </p>
+
+        <ul class="feature-list">
+          <li class="feature-item"><span class="feature-check">✓</span> <strong>INR (₹) Demonstration:</strong> Balances, transfers, limits, receipts</li>
+          <li class="feature-item"><span class="feature-check">✓</span> <strong>Atomic Double-Entry Ledger:</strong> Total Debits = Total Credits (DR = CR)</li>
+          <li class="feature-item"><span class="feature-check">✓</span> <strong>Demo User Switcher:</strong> Soham Gaikwad (HDFC9999), Alice Smith, Bob Kumar</li>
+          <li class="feature-item"><span class="feature-check">✓</span> <strong>Real-Time Carbon Preview:</strong> Live calculation during transfer input</li>
+          <li class="feature-item"><span class="feature-check">✓</span> <strong>Cryptographic Receipts:</strong> Printable PDF receipts with SHA-256 audit hashes</li>
+        </ul>
+
+        <a href="/bank" class="btn-launch bank">
+          <span>Launch Banking Application</span>
+          <span>→</span>
+        </a>
       </div>
 
-      <div class="receipt-sync-badge">
-        <span class="sync-dot"></span>
-        <span>Streamed in real time to Green-Finance-2 Enterprise Suite (:8000)</span>
+      <!-- APP 2: Sustainability Investigator -->
+      <div class="app-card investigator-card">
+        <div class="app-header-row">
+          <div class="app-icon">🌱</div>
+          <span class="app-chip">Investigator Suite</span>
+        </div>
+        <h2 class="app-name">Sustainability Investigator</h2>
+        <p class="app-tagline">
+          Dedicated analytical application for ESG auditors and software engineers. Investigate computational carbon estimates, service efficiency, goals, risk alerts, and regulatory reports.
+        </p>
+
+        <ul class="feature-list">
+          <li class="feature-item"><span class="feature-check">✓</span> <strong>9 Functional Modules:</strong> Overview, Carbon Analysis, Ledger, Efficiency, etc.</li>
+          <li class="feature-item"><span class="feature-check">✓</span> <strong>Calculation Engine:</strong> Window duration controls &amp; zero-division safety</li>
+          <li class="feature-item"><span class="feature-check">✓</span> <strong>Service Efficiency:</strong> payment-service vs auth-service vs ledger-service</li>
+          <li class="feature-item"><span class="feature-check">✓</span> <strong>5-Step Investigation Workflow:</strong> Observe → Compare → Action</li>
+          <li class="feature-item"><span class="feature-check">✓</span> <strong>CEA India Grid Registry:</strong> Configurable official factors (713 gCO₂/kWh)</li>
+        </ul>
+
+        <a href="/investigator" class="btn-launch investigator">
+          <span>Launch Sustainability Investigator</span>
+          <span>→</span>
+        </a>
       </div>
 
-      <div class="modal-footer" style="justify-content: center; margin-top: 20px;">
-        <button class="btn-primary-action" onclick="closeReceiptModal()">Done & View History</button>
+    </div>
+
+    <!-- Live Action Test Bench -->
+    <div class="bench-card">
+      <div class="bench-title">⚡ Interactive Workload Stimulator &amp; Regulatory Exports</div>
+      <div class="bench-desc">Trigger real backend workloads, execute sample transfers, or generate verified compliance reports.</div>
+      
+      <div class="bench-actions">
+        <button class="btn-bench primary" onclick="stimulate10Users()" id="btn-stimulate">
+          ⚡ Stimulate 10 Users (Concurrent Traffic)
+        </button>
+        <button class="btn-bench" onclick="sendQuickTransfer()" id="btn-quick-tx">
+          💸 Send Quick ₹5,000 Transfer (HDFC9999 → MAH123)
+        </button>
+        <a href="/sustainability/report/pdf" target="_blank" class="btn-bench" style="text-decoration:none;">
+          📄 Download Full PDF Sustainability Report
+        </a>
+        <a href="/sustainability/report/csv" target="_blank" class="btn-bench" style="text-decoration:none;">
+          📊 Download Audited CSV Ledger
+        </a>
+        <button class="btn-bench" onclick="refreshHubData()">
+          🔄 Refresh Telemetry
+        </button>
       </div>
     </div>
-  </div>
 
-  <!-- 3. TRANSACTION DETAILS INSPECTION MODAL -->
-  <div class="modal-overlay hidden" id="tx-detail-modal">
-    <div class="modal-card">
-      <div class="modal-header">
-        <h3>Transaction Telemetry Inspection</h3>
-        <button class="modal-close" onclick="closeTxDetailModal()">✕</button>
-      </div>
-      <div class="modal-body" id="tx-detail-content">
-        <!-- Rendered dynamically -->
-      </div>
-      <div class="modal-footer">
-        <button class="btn-secondary-action" onclick="closeTxDetailModal()">Close</button>
+    <!-- Observability & Developer Links -->
+    <div class="bench-card">
+      <div class="bench-title">🛠️ Observability &amp; Infrastructure Access</div>
+      <div class="bench-desc">Inspect Prometheus time-series metrics, Grafana dashboards, and FastAPI OpenAPI Swagger documentation.</div>
+
+      <div class="dev-links-grid">
+        <a href="http://localhost:9090" target="_blank" class="dev-card">
+          <strong>📈 Prometheus (:9090)</strong>
+          <span>Time-series metrics collection, targets page, and PromQL query graph</span>
+        </a>
+        <a href="http://localhost:3000" target="_blank" class="dev-card">
+          <strong>📊 Grafana (:3000)</strong>
+          <span>Green Finance provisioned dashboard with 4 hero monitoring panels</span>
+        </a>
+        <a href="/docs" target="_blank" class="dev-card">
+          <strong>📑 FastAPI Swagger Docs (/docs)</strong>
+          <span>Interactive OpenAPI specification for all microservice endpoints</span>
+        </a>
       </div>
     </div>
-  </div>
 
-  <!-- 4. USER SWITCH MODAL -->
-  <div class="modal-overlay hidden" id="user-switch-modal">
-    <div class="modal-card">
-      <div class="modal-header">
-        <h3>Switch Banking Profile</h3>
-        <button class="modal-close" onclick="closeUserSwitchModal()">✕</button>
-      </div>
-      <div class="modal-body">
-        <p class="text-muted" style="margin-bottom: 16px;">Select a simulated customer profile to view balance and execute payments:</p>
-        <div class="user-switch-list">
-          <div class="user-switch-item active" onclick="switchActiveUser('soham_gaikwad')">
-            <div class="u-avatar">SG</div>
-            <div class="u-info">
-              <strong>Soham Gaikwad (Admin)</strong>
-              <span>Bank ID: HDFC9999 • Balance: ₹50,000.00</span>
-            </div>
-          </div>
-          <div class="user-switch-item" onclick="switchActiveUser('demo_user')">
-            <div class="u-avatar">DU</div>
-            <div class="u-info">
-              <strong>Demo User (Investor)</strong>
-              <span>Bank ID: DEMO0001 • Balance: ₹25,000.00</span>
-            </div>
-          </div>
-          <div class="user-switch-item" onclick="switchActiveUser('alice_smith')">
-            <div class="u-avatar">AS</div>
-            <div class="u-info">
-              <strong>Alice Smith (Customer)</strong>
-              <span>Bank ID: ALICE101 • Balance: ₹30,000.00</span>
-            </div>
-          </div>
-          <div class="user-switch-item" onclick="switchActiveUser('bob_kumar')">
-            <div class="u-avatar">BK</div>
-            <div class="u-info">
-              <strong>Bob Kumar (Customer)</strong>
-              <span>Bank ID: BOB202 • Balance: ₹15,000.00</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+    <!-- Footer -->
+    <footer class="hub-footer">
+      <div>Green Finance — A Real-Time Energy Observability Framework for Sustainable Financial Microservices</div>
+      <div style="margin-top:4px;">Academic Project • S.P.I.T. Mumbai • Group 13 (Soham Gaikwad, Atharva Hule, Laukik Deshpande)</div>
+    </footer>
 
-  <script src="app.js"></script>
+  </main>
+
+  <script>
+    async function loadHubTelemetry() {
+      try {
+        const res = await fetch('/sustainability/kpis?range_filter=30d');
+        if (!res.ok) return;
+        const data = await res.json();
+
+        document.getElementById('hub-tx-count').textContent = data.total_transactions.toLocaleString() + ' Tx';
+        document.getElementById('hub-volume-inr').textContent = '₹' + data.total_volume_inr.toLocaleString('en-IN', { minimumFractionDigits: 2 });
+        document.getElementById('hub-energy-joules').textContent = data.total_energy_joules.toFixed(1) + ' J';
+        document.getElementById('hub-energy-kwh').textContent = data.total_energy_kwh.toFixed(6) + ' kWh';
+        document.getElementById('hub-carbon-grams').textContent = data.total_carbon_grams.toFixed(2) + ' g';
+        document.getElementById('hub-carbon-kg').textContent = data.total_carbon_kg.toFixed(5) + ' kg CO₂';
+        document.getElementById('hub-avg-co2').textContent = (data.avg_co2_per_tx_grams * 1000.0).toFixed(3) + ' mg';
+      } catch (e) {
+        console.warn('Hub telemetry fetch:', e);
+      }
+    }
+
+    async function stimulate10Users() {
+      const btn = document.getElementById('btn-stimulate');
+      btn.disabled = true;
+      btn.textContent = 'Stimulating 10 users...';
+      try {
+        const res = await fetch('/payment/stimulate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ user_count: 10, tx_count: 10, min_amount: 500, max_amount: 5000 })
+        });
+        const data = await res.json();
+        alert(`Successfully stimulated ${data.executed_count} transactions across ${data.user_count} banking users! Energy attributed: ${data.total_energy_joules.toFixed(2)} Joules.`);
+        loadHubTelemetry();
+      } catch (e) {
+        alert('Stimulation error: ' + e.message);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = '⚡ Stimulate 10 Users (Concurrent Traffic)';
+      }
+    }
+
+    async function sendQuickTransfer() {
+      const btn = document.getElementById('btn-quick-tx');
+      btn.disabled = true;
+      btn.textContent = 'Processing transfer...';
+      try {
+        const res = await fetch('/payment/transfer', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            source_account: 'HDFC9999',
+            destination_account: 'MAH123',
+            amount: 5000.0,
+            currency: 'INR',
+            note: 'Quick settlement test'
+          })
+        });
+        const data = await res.json();
+        if (res.ok) {
+          alert(`Transfer Successful! Sent ₹5,000 from ${data.sender_bank_id} to ${data.recipient_bank_id}. Energy: ${data.energy_joules.toFixed(3)} J. SHA-256: ${data.audit_hash.slice(0, 16)}...`);
+          loadHubTelemetry();
+        } else {
+          alert('Transfer Failed: ' + data.detail);
+        }
+      } catch (e) {
+        alert('Transfer error: ' + e.message);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = '💸 Send Quick ₹5,000 Transfer (HDFC9999 → MAH123)';
+      }
+    }
+
+    function refreshHubData() {
+      loadHubTelemetry();
+    }
+
+    document.addEventListener('DOMContentLoaded', loadHubTelemetry);
+  </script>
 </body>
 </html>
