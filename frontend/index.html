@@ -611,18 +611,26 @@
       <div class="bench-title">🛠️ Observability &amp; Infrastructure Access</div>
       <div class="bench-desc">Inspect Prometheus time-series metrics, Grafana dashboards, and FastAPI OpenAPI Swagger documentation.</div>
 
-      <div class="dev-links-grid">
-        <a href="http://localhost:9090" target="_blank" class="dev-card">
-          <strong>📈 Prometheus (:9090)</strong>
-          <span>Time-series metrics collection, targets page, and PromQL query graph</span>
+      <div class="dev-links-grid" style="grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));">
+        <a href="/metrics" target="_blank" class="dev-card" style="border-top: 4px solid #059669;">
+          <strong>⚡ Live Prometheus Scrape (/metrics)</strong>
+          <span style="color:#059669; font-weight:600;">ACTIVE NOW (Port 8000)</span>
+          <span>Time-series metrics scraped by Prometheus, Kepler &amp; Grafana</span>
         </a>
-        <a href="http://localhost:3000" target="_blank" class="dev-card">
-          <strong>📊 Grafana (:3000)</strong>
-          <span>Green Finance provisioned dashboard with 4 hero monitoring panels</span>
-        </a>
-        <a href="/docs" target="_blank" class="dev-card">
+        <a href="/docs" target="_blank" class="dev-card" style="border-top: 4px solid #2563eb;">
           <strong>📑 FastAPI Swagger Docs (/docs)</strong>
+          <span style="color:#2563eb; font-weight:600;">ACTIVE NOW (Port 8000)</span>
           <span>Interactive OpenAPI specification for all microservice endpoints</span>
+        </a>
+        <a href="http://localhost:9090" target="_blank" class="dev-card" style="border-top: 4px solid #e11d48;">
+          <strong>📈 Prometheus (:9090)</strong>
+          <span style="color:#64748b; font-size:11px;">Container Stack (docker-compose)</span>
+          <span>PromQL query graph &amp; time-series storage daemon</span>
+        </a>
+        <a href="http://localhost:3000" target="_blank" class="dev-card" style="border-top: 4px solid #f59e0b;">
+          <strong>📊 Grafana (:3000)</strong>
+          <span style="color:#64748b; font-size:11px;">Container Stack (docker-compose)</span>
+          <span>Pre-provisioned dashboard with 4 hero monitoring panels</span>
         </a>
       </div>
     </div>
