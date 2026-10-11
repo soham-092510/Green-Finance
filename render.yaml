@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: green-finance
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn backend.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: DATABASE_URL
+        value: sqlite:///test.db
+      - key: USE_SQLITE
+        value: "true"
+      - key: JWT_SECRET_KEY
+        value: green-finance-super-secret-key-2026
+      - key: APP_NAME
+        value: green-finance
+      - key: ENVIRONMENT
+        value: production

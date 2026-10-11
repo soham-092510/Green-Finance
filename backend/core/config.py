@@ -37,24 +37,16 @@ class Settings(BaseSettings):
     environment: str = "development"
 
     # database_url (Text/String type)
-    # The address where the database lives.
-    # Note: We do not give it a default value here, which means the app will refuse 
-    # to start unless this parameter is defined in the ".env" file (for safety).
-    database_url: str
+    database_url: str = "sqlite:///test.db"
 
     # prometheus_url (Text/String type)
-    # The address of the Prometheus server that collects telemetry from Kepler.
-    # Defaults to the docker service hostname "http://prometheus:9090".
     prometheus_url: str = "http://prometheus:9090"
 
     # redis_url (Text/String type)
-    # The address of the Redis cache server used to speed up operations.
-    redis_url: str
+    redis_url: str = "redis://localhost:6379/0"
 
     # jwt_secret_key (Text/String type)
-    # A long, highly secret random string used to encrypt/sign digital session cards (tokens).
-    # It must be provided in the ".env" file.
-    jwt_secret_key: str
+    jwt_secret_key: str = "green-finance-super-secret-key-2026"
 
     # jwt_algorithm (Text/String type)
     # The encryption math formula used to secure tokens. Defaults to "HS256".
