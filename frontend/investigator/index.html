@@ -13,29 +13,29 @@
 </head>
 <body>
 
-  <!-- Outer Desktop Window (Same clean layout from Reference Image 2) -->
-  <div class="mes-window">
+  <!-- Outer Desktop Window (Green Finance Sustainability Investigator) -->
+  <div class="gf-inv-window">
 
     <!-- ================= 1. LEFT SIDEBAR ================= -->
-    <aside class="mes-sidebar" role="navigation" aria-label="Sustainability Investigator Navigation">
+    <aside class="gf-inv-sidebar" role="navigation" aria-label="Sustainability Investigator Navigation">
       <!-- Green Finance Concentric Emblem -->
-      <a href="/investigator" class="mes-brand" aria-label="Green Finance Sustainability Investigator">
-        <div class="mes-brand-logo">
-          <div class="mes-logo-outer">
-            <div class="mes-logo-inner"></div>
+      <a href="/investigator" class="gf-inv-brand" aria-label="Green Finance Sustainability Investigator">
+        <div class="gf-inv-brand-logo">
+          <div class="gf-inv-logo-outer">
+            <div class="gf-inv-logo-inner"></div>
           </div>
         </div>
         <div style="display:flex; flex-direction:column;">
-          <span class="mes-brand-text" style="font-size:18px; line-height:1.1;">Green Finance</span>
+          <span class="gf-inv-brand-text" style="font-size:18px; line-height:1.1;">Green Finance</span>
           <span style="font-size:9.5px; font-weight:800; color:#1e5bff; letter-spacing:0.06em; text-transform:uppercase;">INVESTIGATOR</span>
         </div>
       </a>
 
       <!-- Navigation List (Organized around Green Finance) -->
-      <ul class="mes-nav">
-        <li class="mes-nav-item">
-          <button class="mes-nav-link active" onclick="switchMesPanel('dashboard', this)">
-            <svg class="mes-nav-icon" viewBox="0 0 24 24">
+      <ul class="gf-inv-nav">
+        <li class="gf-inv-nav-item">
+          <button class="gf-inv-nav-link active" onclick="switchInvestigatorPanel('dashboard', this)">
+            <svg class="gf-inv-nav-icon" viewBox="0 0 24 24">
               <rect x="3" y="3" width="7" height="7" rx="1.5"></rect>
               <rect x="14" y="3" width="7" height="7" rx="1.5"></rect>
               <rect x="14" y="14" width="7" height="7" rx="1.5"></rect>
@@ -44,26 +44,26 @@
             <span>Dashboard</span>
           </button>
         </li>
-        <li class="mes-nav-item">
-          <button class="mes-nav-link" onclick="switchMesPanel('production-overview', this)">
-            <svg class="mes-nav-icon" viewBox="0 0 24 24">
+        <li class="gf-inv-nav-item">
+          <button class="gf-inv-nav-link" onclick="switchInvestigatorPanel('telemetry', this)">
+            <svg class="gf-inv-nav-icon" viewBox="0 0 24 24">
               <path d="M3 3v18h18"></path>
               <path d="M18 9l-5 5-4-4-3 3"></path>
             </svg>
             <span>Workload Telemetry</span>
           </button>
         </li>
-        <li class="mes-nav-item">
-          <button class="mes-nav-link" onclick="switchMesPanel('performance-metrics', this)">
-            <svg class="mes-nav-icon" viewBox="0 0 24 24">
+        <li class="gf-inv-nav-item">
+          <button class="gf-inv-nav-link" onclick="switchInvestigatorPanel('attribution', this)">
+            <svg class="gf-inv-nav-icon" viewBox="0 0 24 24">
               <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
             </svg>
             <span>Attribution & Fidelity</span>
           </button>
         </li>
-        <li class="mes-nav-item">
-          <button class="mes-nav-link" onclick="switchMesPanel('task-management', this)">
-            <svg class="mes-nav-icon" viewBox="0 0 24 24">
+        <li class="gf-inv-nav-item">
+          <button class="gf-inv-nav-link" onclick="switchInvestigatorPanel('ledger', this)">
+            <svg class="gf-inv-nav-icon" viewBox="0 0 24 24">
               <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"></path>
               <rect x="9" y="3" width="6" height="4" rx="1"></rect>
               <path d="M9 14l2 2 4-4"></path>
@@ -71,18 +71,18 @@
             <span>Carbon Ledger</span>
           </button>
         </li>
-        <li class="mes-nav-item">
-          <button class="mes-nav-link" onclick="switchMesPanel('alert-notification', this)">
-            <svg class="mes-nav-icon" viewBox="0 0 24 24">
+        <li class="gf-inv-nav-item">
+          <button class="gf-inv-nav-link" onclick="switchInvestigatorPanel('alerts', this)">
+            <svg class="gf-inv-nav-icon" viewBox="0 0 24 24">
               <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
               <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
             </svg>
             <span>Basel Risk & Alerts</span>
           </button>
         </li>
-        <li class="mes-nav-item">
-          <button class="mes-nav-link" onclick="switchMesPanel('report', this)">
-            <svg class="mes-nav-icon" viewBox="0 0 24 24">
+        <li class="gf-inv-nav-item">
+          <button class="gf-inv-nav-link" onclick="switchInvestigatorPanel('reports', this)">
+            <svg class="gf-inv-nav-icon" viewBox="0 0 24 24">
               <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
               <polyline points="14 2 14 8 20 8"></polyline>
               <line x1="16" y1="13" x2="8" y2="13"></line>
@@ -91,18 +91,18 @@
             <span>ESG Audit Reports</span>
           </button>
         </li>
-        <li class="mes-nav-item">
-          <button class="mes-nav-link" onclick="switchMesPanel('settings', this)">
-            <svg class="mes-nav-icon" viewBox="0 0 24 24">
+        <li class="gf-inv-nav-item">
+          <button class="gf-inv-nav-link" onclick="switchInvestigatorPanel('grid', this)">
+            <svg class="gf-inv-nav-icon" viewBox="0 0 24 24">
               <circle cx="12" cy="12" r="3"></circle>
               <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
             </svg>
             <span>CEA Grid Settings</span>
           </button>
         </li>
-        <li class="mes-nav-item">
-          <a href="/bank" class="mes-nav-link" style="color:#059669;">
-            <svg class="mes-nav-icon" viewBox="0 0 24 24" style="stroke:#059669;">
+        <li class="gf-inv-nav-item">
+          <a href="/bank" class="gf-inv-nav-link" style="color:#059669;">
+            <svg class="gf-inv-nav-icon" viewBox="0 0 24 24" style="stroke:#059669;">
               <path d="M3 10.5L12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1v-9.5z"/>
             </svg>
             <span>Bank Portal</span>
@@ -111,33 +111,33 @@
       </ul>
 
       <!-- Transparency notice footer -->
-      <div class="mes-sidebar-footer">
-        <div class="mes-footer-meta">
+      <div class="gf-inv-sidebar-footer">
+        <div class="gf-inv-footer-meta">
           <strong>S.P.I.T. Mumbai • Group 13</strong><br>
           CEA Factor: <strong>713 g/kWh</strong><br>
-          Telemetry: <span class="mes-badge simulated">SIMULATED</span>
+          Telemetry: <span class="gf-inv-badge simulated">SIMULATED</span>
         </div>
       </div>
     </aside>
 
     <!-- ================= 2. MAIN WORKSPACE ================= -->
-    <main class="mes-main">
+    <main class="gf-inv-main">
 
       <!-- Top Header Row -->
-      <header class="mes-header">
+      <header class="gf-inv-header">
         <!-- Search Keyword Pill -->
-        <div class="mes-search-box">
-          <input type="text" class="mes-search-input" id="mes-search" placeholder="Search transactions, services, audit hashes..." oninput="handleInvestigatorSearch(this.value)" />
-          <svg class="mes-search-icon" viewBox="0 0 24 24">
+        <div class="gf-inv-search-box">
+          <input type="text" class="gf-inv-search-input" id="gf-inv-search" placeholder="Search transactions, services, audit hashes..." oninput="handleInvestigatorSearch(this.value)" />
+          <svg class="gf-inv-search-icon" viewBox="0 0 24 24">
             <circle cx="11" cy="11" r="8"></circle>
             <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
           </svg>
         </div>
 
         <!-- Header Actions -->
-        <div class="mes-header-right">
+        <div class="gf-inv-header-right">
           <!-- Notification Bell -->
-          <button class="mes-bell-btn" onclick="showMesToast('All computational microservices operating within ESG threshold.')" title="Alerts" aria-label="Alerts">
+          <button class="gf-inv-bell-btn" onclick="showInvestigatorToast('All computational microservices operating within ESG threshold.')" title="Alerts" aria-label="Alerts">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2">
               <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
               <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
@@ -145,11 +145,11 @@
           </button>
 
           <!-- User Profile: Soham Gaikwad / Lead Investigator -->
-          <div class="mes-user-profile" onclick="showMesToast('Active Lead Investigator: Soham Gaikwad (Group 13, S.P.I.T. Mumbai)')">
-            <div class="mes-avatar-circle" id="mes-avatar">SG</div>
-            <div class="mes-user-meta">
-              <span class="mes-user-name" id="mes-name">Soham Gaikwad</span>
-              <span class="mes-user-role" id="mes-role">Lead Sustainability Investigator</span>
+          <div class="gf-inv-user-profile" onclick="showInvestigatorToast('Active Lead Investigator: Soham Gaikwad (Group 13, S.P.I.T. Mumbai)')">
+            <div class="gf-inv-avatar-circle" id="gf-inv-avatar">SG</div>
+            <div class="gf-inv-user-meta">
+              <span class="gf-inv-user-name" id="gf-inv-name">Soham Gaikwad</span>
+              <span class="gf-inv-user-role" id="gf-inv-role">Lead Sustainability Investigator</span>
             </div>
           </div>
 
@@ -161,72 +161,72 @@
       </header>
 
       <!-- Main Panels Container -->
-      <div class="mes-content-body">
+      <div class="gf-inv-content-body">
 
-        <!-- ================= PANEL 1: PRIMARY DASHBOARD (Same layout from Reference Image 2) ================= -->
-        <section id="panel-dashboard" class="mes-panel active">
+        <!-- ================= PANEL 1: PRIMARY DASHBOARD ================= -->
+        <section id="panel-dashboard" class="gf-inv-panel active">
 
           <!-- 4 HERO KPI CARDS IN A ROW (Green Finance Parameters) -->
-          <div class="mes-kpi-grid">
+          <div class="gf-inv-kpi-grid">
             <!-- 1. Total Transactions -->
-            <div class="mes-kpi-card">
-              <div class="mes-kpi-header">
-                <span class="mes-kpi-title">Total Transactions</span>
-                <button class="mes-dots-btn" onclick="showMesToast('Workload Throughput: 1,429 Completed Transactions across payment-service')">•••</button>
+            <div class="gf-inv-kpi-card">
+              <div class="gf-inv-kpi-header">
+                <span class="gf-inv-kpi-title">Total Transactions</span>
+                <button class="gf-inv-dots-btn" onclick="showInvestigatorToast('Workload Throughput: 1,429 Completed Transactions across payment-service')">•••</button>
               </div>
-              <div class="mes-kpi-val-row">
-                <span class="mes-kpi-value" id="kpi-total-units">1,429</span>
-                <span class="mes-kpi-unit">Tx</span>
+              <div class="gf-inv-kpi-val-row">
+                <span class="gf-inv-kpi-value" id="kpi-total-tx">1,429</span>
+                <span class="gf-inv-kpi-unit">Tx</span>
               </div>
-              <span class="mes-kpi-trend up-blue">
+              <span class="gf-inv-kpi-trend up-blue">
                 <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="18 15 12 9 6 15"></polyline></svg>
                 <span>8.2% from last week</span>
               </span>
             </div>
 
             <!-- 2. Attributed Energy / Tx -->
-            <div class="mes-kpi-card">
-              <div class="mes-kpi-header">
-                <span class="mes-kpi-title">Attributed Energy / Tx</span>
-                <button class="mes-dots-btn" onclick="showMesToast('Marginal Computational Energy: 0.695 Joules per transaction (eBPF telemetry)')">•••</button>
+            <div class="gf-inv-kpi-card">
+              <div class="gf-inv-kpi-header">
+                <span class="gf-inv-kpi-title">Attributed Energy / Tx</span>
+                <button class="gf-inv-dots-btn" onclick="showInvestigatorToast('Marginal Computational Energy: 0.695 Joules per transaction (eBPF telemetry)')">•••</button>
               </div>
-              <div class="mes-kpi-val-row">
-                <span class="mes-kpi-value" id="kpi-cycle-time">0.695</span>
-                <span class="mes-kpi-unit">Joules</span>
+              <div class="gf-inv-kpi-val-row">
+                <span class="gf-inv-kpi-value" id="kpi-energy-per-tx">0.695</span>
+                <span class="gf-inv-kpi-unit">Joules</span>
               </div>
-              <span class="mes-kpi-trend down-red" style="color:#059669; background:#ecfdf5;">
+              <span class="gf-inv-kpi-trend down-red" style="color:#059669; background:#ecfdf5;">
                 <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="6 9 12 15 18 9"></polyline></svg>
                 <span>3.1% energy saved</span>
               </span>
             </div>
 
             <!-- 3. Attribution Fidelity -->
-            <div class="mes-kpi-card">
-              <div class="mes-kpi-header">
-                <span class="mes-kpi-title">Attribution Fidelity</span>
-                <button class="mes-dots-btn" onclick="showMesToast('Attribution Confidence: 96.2% statistical R² correlation vs physical telemetry')">•••</button>
+            <div class="gf-inv-kpi-card">
+              <div class="gf-inv-kpi-header">
+                <span class="gf-inv-kpi-title">Attribution Fidelity</span>
+                <button class="gf-inv-dots-btn" onclick="showInvestigatorToast('Attribution Confidence: 96.2% statistical R² correlation vs physical telemetry')">•••</button>
               </div>
-              <div class="mes-kpi-val-row">
-                <span class="mes-kpi-value" id="kpi-utilization">96.2</span>
-                <span class="mes-kpi-unit">%</span>
+              <div class="gf-inv-kpi-val-row">
+                <span class="gf-inv-kpi-value" id="kpi-attribution-fidelity">96.2</span>
+                <span class="gf-inv-kpi-unit">%</span>
               </div>
-              <span class="mes-kpi-trend up-blue">
+              <span class="gf-inv-kpi-trend up-blue">
                 <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="18 15 12 9 6 15"></polyline></svg>
                 <span>5.4% model confidence</span>
               </span>
             </div>
 
             <!-- 4. Carbon Intensity / Tx -->
-            <div class="mes-kpi-card">
-              <div class="mes-kpi-header">
-                <span class="mes-kpi-title">Carbon Intensity / Tx</span>
-                <button class="mes-dots-btn" onclick="showMesToast('Carbon Footprint: 0.138 mg CO₂/tx (Target < 0.20 mg - PASS)')">•••</button>
+            <div class="gf-inv-kpi-card">
+              <div class="gf-inv-kpi-header">
+                <span class="gf-inv-kpi-title">Carbon Intensity / Tx</span>
+                <button class="gf-inv-dots-btn" onclick="showInvestigatorToast('Carbon Footprint: 0.138 mg CO₂/tx (Target < 0.20 mg - PASS)')">•••</button>
               </div>
-              <div class="mes-kpi-val-row">
-                <span class="mes-kpi-value" id="kpi-defect-rate">0.138</span>
-                <span class="mes-kpi-unit">mg CO₂</span>
+              <div class="gf-inv-kpi-val-row">
+                <span class="gf-inv-kpi-value" id="kpi-carbon-intensity">0.138</span>
+                <span class="gf-inv-kpi-unit">mg CO₂</span>
               </div>
-              <span class="mes-kpi-trend down-red" style="color:#059669; background:#ecfdf5;">
+              <span class="gf-inv-kpi-trend down-red" style="color:#059669; background:#ecfdf5;">
                 <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="6 9 12 15 18 9"></polyline></svg>
                 <span>Target &lt; 0.20 mg (PASS)</span>
               </span>
@@ -234,107 +234,107 @@
           </div>
 
           <!-- 2x2 ANALYTICAL CHARTS GRID (Green Finance Parameters) -->
-          <div class="mes-charts-grid">
+          <div class="gf-inv-charts-grid">
 
             <!-- Chart 1: Transaction Throughput & Energy Trend (Bar chart) -->
-            <div class="mes-chart-card">
-              <div class="mes-card-top">
-                <div class="mes-card-header-meta">
-                  <h3 class="mes-card-title">Transaction Throughput Trend</h3>
-                  <span class="mes-card-subtitle">Financial volume &amp; energy load over time</span>
+            <div class="gf-inv-chart-card">
+              <div class="gf-inv-card-top">
+                <div class="gf-inv-card-header-meta">
+                  <h3 class="gf-inv-card-title">Transaction Throughput Trend</h3>
+                  <span class="gf-inv-card-subtitle">Financial volume &amp; energy load over time</span>
                 </div>
-                <button class="mes-blue-pill-btn" onclick="cycleProductionTrendPeriod()">
+                <button class="gf-inv-blue-pill-btn" onclick="cycleThroughputPeriod()">
                   <span id="trend-period-label">Monthly</span>
                   <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="6 9 12 15 18 9"></polyline></svg>
                 </button>
               </div>
-              <div class="mes-canvas-wrap">
-                <canvas id="chart-production-trend" height="220"></canvas>
+              <div class="gf-inv-canvas-wrap">
+                <canvas id="chart-tx-throughput" height="220"></canvas>
               </div>
             </div>
 
             <!-- Chart 2: Microservice Energy Breakdown (Donut chart) -->
-            <div class="mes-chart-card">
-              <div class="mes-card-top">
-                <div class="mes-card-header-meta">
-                  <h3 class="mes-card-title">Service Energy Breakdown</h3>
-                  <span class="mes-card-subtitle">Microservice container power allocation share</span>
+            <div class="gf-inv-chart-card">
+              <div class="gf-inv-card-top">
+                <div class="gf-inv-card-header-meta">
+                  <h3 class="gf-inv-card-title">Service Energy Breakdown</h3>
+                  <span class="gf-inv-card-subtitle">Microservice container power allocation share</span>
                 </div>
-                <button class="mes-blue-pill-btn" onclick="cycleOEEPeriod()">
+                <button class="gf-inv-blue-pill-btn" onclick="cycleServiceEnergyPeriod()">
                   <span>Monthly</span>
                   <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="6 9 12 15 18 9"></polyline></svg>
                 </button>
               </div>
-              <div class="mes-oee-layout">
-                <div class="mes-donut-wrap">
-                  <canvas id="chart-oee-donut" width="180" height="180"></canvas>
+              <div class="gf-inv-energy-donut-layout">
+                <div class="gf-inv-donut-wrap">
+                  <canvas id="chart-service-energy" width="180" height="180"></canvas>
                 </div>
-                <div class="mes-donut-legend">
-                  <div class="mes-legend-row">
-                    <span class="mes-legend-dot blue"></span>
+                <div class="gf-inv-donut-legend">
+                  <div class="gf-inv-legend-row">
+                    <span class="gf-inv-legend-dot blue"></span>
                     <span>payment-service</span>
-                    <span class="mes-legend-pct">75%</span>
+                    <span class="gf-inv-legend-pct">75%</span>
                   </div>
-                  <div class="mes-legend-row">
-                    <span class="mes-legend-dot green"></span>
+                  <div class="gf-inv-legend-row">
+                    <span class="gf-inv-legend-dot green"></span>
                     <span>auth-service</span>
-                    <span class="mes-legend-pct">15%</span>
+                    <span class="gf-inv-legend-pct">15%</span>
                   </div>
-                  <div class="mes-legend-row">
-                    <span class="mes-legend-dot orange"></span>
+                  <div class="gf-inv-legend-row">
+                    <span class="gf-inv-legend-dot orange"></span>
                     <span>telemetry &amp; ledger</span>
-                    <span class="mes-legend-pct">10%</span>
+                    <span class="gf-inv-legend-pct">10%</span>
                   </div>
                 </div>
               </div>
             </div>
 
             <!-- Chart 3: Computational Power Intensity (Spline line area chart) -->
-            <div class="mes-chart-card">
-              <div class="mes-card-top">
-                <div class="mes-card-header-meta">
-                  <h3 class="mes-card-title">Computational Power Intensity</h3>
-                  <span class="mes-card-subtitle">Attributed CPU wattage profile across hours</span>
+            <div class="gf-inv-chart-card">
+              <div class="gf-inv-card-top">
+                <div class="gf-inv-card-header-meta">
+                  <h3 class="gf-inv-card-title">Computational Power Intensity</h3>
+                  <span class="gf-inv-card-subtitle">Attributed CPU wattage profile across hours</span>
                 </div>
-                <button class="mes-blue-pill-btn" onclick="cycleDowntimePeriod()">
-                  <span id="downtime-period-label">Today</span>
+                <button class="gf-inv-blue-pill-btn" onclick="cyclePowerIntensityPeriod()">
+                  <span id="power-intensity-period-label">Today</span>
                   <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="6 9 12 15 18 9"></polyline></svg>
                 </button>
               </div>
-              <div class="mes-canvas-wrap">
-                <canvas id="chart-downtime-analysis" height="220"></canvas>
+              <div class="gf-inv-canvas-wrap">
+                <canvas id="chart-power-intensity" height="220"></canvas>
               </div>
             </div>
 
             <!-- Card 4: Real-time Sustainability Alerts (3 cards with Critical, Warning, Complete) -->
-            <div class="mes-chart-card">
-              <div class="mes-card-top">
-                <div class="mes-card-header-meta">
-                  <h3 class="mes-card-title">
-                    <span class="mes-alert-icon-head">✦</span>
+            <div class="gf-inv-chart-card">
+              <div class="gf-inv-card-top">
+                <div class="gf-inv-card-header-meta">
+                  <h3 class="gf-inv-card-title">
+                    <span class="gf-inv-alert-icon-head">✦</span>
                     <span>Real-time Sustainability Alerts</span>
                   </h3>
                 </div>
-                <button class="mes-blue-pill-btn" onclick="switchMesPanel('alert-notification')">
+                <button class="gf-inv-blue-pill-btn" onclick="switchInvestigatorPanel('alerts')">
                   More Alerts
                 </button>
               </div>
 
-              <div class="mes-alerts-list">
+              <div class="gf-inv-alerts-list">
                 <!-- Alert 1: Critical -->
-                <div class="mes-alert-card-item">
-                  <div class="mes-alert-item-left">
-                    <div class="mes-alert-warning-icon">
+                <div class="gf-inv-alert-card-item">
+                  <div class="gf-inv-alert-item-left">
+                    <div class="gf-inv-alert-warning-icon">
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
                     </div>
-                    <div class="mes-alert-text">
-                      <span class="mes-alert-title">Payment Service High Power Draw</span>
-                      <span class="mes-alert-desc">Container attributed load exceeds 25.0 W threshold</span>
+                    <div class="gf-inv-alert-text">
+                      <span class="gf-inv-alert-title">Payment Service High Power Draw</span>
+                      <span class="gf-inv-alert-desc">Container attributed load exceeds 25.0 W threshold</span>
                     </div>
                   </div>
-                  <div class="mes-alert-item-right">
-                    <span class="mes-status-pill critical">Critical</span>
-                    <span class="mes-alert-time">
+                  <div class="gf-inv-alert-item-right">
+                    <span class="gf-inv-status-pill critical">Critical</span>
+                    <span class="gf-inv-alert-time">
                       <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
                       2 min ago
                     </span>
@@ -342,19 +342,19 @@
                 </div>
 
                 <!-- Alert 2: Warning -->
-                <div class="mes-alert-card-item">
-                  <div class="mes-alert-item-left">
-                    <div class="mes-alert-warning-icon">
+                <div class="gf-inv-alert-card-item">
+                  <div class="gf-inv-alert-item-left">
+                    <div class="gf-inv-alert-warning-icon">
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
                     </div>
-                    <div class="mes-alert-text">
-                      <span class="mes-alert-title">Grid Carbon Intensity Factor Warning</span>
-                      <span class="mes-alert-desc">CEA India grid factor active: 713.0 g CO₂/kWh</span>
+                    <div class="gf-inv-alert-text">
+                      <span class="gf-inv-alert-title">Grid Carbon Intensity Factor Warning</span>
+                      <span class="gf-inv-alert-desc">CEA India grid factor active: 713.0 g CO₂/kWh</span>
                     </div>
                   </div>
-                  <div class="mes-alert-item-right">
-                    <span class="mes-status-pill warning">Warning</span>
-                    <span class="mes-alert-time">
+                  <div class="gf-inv-alert-item-right">
+                    <span class="gf-inv-status-pill warning">Warning</span>
+                    <span class="gf-inv-alert-time">
                       <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
                       15 min ago
                     </span>
@@ -362,19 +362,19 @@
                 </div>
 
                 <!-- Alert 3: Complete -->
-                <div class="mes-alert-card-item">
-                  <div class="mes-alert-item-left">
-                    <div class="mes-alert-warning-icon">
+                <div class="gf-inv-alert-card-item">
+                  <div class="gf-inv-alert-item-left">
+                    <div class="gf-inv-alert-warning-icon">
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
                     </div>
-                    <div class="mes-alert-text">
-                      <span class="mes-alert-title">Scope 2 ESG Target Compliant</span>
-                      <span class="mes-alert-desc">Monthly transaction footprint &lt; 12.0 g CO₂ budget</span>
+                    <div class="gf-inv-alert-text">
+                      <span class="gf-inv-alert-title">Scope 2 ESG Target Compliant</span>
+                      <span class="gf-inv-alert-desc">Monthly transaction footprint &lt; 12.0 g CO₂ budget</span>
                     </div>
                   </div>
-                  <div class="mes-alert-item-right">
-                    <span class="mes-status-pill complete">Complete</span>
-                    <span class="mes-alert-time">
+                  <div class="gf-inv-alert-item-right">
+                    <span class="gf-inv-status-pill complete">Complete</span>
+                    <span class="gf-inv-alert-time">
                       <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
                       1 day ago
                     </span>
@@ -386,10 +386,10 @@
           </div>
 
           <!-- BOTTOM SECTION: SUSTAINABILITY INVESTIGATION TASKS TABLE (#EDF4FE Header) -->
-          <div class="mes-task-section">
-            <div class="mes-task-header">
-              <div class="mes-task-title-wrap">
-                <svg class="mes-task-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <div class="gf-inv-task-section">
+            <div class="gf-inv-task-header">
+              <div class="gf-inv-task-title-wrap">
+                <svg class="gf-inv-task-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <rect x="3" y="3" width="18" height="18" rx="4"></rect>
                   <circle cx="8" cy="8" r="1.5"></circle>
                   <line x1="12" y1="8" x2="17" y2="8"></line>
@@ -398,15 +398,15 @@
                   <circle cx="8" cy="16" r="1.5"></circle>
                   <line x1="12" y1="16" x2="17" y2="16"></line>
                 </svg>
-                <h3 class="mes-task-title">Sustainability Investigation &amp; Audit Tasks</h3>
+                <h3 class="gf-inv-task-title">Sustainability Investigation &amp; Audit Tasks</h3>
               </div>
-              <button class="mes-btn mes-btn-primary" onclick="openAddTaskModal()">
+              <button class="gf-inv-btn gf-inv-btn-primary" onclick="openAddTaskModal()">
                 Add Task
               </button>
             </div>
 
-            <div class="mes-table-wrap">
-              <table class="mes-table">
+            <div class="gf-inv-table-wrap">
+              <table class="gf-inv-table">
                 <thead>
                   <tr>
                     <th>Audit Task Name</th>
@@ -416,20 +416,20 @@
                     <th>Deadline</th>
                   </tr>
                 </thead>
-                <tbody id="mes-task-table-body">
+                <tbody id="gf-inv-task-table-body">
                   <!-- Row 1 -->
                   <tr>
-                    <td class="mes-task-name">Scope 2 Emission Verification (CEA v20.0)</td>
+                    <td class="gf-inv-task-name">Scope 2 Emission Verification (CEA v20.0)</td>
                     <td>
-                      <div class="mes-assigned-user">
-                        <svg class="mes-user-outline-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                      <div class="gf-inv-assigned-user">
+                        <svg class="gf-inv-user-outline-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
                         <span>Soham Gaikwad</span>
                       </div>
                     </td>
-                    <td><span class="mes-status-text in-progress">In Progress</span></td>
-                    <td><span class="mes-priority-text high">High</span></td>
+                    <td><span class="gf-inv-status-text in-progress">In Progress</span></td>
+                    <td><span class="gf-inv-priority-text high">High</span></td>
                     <td>
-                      <span class="mes-deadline">
+                      <span class="gf-inv-deadline">
                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
                         15/01/2026
                       </span>
@@ -438,17 +438,17 @@
 
                   <!-- Row 2 -->
                   <tr>
-                    <td class="mes-task-name">Idle Baseline Power Recalibration</td>
+                    <td class="gf-inv-task-name">Idle Baseline Power Recalibration</td>
                     <td>
-                      <div class="mes-assigned-user">
-                        <svg class="mes-user-outline-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                      <div class="gf-inv-assigned-user">
+                        <svg class="gf-inv-user-outline-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
                         <span>Atharva Hule</span>
                       </div>
                     </td>
-                    <td><span class="mes-status-text pending">Pending</span></td>
-                    <td><span class="mes-priority-text medium">Medium</span></td>
+                    <td><span class="gf-inv-status-text pending">Pending</span></td>
+                    <td><span class="gf-inv-priority-text medium">Medium</span></td>
                     <td>
-                      <span class="mes-deadline">
+                      <span class="gf-inv-deadline">
                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
                         15/01/2026
                       </span>
@@ -457,17 +457,17 @@
 
                   <!-- Row 3 -->
                   <tr>
-                    <td class="mes-task-name">CEA India Grid Factor Audit (713 g/kWh)</td>
+                    <td class="gf-inv-task-name">CEA India Grid Factor Audit (713 g/kWh)</td>
                     <td>
-                      <div class="mes-assigned-user">
-                        <svg class="mes-user-outline-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                      <div class="gf-inv-assigned-user">
+                        <svg class="gf-inv-user-outline-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
                         <span>Laukik Deshpande</span>
                       </div>
                     </td>
-                    <td><span class="mes-status-text completed">Completed</span></td>
-                    <td><span class="mes-priority-text low">Low</span></td>
+                    <td><span class="gf-inv-status-text completed">Completed</span></td>
+                    <td><span class="gf-inv-priority-text low">Low</span></td>
                     <td>
-                      <span class="mes-deadline">
+                      <span class="gf-inv-deadline">
                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
                         15/01/2026
                       </span>
@@ -476,17 +476,17 @@
 
                   <!-- Row 4 -->
                   <tr>
-                    <td class="mes-task-name">Double-Entry Ledger Integrity Proof</td>
+                    <td class="gf-inv-task-name">Double-Entry Ledger Integrity Proof</td>
                     <td>
-                      <div class="mes-assigned-user">
-                        <svg class="mes-user-outline-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                      <div class="gf-inv-assigned-user">
+                        <svg class="gf-inv-user-outline-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
                         <span>Prof. Kirti Chaudhari</span>
                       </div>
                     </td>
-                    <td><span class="mes-status-text in-progress">In Progress</span></td>
-                    <td><span class="mes-priority-text high">High</span></td>
+                    <td><span class="gf-inv-status-text in-progress">In Progress</span></td>
+                    <td><span class="gf-inv-priority-text high">High</span></td>
                     <td>
-                      <span class="mes-deadline">
+                      <span class="gf-inv-deadline">
                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
                         15/01/2026
                       </span>
@@ -495,17 +495,17 @@
 
                   <!-- Row 5 -->
                   <tr>
-                    <td class="mes-task-name">ESG Compliance PDF Report Generation</td>
+                    <td class="gf-inv-task-name">ESG Compliance PDF Report Generation</td>
                     <td>
-                      <div class="mes-assigned-user">
-                        <svg class="mes-user-outline-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                      <div class="gf-inv-assigned-user">
+                        <svg class="gf-inv-user-outline-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
                         <span>Soham Gaikwad</span>
                       </div>
                     </td>
-                    <td><span class="mes-status-text pending">Pending</span></td>
-                    <td><span class="mes-priority-text medium">Medium</span></td>
+                    <td><span class="gf-inv-status-text pending">Pending</span></td>
+                    <td><span class="gf-inv-priority-text medium">Medium</span></td>
                     <td>
-                      <span class="mes-deadline">
+                      <span class="gf-inv-deadline">
                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
                         15/01/2026
                       </span>
@@ -519,16 +519,16 @@
         </section>
 
         <!-- ================= PANEL 2: WORKLOAD TELEMETRY ================= -->
-        <section id="panel-production-overview" class="mes-panel">
-          <div class="mes-card">
-            <div class="mes-card-header">
-              <h3 class="mes-card-h3">Container Telemetry &amp; Microservices Power</h3>
-              <span class="mes-badge simulated">Kepler PromQL Scraped</span>
+        <section id="panel-telemetry" class="gf-inv-panel">
+          <div class="gf-inv-card">
+            <div class="gf-inv-card-header">
+              <h3 class="gf-inv-card-h3">Container Telemetry &amp; Microservices Power</h3>
+              <span class="gf-inv-badge simulated">Kepler PromQL Scraped</span>
             </div>
             <p style="font-size:13px; color:#64748b; margin-bottom:18px;">
               Continuous computational power tracking across core containerized financial services: Auth, Payment, Ledger, and Telemetry.
             </p>
-            <div class="mes-grid-2">
+            <div class="gf-inv-grid-2">
               <div style="background:#f8fafc; padding:16px; border-radius:12px; border:1px solid #e2e8f0;">
                 <div style="font-size:12px; color:#64748b; font-weight:700;">PAYMENT SERVICE (Kepler Container)</div>
                 <div style="font-size:24px; font-weight:900; margin:6px 0;" id="telemetry-payment-power">14.2 Watts</div>
@@ -544,23 +544,23 @@
         </section>
 
         <!-- ================= PANEL 3: ATTRIBUTION & FIDELITY ================= -->
-        <section id="panel-performance-metrics" class="mes-panel">
-          <div class="mes-card">
-            <div class="mes-card-header">
-              <h3 class="mes-card-h3">Attribution Fidelity &amp; Baseline Calibration</h3>
-              <span class="mes-badge calculated">Statistical Model</span>
+        <section id="panel-attribution" class="gf-inv-panel">
+          <div class="gf-inv-card">
+            <div class="gf-inv-card-header">
+              <h3 class="gf-inv-card-h3">Attribution Fidelity &amp; Baseline Calibration</h3>
+              <span class="gf-inv-badge calculated">Statistical Model</span>
             </div>
-            <div class="mes-grid-2">
+            <div class="gf-inv-grid-2">
               <div>
-                <div class="mes-form-group">
-                  <label class="mes-label">Calibration Window Duration (Seconds)</label>
-                  <input type="number" class="mes-input" id="calib-window" value="300" />
+                <div class="gf-inv-form-group">
+                  <label class="gf-inv-label">Calibration Window Duration (Seconds)</label>
+                  <input type="number" class="gf-inv-input" id="calib-window" value="300" />
                 </div>
-                <div class="mes-form-group">
-                  <label class="mes-label">Idle CPU Power Baseline (Watts)</label>
-                  <input type="number" class="mes-input" id="calib-idle" value="18.7" step="0.1" />
+                <div class="gf-inv-form-group">
+                  <label class="gf-inv-label">Idle CPU Power Baseline (Watts)</label>
+                  <input type="number" class="gf-inv-input" id="calib-idle" value="18.7" step="0.1" />
                 </div>
-                <button class="mes-btn mes-btn-primary" onclick="recalibrateBaseline()">Recalibrate Baseline →</button>
+                <button class="gf-inv-btn gf-inv-btn-primary" onclick="recalibrateBaseline()">Recalibrate Baseline →</button>
               </div>
               <div style="background:#f8fafc; padding:18px; border-radius:12px; border:1px solid #e2e8f0;">
                 <h4 style="font-size:13px; font-weight:800; margin-bottom:8px;">Model Accuracy &amp; Integrity</h4>
@@ -568,7 +568,7 @@
                   • Statistical R² Correlation: <strong>0.962 (96.2%)</strong><br>
                   • Scope 2 Method: <strong>Location-Based CEA India</strong><br>
                   • Telemetry Latency: <strong>&lt; 150 ms</strong><br>
-                  • Double-Entry Balance Proof: <strong class="mes-status-text completed">PASS (Atomic)</strong>
+                  • Double-Entry Balance Proof: <strong class="gf-inv-status-text completed">PASS (Atomic)</strong>
                 </div>
               </div>
             </div>
@@ -576,14 +576,14 @@
         </section>
 
         <!-- ================= PANEL 4: AUDITED CARBON LEDGER ================= -->
-        <section id="panel-task-management" class="mes-panel">
-          <div class="mes-card">
-            <div class="mes-card-header">
-              <h3 class="mes-card-h3">Audited Sustainability Ledger (Scope 2 Records)</h3>
-              <button class="mes-btn mes-btn-secondary" onclick="loadBackendLedger()">↻ Refresh Ledger</button>
+        <section id="panel-ledger" class="gf-inv-panel">
+          <div class="gf-inv-card">
+            <div class="gf-inv-card-header">
+              <h3 class="gf-inv-card-h3">Audited Sustainability Ledger (Scope 2 Records)</h3>
+              <button class="gf-inv-btn gf-inv-btn-secondary" onclick="loadBackendLedger()">↻ Refresh Ledger</button>
             </div>
-            <div class="mes-table-wrap">
-              <table class="mes-table">
+            <div class="gf-inv-table-wrap">
+              <table class="gf-inv-table">
                 <thead>
                   <tr>
                     <th>Tx ID</th>
@@ -607,53 +607,53 @@
         </section>
 
         <!-- ================= PANEL 5: BASEL RISK & ALERTS ================= -->
-        <section id="panel-alert-notification" class="mes-panel">
-          <div class="mes-card">
-            <div class="mes-card-header">
-              <h3 class="mes-card-h3">Environmental &amp; Computational Risk Alerts</h3>
-              <span class="mes-badge simulated">Automated Rule Engine</span>
+        <section id="panel-alerts" class="gf-inv-panel">
+          <div class="gf-inv-card">
+            <div class="gf-inv-card-header">
+              <h3 class="gf-inv-card-h3">Environmental &amp; Computational Risk Alerts</h3>
+              <span class="gf-inv-badge simulated">Automated Rule Engine</span>
             </div>
             <div id="full-alerts-container">
-              <div class="mes-alert-card-item" style="margin-bottom:12px;">
-                <div class="mes-alert-item-left">
-                  <div class="mes-alert-warning-icon">⚠️</div>
-                  <div class="mes-alert-text">
-                    <span class="mes-alert-title">Carbon Emission Spike Detected (> 12.0 g CO₂ Threshold)</span>
-                    <span class="mes-alert-desc">Prometheus alert rule triggered on payment-service container burst</span>
+              <div class="gf-inv-alert-card-item" style="margin-bottom:12px;">
+                <div class="gf-inv-alert-item-left">
+                  <div class="gf-inv-alert-warning-icon">⚠️</div>
+                  <div class="gf-inv-alert-text">
+                    <span class="gf-inv-alert-title">Carbon Emission Spike Detected (> 12.0 g CO₂ Threshold)</span>
+                    <span class="gf-inv-alert-desc">Prometheus alert rule triggered on payment-service container burst</span>
                   </div>
                 </div>
-                <span class="mes-status-pill critical">Critical</span>
+                <span class="gf-inv-status-pill critical">Critical</span>
               </div>
-              <div class="mes-alert-card-item">
-                <div class="mes-alert-item-left">
-                  <div class="mes-alert-warning-icon">ℹ️</div>
-                  <div class="mes-alert-text">
-                    <span class="mes-alert-title">CEA India Grid Baseline Active</span>
-                    <span class="mes-alert-desc">All Scope 2 emissions evaluated at 713.0 g CO₂/kWh</span>
+              <div class="gf-inv-alert-card-item">
+                <div class="gf-inv-alert-item-left">
+                  <div class="gf-inv-alert-warning-icon">ℹ️</div>
+                  <div class="gf-inv-alert-text">
+                    <span class="gf-inv-alert-title">CEA India Grid Baseline Active</span>
+                    <span class="gf-inv-alert-desc">All Scope 2 emissions evaluated at 713.0 g CO₂/kWh</span>
                   </div>
                 </div>
-                <span class="mes-status-pill complete">Compliant</span>
+                <span class="gf-inv-status-pill complete">Compliant</span>
               </div>
             </div>
           </div>
         </section>
 
         <!-- ================= PANEL 6: ESG AUDIT REPORTS (PDF & CSV Export) ================= -->
-        <section id="panel-report" class="mes-panel">
-          <div class="mes-card">
-            <div class="mes-card-header">
-              <h3 class="mes-card-h3">Official Sustainability Audit Reports</h3>
-              <span class="mes-badge calculated">Official Audit</span>
+        <section id="panel-reports" class="gf-inv-panel">
+          <div class="gf-inv-card">
+            <div class="gf-inv-card-header">
+              <h3 class="gf-inv-card-h3">Official Sustainability Audit Reports</h3>
+              <span class="gf-inv-badge calculated">Official Audit</span>
             </div>
             <p style="font-size:13px; color:#64748b; margin-bottom:20px;">
               Export formal Scope 2 computational carbon disclosures for ESG regulatory compliance and internal sustainability auditing.
             </p>
             <div style="display:flex; gap:14px;">
-              <a href="/sustainability/report/pdf" target="_blank" class="mes-btn mes-btn-primary" style="text-decoration:none;">
+              <a href="/sustainability/report/pdf" target="_blank" class="gf-inv-btn gf-inv-btn-primary" style="text-decoration:none;">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
                 Download Official Audit PDF
               </a>
-              <a href="/sustainability/report/csv" target="_blank" class="mes-btn mes-btn-secondary" style="text-decoration:none;">
+              <a href="/sustainability/report/csv" target="_blank" class="gf-inv-btn gf-inv-btn-secondary" style="text-decoration:none;">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
                 Export CSV Ledger
               </a>
@@ -662,23 +662,23 @@
         </section>
 
         <!-- ================= PANEL 7: CEA GRID SETTINGS ================= -->
-        <section id="panel-settings" class="mes-panel">
-          <div class="mes-card">
-            <div class="mes-card-header">
-              <h3 class="mes-card-h3">Electricity Grid Carbon Intensity Registry</h3>
-              <span class="mes-badge calculated">CEA India v20.0</span>
+        <section id="panel-grid" class="gf-inv-panel">
+          <div class="gf-inv-card">
+            <div class="gf-inv-card-header">
+              <h3 class="gf-inv-card-h3">Electricity Grid Carbon Intensity Registry</h3>
+              <span class="gf-inv-badge calculated">CEA India v20.0</span>
             </div>
-            <div class="mes-grid-2">
-              <div class="mes-form-group">
-                <label class="mes-label">Active Grid Carbon Factor (g CO₂ / kWh)</label>
-                <input type="number" class="mes-input" id="settings-grid-factor" value="713.0" step="0.1" />
+            <div class="gf-inv-grid-2">
+              <div class="gf-inv-form-group">
+                <label class="gf-inv-label">Active Grid Carbon Factor (g CO₂ / kWh)</label>
+                <input type="number" class="gf-inv-input" id="settings-grid-factor" value="713.0" step="0.1" />
               </div>
-              <div class="mes-form-group">
-                <label class="mes-label">Standard Authority</label>
-                <input type="text" class="mes-input" value="Central Electricity Authority (CEA) India Baseline Database" readonly />
+              <div class="gf-inv-form-group">
+                <label class="gf-inv-label">Standard Authority</label>
+                <input type="text" class="gf-inv-input" value="Central Electricity Authority (CEA) India Baseline Database" readonly />
               </div>
             </div>
-            <button class="mes-btn mes-btn-primary" onclick="saveSettings()">Save Emission Registry →</button>
+            <button class="gf-inv-btn gf-inv-btn-primary" onclick="saveSettings()">Save Emission Registry →</button>
           </div>
         </section>
 
@@ -689,7 +689,7 @@
   </div>
 
   <!-- Notification Toast Container -->
-  <div id="mes-toast-container"></div>
+  <div id="gf-inv-toast-container"></div>
 
   <!-- Investigator Script Controller -->
   <script src="/investigator/investigator.js"></script>

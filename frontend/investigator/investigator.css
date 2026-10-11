@@ -1,47 +1,47 @@
 /* =====================================================================
-   GREEN FINANCE — SUSTAINABILITY INVESTIGATOR (MES REFERENCE DESIGN)
-   Strict visual implementation of Reference Image 2:
+   GREEN FINANCE — SUSTAINABILITY INVESTIGATOR DASHBOARD
+   Auditor & Investigator analytical platform for financial microservices:
    - Clean industrial analytics dashboard in white container with soft ambient aura
-   - Left sidebar with blue target emblem + "MES" title, and navigation items:
-     Dashboard, Production overview, Performence Metrics, Task Management,
-     Alert & Notification, Report, Settings, Logout
-   - Top Header with "Enter your keywords..." search pill, notification bell,
-     user profile ("Abu Talha", "Operation Manager"), and Bank portal button
+   - Left sidebar with Green Finance emblem, and navigation items:
+     Dashboard, Kernel Energy Telemetry, Attribution Fidelity, Carbon Ledger,
+     Basel Risk & Alerts, ESG Audit Reports, CEA Grid Settings
+   - Top Header with search keywords pill, notification bell,
+     user profile for Soham Gaikwad (Lead Sustainability Investigator), and Bank portal button
    - 4 Hero KPI Cards with 3-dot menus:
-     1. Total Production (1,247 Units / Tx, ↑ 8.2%)
-     2. Avg. Cycle Time (2.4 min / 0.69 J, ↓ 3.1%)
-     3. Machine Utilization (85.7% / 96.2%, ↑ 5.4%)
-     4. Defect Rate (2.1% / 0.137 mg, ↓ 1.2%)
+     1. Total Transactions (1,429 Tx, ↑ 8.2%)
+     2. Attributed Energy / Tx (0.695 Joules, ↓ 3.1%)
+     3. Attribution Fidelity (96.2%, ↑ 5.4%)
+     4. Carbon Intensity / Tx (0.138 mg CO₂, Target < 0.20 mg)
    - 2x2 Analytical Grid:
-     1. Production Trend Bar Chart (Monthly, numbers above bars)
-     2. OEE Breakdown Donut Chart (Availability 15%, Performance 75%, Quality 10%)
-     3. Downtime Analysis Spline Area Chart (1PM to 12PM)
-     4. Real-time Alerts Card (Critical, Warning, Complete status pills)
-   - Bottom Task Management Table with distinct #EDF4FE header
-   - Tab switching for all 9 core sustainability investigator modules
+     1. Transaction Throughput Trend Bar Chart (Monthly, numbers above bars)
+     2. Microservice Energy Allocation Share Donut Chart (Payment 75%, Auth 15%, Telemetry 10%)
+     3. Computational Power Intensity Spline Area Chart (1PM to 12PM CPU wattage % of 35W TDP)
+     4. Real-time Sustainability Alerts Card (Critical, Warning, Complete status pills)
+   - Bottom Sustainability Investigation & Audit Tasks Table with distinct #EDF4FE header
+   - Tab switching for all 7 core Green Finance sustainability modules
    ===================================================================== */
 
 :root {
-  --mes-bg-canvas: #f0f4f9;
-  --mes-bg-window: #ffffff;
-  --mes-primary: #1e5bff;
-  --mes-primary-hover: #1447db;
-  --mes-primary-light: #eff4fe;
-  --mes-table-head: #edf4fe;
-  --mes-border: #eef2f6;
-  --mes-border-strong: #e2e8f0;
-  --mes-text-main: #141824;
-  --mes-text-muted: #64748b;
-  --mes-text-light: #94a3b8;
-  --mes-green: #22c55e;
-  --mes-green-light: #ecfdf5;
-  --mes-red: #ef4444;
-  --mes-red-light: #fef2f2;
-  --mes-amber: #f59e0b;
-  --mes-amber-light: #fffbeb;
-  --mes-blue: #1e5bff;
-  --mes-font: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --mes-font-mono: 'JetBrains Mono', monospace;
+  --gf-inv-bg-canvas: #f0f4f9;
+  --gf-inv-bg-window: #ffffff;
+  --gf-inv-primary: #1e5bff;
+  --gf-inv-primary-hover: #1447db;
+  --gf-inv-primary-light: #eff4fe;
+  --gf-inv-table-head: #edf4fe;
+  --gf-inv-border: #eef2f6;
+  --gf-inv-border-strong: #e2e8f0;
+  --gf-inv-text-main: #141824;
+  --gf-inv-text-muted: #64748b;
+  --gf-inv-text-light: #94a3b8;
+  --gf-inv-green: #22c55e;
+  --gf-inv-green-light: #ecfdf5;
+  --gf-inv-red: #ef4444;
+  --gf-inv-red-light: #fef2f2;
+  --gf-inv-amber: #f59e0b;
+  --gf-inv-amber-light: #fffbeb;
+  --gf-inv-blue: #1e5bff;
+  --gf-inv-font: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --gf-inv-font-mono: 'JetBrains Mono', monospace;
 }
 
 * {
@@ -51,12 +51,12 @@
 }
 
 body {
-  background: var(--mes-bg-canvas);
+  background: var(--gf-inv-bg-canvas);
   background-image: 
     radial-gradient(at 0% 0%, rgba(224, 231, 255, 0.6) 0px, transparent 50%),
     radial-gradient(at 100% 100%, rgba(254, 226, 226, 0.35) 0px, transparent 50%);
-  font-family: var(--mes-font);
-  color: var(--mes-text-main);
+  font-family: var(--gf-inv-font);
+  color: var(--gf-inv-text-main);
   min-height: 100vh;
   display: flex;
   justify-content: center;
@@ -65,10 +65,10 @@ body {
 }
 
 /* Outer MES Container (Strict match to Reference Image 2) */
-.mes-window {
+.gf-inv-window {
   width: 100%;
   max-width: 1360px;
-  background: var(--mes-bg-window);
+  background: var(--gf-inv-bg-window);
   border-radius: 20px;
   box-shadow: 0 10px 35px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02);
   display: flex;
@@ -80,17 +80,17 @@ body {
 /* -------------------------------------------------------------------
    1. LEFT SIDEBAR (MES NAVIGATION)
    ------------------------------------------------------------------- */
-.mes-sidebar {
+.gf-inv-sidebar {
   width: 230px;
   background: #ffffff;
-  border-right: 1px solid var(--mes-border);
+  border-right: 1px solid var(--gf-inv-border);
   display: flex;
   flex-direction: column;
   padding: 28px 18px 24px;
   flex-shrink: 0;
 }
 
-.mes-brand {
+.gf-inv-brand {
   display: flex;
   align-items: center;
   gap: 12px;
@@ -100,7 +100,7 @@ body {
 }
 
 /* Concentric blue bullseye target emblem */
-.mes-brand-logo {
+.gf-inv-brand-logo {
   width: 32px;
   height: 32px;
   position: relative;
@@ -109,33 +109,33 @@ body {
   justify-content: center;
 }
 
-.mes-logo-outer {
+.gf-inv-logo-outer {
   width: 30px;
   height: 30px;
   border-radius: 50%;
-  border: 3.5px solid var(--mes-primary);
+  border: 3.5px solid var(--gf-inv-primary);
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
 }
 
-.mes-logo-inner {
+.gf-inv-logo-inner {
   width: 14px;
   height: 14px;
   border-radius: 50%;
-  background: var(--mes-primary);
+  background: var(--gf-inv-primary);
 }
 
-.mes-brand-text {
+.gf-inv-brand-text {
   font-size: 22px;
   font-weight: 900;
   letter-spacing: -0.03em;
-  color: var(--mes-primary);
+  color: var(--gf-inv-primary);
 }
 
 /* Sidebar navigation links */
-.mes-nav {
+.gf-inv-nav {
   list-style: none;
   display: flex;
   flex-direction: column;
@@ -143,11 +143,11 @@ body {
   flex: 1;
 }
 
-.mes-nav-item {
+.gf-inv-nav-item {
   width: 100%;
 }
 
-.mes-nav-link {
+.gf-inv-nav-link {
   display: flex;
   align-items: center;
   gap: 12px;
@@ -165,21 +165,21 @@ body {
   transition: all 0.15s ease;
 }
 
-.mes-nav-link:hover {
+.gf-inv-nav-link:hover {
   background: #f8fafc;
-  color: var(--mes-text-main);
+  color: var(--gf-inv-text-main);
 }
 
-.mes-nav-link.active {
-  color: var(--mes-primary);
+.gf-inv-nav-link.active {
+  color: var(--gf-inv-primary);
   font-weight: 700;
 }
 
-.mes-nav-link.active svg {
-  stroke: var(--mes-primary);
+.gf-inv-nav-link.active svg {
+  stroke: var(--gf-inv-primary);
 }
 
-.mes-nav-icon {
+.gf-inv-nav-icon {
   width: 18px;
   height: 18px;
   stroke: currentColor;
@@ -188,15 +188,15 @@ body {
   flex-shrink: 0;
 }
 
-.mes-sidebar-footer {
+.gf-inv-sidebar-footer {
   margin-top: auto;
   padding-top: 18px;
-  border-top: 1px solid var(--mes-border);
+  border-top: 1px solid var(--gf-inv-border);
 }
 
-.mes-footer-meta {
+.gf-inv-footer-meta {
   font-size: 11px;
-  color: var(--mes-text-light);
+  color: var(--gf-inv-text-light);
   line-height: 1.4;
   padding-left: 6px;
 }
@@ -204,7 +204,7 @@ body {
 /* -------------------------------------------------------------------
    2. MAIN DASHBOARD CONTENT AREA
    ------------------------------------------------------------------- */
-.mes-main {
+.gf-inv-main {
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -213,10 +213,10 @@ body {
 }
 
 /* Top Header Bar */
-.mes-header {
+.gf-inv-header {
   height: 72px;
   background: #ffffff;
-  border-bottom: 1px solid var(--mes-border);
+  border-bottom: 1px solid var(--gf-inv-border);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -225,36 +225,36 @@ body {
 }
 
 /* Keyword Search Pill */
-.mes-search-box {
+.gf-inv-search-box {
   display: flex;
   align-items: center;
   background: #ffffff;
-  border: 1px solid var(--mes-border-strong);
+  border: 1px solid var(--gf-inv-border-strong);
   border-radius: 24px;
   padding: 9px 18px;
   width: 320px;
   transition: all 0.15s;
 }
 
-.mes-search-box:focus-within {
-  border-color: var(--mes-primary);
+.gf-inv-search-box:focus-within {
+  border-color: var(--gf-inv-primary);
   box-shadow: 0 0 0 3px rgba(30, 91, 255, 0.12);
 }
 
-.mes-search-input {
+.gf-inv-search-input {
   border: none;
   background: transparent;
   outline: none;
   font-size: 13px;
-  color: var(--mes-text-main);
+  color: var(--gf-inv-text-main);
   width: 100%;
 }
 
-.mes-search-input::placeholder {
+.gf-inv-search-input::placeholder {
   color: #94a3b8;
 }
 
-.mes-search-icon {
+.gf-inv-search-icon {
   width: 16px;
   height: 16px;
   stroke: #94a3b8;
@@ -264,18 +264,18 @@ body {
 }
 
 /* Header Right Actions */
-.mes-header-right {
+.gf-inv-header-right {
   display: flex;
   align-items: center;
   gap: 18px;
 }
 
-.mes-bell-btn {
+.gf-inv-bell-btn {
   width: 38px;
   height: 38px;
   border-radius: 50%;
   background: #ffffff;
-  border: 1px solid var(--mes-border-strong);
+  border: 1px solid var(--gf-inv-border-strong);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -283,22 +283,22 @@ body {
   transition: background 0.15s;
 }
 
-.mes-bell-btn:hover {
+.gf-inv-bell-btn:hover {
   background: #f8fafc;
 }
 
-.mes-user-profile {
+.gf-inv-user-profile {
   display: flex;
   align-items: center;
   gap: 10px;
   cursor: pointer;
 }
 
-.mes-avatar-circle {
+.gf-inv-avatar-circle {
   width: 38px;
   height: 38px;
   border-radius: 50%;
-  background: var(--mes-primary);
+  background: var(--gf-inv-primary);
   color: #ffffff;
   display: flex;
   align-items: center;
@@ -307,21 +307,21 @@ body {
   font-weight: 700;
 }
 
-.mes-user-meta {
+.gf-inv-user-meta {
   display: flex;
   flex-direction: column;
 }
 
-.mes-user-name {
+.gf-inv-user-name {
   font-size: 13px;
   font-weight: 800;
-  color: var(--mes-text-main);
+  color: var(--gf-inv-text-main);
   line-height: 1.2;
 }
 
-.mes-user-role {
+.gf-inv-user-role {
   font-size: 11px;
-  color: var(--mes-text-muted);
+  color: var(--gf-inv-text-muted);
 }
 
 .btn-switch-bank {
@@ -346,18 +346,18 @@ body {
 /* -------------------------------------------------------------------
    3. PANELS & DASHBOARD CONTENT
    ------------------------------------------------------------------- */
-.mes-content-body {
+.gf-inv-content-body {
   padding: 26px 32px 36px;
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
 
-.mes-panel {
+.gf-inv-panel {
   display: none;
 }
 
-.mes-panel.active {
+.gf-inv-panel.active {
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -372,15 +372,15 @@ body {
 /* -------------------------------------------------------------------
    4. TOP 4 KPI STAT CARDS (Exact match to Reference Image 2)
    ------------------------------------------------------------------- */
-.mes-kpi-grid {
+.gf-inv-kpi-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 16px;
 }
 
-.mes-kpi-card {
+.gf-inv-kpi-card {
   background: #ffffff;
-  border: 1px solid var(--mes-border);
+  border: 1px solid var(--gf-inv-border);
   border-radius: 16px;
   padding: 20px 22px 18px;
   display: flex;
@@ -389,29 +389,29 @@ body {
   transition: all 0.18s ease;
 }
 
-.mes-kpi-card:hover {
+.gf-inv-kpi-card:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.04);
 }
 
-.mes-kpi-header {
+.gf-inv-kpi-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 12px;
 }
 
-.mes-kpi-title {
+.gf-inv-kpi-title {
   font-size: 13.5px;
   font-weight: 700;
   color: #1e293b;
 }
 
 /* 3-dot menu icon in rounded square */
-.mes-dots-btn {
+.gf-inv-dots-btn {
   width: 24px;
   height: 24px;
-  border: 1px solid var(--mes-border-strong);
+  border: 1px solid var(--gf-inv-border-strong);
   border-radius: 6px;
   background: #ffffff;
   display: flex;
@@ -423,27 +423,27 @@ body {
   letter-spacing: 1px;
 }
 
-.mes-kpi-val-row {
+.gf-inv-kpi-val-row {
   display: flex;
   align-items: baseline;
   gap: 6px;
   margin-bottom: 10px;
 }
 
-.mes-kpi-value {
+.gf-inv-kpi-value {
   font-size: 28px;
   font-weight: 900;
   letter-spacing: -0.03em;
   color: #0f172a;
 }
 
-.mes-kpi-unit {
+.gf-inv-kpi-unit {
   font-size: 12.5px;
   color: #64748b;
   font-weight: 600;
 }
 
-.mes-kpi-trend {
+.gf-inv-kpi-trend {
   display: inline-flex;
   align-items: center;
   gap: 4px;
@@ -454,28 +454,28 @@ body {
   width: fit-content;
 }
 
-.mes-kpi-trend.up-blue {
-  color: var(--mes-primary);
+.gf-inv-kpi-trend.up-blue {
+  color: var(--gf-inv-primary);
   background: #eff4fe;
 }
 
-.mes-kpi-trend.down-red {
-  color: var(--mes-red);
+.gf-inv-kpi-trend.down-red {
+  color: var(--gf-inv-red);
   background: #fef2f2;
 }
 
 /* -------------------------------------------------------------------
    5. 2x2 ANALYTICAL CHARTS GRID (Exact match to Reference Image 2)
    ------------------------------------------------------------------- */
-.mes-charts-grid {
+.gf-inv-charts-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 16px;
 }
 
-.mes-chart-card {
+.gf-inv-chart-card {
   background: #ffffff;
-  border: 1px solid var(--mes-border);
+  border: 1px solid var(--gf-inv-border);
   border-radius: 16px;
   padding: 20px 24px;
   display: flex;
@@ -483,36 +483,36 @@ body {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
 }
 
-.mes-card-top {
+.gf-inv-card-top {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   margin-bottom: 16px;
 }
 
-.mes-card-header-meta {
+.gf-inv-card-header-meta {
   display: flex;
   flex-direction: column;
 }
 
-.mes-card-title {
+.gf-inv-card-title {
   font-size: 15px;
   font-weight: 800;
-  color: var(--mes-text-main);
+  color: var(--gf-inv-text-main);
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
-.mes-card-subtitle {
+.gf-inv-card-subtitle {
   font-size: 11px;
   color: #94a3b8;
   margin-top: 2px;
 }
 
 /* Blue Dropdown Pill (e.g. Monthly ⌄, Today ⌄) */
-.mes-blue-pill-btn {
-  background: var(--mes-primary);
+.gf-inv-blue-pill-btn {
+  background: var(--gf-inv-primary);
   color: #ffffff;
   border: none;
   border-radius: 16px;
@@ -526,26 +526,26 @@ body {
   transition: background 0.15s;
 }
 
-.mes-blue-pill-btn:hover {
-  background: var(--mes-primary-hover);
+.gf-inv-blue-pill-btn:hover {
+  background: var(--gf-inv-primary-hover);
 }
 
 /* Chart Canvas Area */
-.mes-canvas-wrap {
+.gf-inv-canvas-wrap {
   width: 100%;
   height: 220px;
   position: relative;
 }
 
-/* OEE Donut Layout */
-.mes-oee-layout {
+/* Service Energy Donut Layout */
+.gf-inv-energy-donut-layout {
   display: flex;
   align-items: center;
   justify-content: space-around;
   height: 220px;
 }
 
-.mes-donut-wrap {
+.gf-inv-donut-wrap {
   width: 180px;
   height: 180px;
   position: relative;
@@ -554,13 +554,13 @@ body {
   justify-content: center;
 }
 
-.mes-donut-legend {
+.gf-inv-donut-legend {
   display: flex;
   flex-direction: column;
   gap: 14px;
 }
 
-.mes-legend-row {
+.gf-inv-legend-row {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -568,18 +568,18 @@ body {
   font-weight: 600;
 }
 
-.mes-legend-dot {
+.gf-inv-legend-dot {
   width: 10px;
   height: 10px;
   border-radius: 50%;
   flex-shrink: 0;
 }
 
-.mes-legend-dot.green { background: #22c55e; }
-.mes-legend-dot.blue { background: #1e5bff; }
-.mes-legend-dot.orange { background: #f97316; }
+.gf-inv-legend-dot.green { background: #22c55e; }
+.gf-inv-legend-dot.blue { background: #1e5bff; }
+.gf-inv-legend-dot.orange { background: #f97316; }
 
-.mes-legend-pct {
+.gf-inv-legend-pct {
   margin-left: auto;
   font-weight: 800;
   color: #0f172a;
@@ -590,21 +590,21 @@ body {
 /* -------------------------------------------------------------------
    6. REAL-TIME ALERTS CARD (Exact match to Reference Image 2)
    ------------------------------------------------------------------- */
-.mes-alert-icon-head {
+.gf-inv-alert-icon-head {
   color: #f43f5e;
   font-size: 16px;
 }
 
-.mes-alerts-list {
+.gf-inv-alerts-list {
   display: flex;
   flex-direction: column;
   gap: 10px;
   margin-top: 4px;
 }
 
-.mes-alert-card-item {
+.gf-inv-alert-card-item {
   background: #ffffff;
-  border: 1px solid var(--mes-border);
+  border: 1px solid var(--gf-inv-border);
   border-radius: 12px;
   padding: 13px 16px;
   display: flex;
@@ -613,18 +613,18 @@ body {
   transition: all 0.15s;
 }
 
-.mes-alert-card-item:hover {
+.gf-inv-alert-card-item:hover {
   background: #f8fafc;
   border-color: #cbd5e1;
 }
 
-.mes-alert-item-left {
+.gf-inv-alert-item-left {
   display: flex;
   align-items: center;
   gap: 12px;
 }
 
-.mes-alert-warning-icon {
+.gf-inv-alert-warning-icon {
   width: 24px;
   height: 24px;
   border: 1px solid #cbd5e1;
@@ -636,31 +636,31 @@ body {
   flex-shrink: 0;
 }
 
-.mes-alert-text {
+.gf-inv-alert-text {
   display: flex;
   flex-direction: column;
 }
 
-.mes-alert-title {
+.gf-inv-alert-title {
   font-size: 13px;
   font-weight: 700;
   color: #1e293b;
 }
 
-.mes-alert-desc {
+.gf-inv-alert-desc {
   font-size: 11px;
   color: #94a3b8;
   margin-top: 2px;
 }
 
-.mes-alert-item-right {
+.gf-inv-alert-item-right {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   gap: 4px;
 }
 
-.mes-status-pill {
+.gf-inv-status-pill {
   font-size: 10.5px;
   font-weight: 700;
   color: #ffffff;
@@ -668,11 +668,11 @@ body {
   border-radius: 12px;
 }
 
-.mes-status-pill.critical { background: #dc2626; }
-.mes-status-pill.warning { background: #f59e0b; }
-.mes-status-pill.complete { background: #16a34a; }
+.gf-inv-status-pill.critical { background: #dc2626; }
+.gf-inv-status-pill.warning { background: #f59e0b; }
+.gf-inv-status-pill.complete { background: #16a34a; }
 
-.mes-alert-time {
+.gf-inv-alert-time {
   font-size: 10px;
   color: #94a3b8;
   display: inline-flex;
@@ -683,58 +683,58 @@ body {
 /* -------------------------------------------------------------------
    7. TASK MANAGEMENT TABLE (Exact match to Reference Image 2)
    ------------------------------------------------------------------- */
-.mes-task-section {
+.gf-inv-task-section {
   background: #ffffff;
-  border: 1px solid var(--mes-border);
+  border: 1px solid var(--gf-inv-border);
   border-radius: 16px;
   padding: 22px 24px 20px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
 }
 
-.mes-task-header {
+.gf-inv-task-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 16px;
 }
 
-.mes-task-title-wrap {
+.gf-inv-task-title-wrap {
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
-.mes-task-icon {
+.gf-inv-task-icon {
   width: 22px;
   height: 22px;
-  color: var(--mes-primary);
+  color: var(--gf-inv-primary);
 }
 
-.mes-task-title {
+.gf-inv-task-title {
   font-size: 15px;
   font-weight: 800;
-  color: var(--mes-text-main);
+  color: var(--gf-inv-text-main);
 }
 
-.mes-table-wrap {
+.gf-inv-table-wrap {
   width: 100%;
   overflow-x: auto;
   border-radius: 10px;
   border: 1px solid #eef2f6;
 }
 
-.mes-table {
+.gf-inv-table {
   width: 100%;
   border-collapse: collapse;
   text-align: left;
 }
 
 /* Distinct light blue table header from Reference Image 2 */
-.mes-table thead tr {
-  background: var(--mes-table-head);
+.gf-inv-table thead tr {
+  background: var(--gf-inv-table-head);
 }
 
-.mes-table th {
+.gf-inv-table th {
   padding: 12px 18px;
   font-size: 12px;
   font-weight: 700;
@@ -742,52 +742,52 @@ body {
   border-bottom: 1px solid #e2e8f0;
 }
 
-.mes-table td {
+.gf-inv-table td {
   padding: 13px 18px;
   font-size: 12.5px;
   color: #1e293b;
   border-bottom: 1px solid #f1f5f9;
 }
 
-.mes-table tbody tr:hover {
+.gf-inv-table tbody tr:hover {
   background: #f8fafc;
 }
 
-.mes-task-name {
+.gf-inv-task-name {
   font-weight: 600;
   color: #0f172a;
 }
 
-.mes-assigned-user {
+.gf-inv-assigned-user {
   display: flex;
   align-items: center;
   gap: 8px;
   color: #475569;
 }
 
-.mes-user-outline-icon {
+.gf-inv-user-outline-icon {
   width: 16px;
   height: 16px;
   color: #94a3b8;
 }
 
-.mes-status-text {
+.gf-inv-status-text {
   font-weight: 700;
 }
 
-.mes-status-text.in-progress { color: var(--mes-primary); }
-.mes-status-text.pending { color: #d97706; }
-.mes-status-text.completed { color: #16a34a; }
+.gf-inv-status-text.in-progress { color: var(--gf-inv-primary); }
+.gf-inv-status-text.pending { color: #d97706; }
+.gf-inv-status-text.completed { color: #16a34a; }
 
-.mes-priority-text {
+.gf-inv-priority-text {
   font-weight: 700;
 }
 
-.mes-priority-text.high { color: #dc2626; }
-.mes-priority-text.medium { color: #d97706; }
-.mes-priority-text.low { color: #16a34a; }
+.gf-inv-priority-text.high { color: #dc2626; }
+.gf-inv-priority-text.medium { color: #d97706; }
+.gf-inv-priority-text.low { color: #16a34a; }
 
-.mes-deadline {
+.gf-inv-deadline {
   color: #64748b;
   display: inline-flex;
   align-items: center;
@@ -797,41 +797,41 @@ body {
 /* -------------------------------------------------------------------
    8. ANALYTICAL SUITE STYLING (For Existing Modules)
    ------------------------------------------------------------------- */
-.mes-card {
+.gf-inv-card {
   background: #ffffff;
-  border: 1px solid var(--mes-border);
+  border: 1px solid var(--gf-inv-border);
   border-radius: 16px;
   padding: 22px 24px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
   margin-bottom: 16px;
 }
 
-.mes-card-header {
+.gf-inv-card-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 16px;
   padding-bottom: 12px;
-  border-bottom: 1px solid var(--mes-border);
+  border-bottom: 1px solid var(--gf-inv-border);
 }
 
-.mes-card-h3 {
+.gf-inv-card-h3 {
   font-size: 16px;
   font-weight: 800;
-  color: var(--mes-text-main);
+  color: var(--gf-inv-text-main);
 }
 
-.mes-grid-2 {
+.gf-inv-grid-2 {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 16px;
 }
 
-.mes-form-group {
+.gf-inv-form-group {
   margin-bottom: 14px;
 }
 
-.mes-label {
+.gf-inv-label {
   display: block;
   font-size: 12px;
   font-weight: 700;
@@ -839,25 +839,25 @@ body {
   margin-bottom: 6px;
 }
 
-.mes-input, .mes-select {
+.gf-inv-input, .gf-inv-select {
   width: 100%;
   padding: 10px 14px;
   border-radius: 10px;
-  border: 1px solid var(--mes-border-strong);
+  border: 1px solid var(--gf-inv-border-strong);
   background: #f8fafc;
-  color: var(--mes-text-main);
+  color: var(--gf-inv-text-main);
   font-size: 13.5px;
   font-family: inherit;
   outline: none;
 }
 
-.mes-input:focus, .mes-select:focus {
-  border-color: var(--mes-primary);
+.gf-inv-input:focus, .gf-inv-select:focus {
+  border-color: var(--gf-inv-primary);
   background: #ffffff;
   box-shadow: 0 0 0 3px rgba(30, 91, 255, 0.12);
 }
 
-.mes-btn {
+.gf-inv-btn {
   padding: 10px 18px;
   border-radius: 10px;
   font-weight: 700;
@@ -870,26 +870,26 @@ body {
   transition: all 0.15s;
 }
 
-.mes-btn-primary {
-  background: var(--mes-primary);
+.gf-inv-btn-primary {
+  background: var(--gf-inv-primary);
   color: #ffffff;
 }
 
-.mes-btn-primary:hover {
-  background: var(--mes-primary-hover);
+.gf-inv-btn-primary:hover {
+  background: var(--gf-inv-primary-hover);
 }
 
-.mes-btn-secondary {
+.gf-inv-btn-secondary {
   background: #f1f5f9;
   color: #475569;
   border: 1px solid #e2e8f0;
 }
 
-.mes-btn-secondary:hover {
+.gf-inv-btn-secondary:hover {
   background: #e2e8f0;
 }
 
-.mes-badge {
+.gf-inv-badge {
   font-size: 11px;
   font-weight: 700;
   padding: 3px 8px;
@@ -898,23 +898,23 @@ body {
   align-items: center;
 }
 
-.mes-badge.simulated {
+.gf-inv-badge.simulated {
   background: #fef3c7;
   color: #92400e;
 }
 
-.mes-badge.calculated {
+.gf-inv-badge.calculated {
   background: #eff6ff;
   color: #1e40af;
 }
 
-.mes-badge.observed {
+.gf-inv-badge.observed {
   background: #ecfdf5;
   color: #065f46;
 }
 
 /* Notification Toast */
-#mes-toast-container {
+#gf-toast-container {
   position: fixed;
   bottom: 24px;
   right: 24px;
@@ -924,7 +924,7 @@ body {
   z-index: 2000;
 }
 
-.mes-toast {
+.gf-inv-toast {
   background: #1e293b;
   color: #ffffff;
   padding: 12px 18px;

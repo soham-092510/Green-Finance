@@ -40,7 +40,7 @@ function initCharts() {
  * Peak month (March) in royal blue #1e5bff
  */
 function initThroughputTrendChart() {
-  const ctx = document.getElementById('chart-production-trend');
+  const ctx = document.getElementById('chart-tx-throughput');
   if (!ctx) return;
 
   const labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'];
@@ -70,7 +70,7 @@ function initThroughputTrendChart() {
     }
   };
 
-  GREEN_INVESTIGATOR_STATE.charts.productionTrend = new Chart(ctx, {
+  GREEN_INVESTIGATOR_STATE.charts.txThroughput = new Chart(ctx, {
     type: 'bar',
     data: {
       labels: labels,
@@ -130,10 +130,10 @@ function initThroughputTrendChart() {
  * telemetry & ledger: 10%
  */
 function initServiceEnergyDonutChart() {
-  const ctx = document.getElementById('chart-oee-donut');
+  const ctx = document.getElementById('chart-service-energy');
   if (!ctx) return;
 
-  GREEN_INVESTIGATOR_STATE.charts.oeeDonut = new Chart(ctx, {
+  GREEN_INVESTIGATOR_STATE.charts.serviceEnergyDonut = new Chart(ctx, {
     type: 'doughnut',
     data: {
       labels: ['payment-service', 'auth-service', 'telemetry & ledger'],
@@ -165,7 +165,7 @@ function initServiceEnergyDonutChart() {
  * 1PM to 12PM points with royal blue line and light blue area fill
  */
 function initPowerIntensityChart() {
-  const ctx = document.getElementById('chart-downtime-analysis');
+  const ctx = document.getElementById('chart-power-intensity');
   if (!ctx) return;
 
   const timeLabels = ['1PM', '2PM', '3PM', '4PM', '5PM', '6PM', '7PM', '8PM', '9PM', '10PM', '11PM', '12PM'];
@@ -175,7 +175,7 @@ function initPowerIntensityChart() {
   gradient.addColorStop(0, 'rgba(30, 91, 255, 0.22)');
   gradient.addColorStop(1, 'rgba(30, 91, 255, 0.0)');
 
-  GREEN_INVESTIGATOR_STATE.charts.downtimeAnalysis = new Chart(ctx, {
+  GREEN_INVESTIGATOR_STATE.charts.powerIntensity = new Chart(ctx, {
     type: 'line',
     data: {
       labels: timeLabels,
@@ -244,12 +244,12 @@ async function loadBackendKPIs() {
     GREEN_INVESTIGATOR_STATE.kpis = data;
 
     if (data.total_transactions !== undefined) {
-      const unitsEl = document.getElementById('kpi-total-units');
+      const unitsEl = document.getElementById('kpi-total-tx');
       if (unitsEl) unitsEl.textContent = '1,429';
     }
 
     if (data.avg_carbon_mg_per_tx !== undefined) {
-      const defEl = document.getElementById('kpi-defect-rate');
+      const defEl = document.getElementById('kpi-carbon-intensity');
       if (defEl) defEl.textContent = '0.138';
     }
   } catch (e) {
@@ -275,90 +275,90 @@ async function loadBackendLedger() {
  * Appends live financial transaction audit tasks to the Sustainability Investigation Tasks table
  */
 function renderTaskTableWithLedger(records) {
-  const tbody = document.getElementById('mes-task-table-body');
+  const tbody = document.getElementById('gf-task-table-body');
   if (!tbody || !records || records.length === 0) return;
 
   const staticRows = `
     <tr>
-      <td class="mes-task-name">Scope 2 Emission Verification (CEA v20.0)</td>
+      <td class="gf-inv-task-name">Scope 2 Emission Verification (CEA v20.0)</td>
       <td>
-        <div class="mes-assigned-user">
-          <svg class="mes-user-outline-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+        <div class="gf-inv-assigned-user">
+          <svg class="gf-inv-user-outline-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
           <span>Soham Gaikwad</span>
         </div>
       </td>
-      <td><span class="mes-status-text in-progress">In Progress</span></td>
-      <td><span class="mes-priority-text high">High</span></td>
+      <td><span class="gf-inv-status-text in-progress">In Progress</span></td>
+      <td><span class="gf-inv-priority-text high">High</span></td>
       <td>
-        <span class="mes-deadline">
+        <span class="gf-inv-deadline">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
           15/01/2026
         </span>
       </td>
     </tr>
     <tr>
-      <td class="mes-task-name">Idle Baseline Power Recalibration</td>
+      <td class="gf-inv-task-name">Idle Baseline Power Recalibration</td>
       <td>
-        <div class="mes-assigned-user">
-          <svg class="mes-user-outline-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+        <div class="gf-inv-assigned-user">
+          <svg class="gf-inv-user-outline-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
           <span>Atharva Hule</span>
         </div>
       </td>
-      <td><span class="mes-status-text pending">Pending</span></td>
-      <td><span class="mes-priority-text medium">Medium</span></td>
+      <td><span class="gf-inv-status-text pending">Pending</span></td>
+      <td><span class="gf-inv-priority-text medium">Medium</span></td>
       <td>
-        <span class="mes-deadline">
+        <span class="gf-inv-deadline">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
           15/01/2026
         </span>
       </td>
     </tr>
     <tr>
-      <td class="mes-task-name">CEA India Grid Factor Audit (713 g/kWh)</td>
+      <td class="gf-inv-task-name">CEA India Grid Factor Audit (713 g/kWh)</td>
       <td>
-        <div class="mes-assigned-user">
-          <svg class="mes-user-outline-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+        <div class="gf-inv-assigned-user">
+          <svg class="gf-inv-user-outline-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
           <span>Laukik Deshpande</span>
         </div>
       </td>
-      <td><span class="mes-status-text completed">Completed</span></td>
-      <td><span class="mes-priority-text low">Low</span></td>
+      <td><span class="gf-inv-status-text completed">Completed</span></td>
+      <td><span class="gf-inv-priority-text low">Low</span></td>
       <td>
-        <span class="mes-deadline">
+        <span class="gf-inv-deadline">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
           15/01/2026
         </span>
       </td>
     </tr>
     <tr>
-      <td class="mes-task-name">Double-Entry Ledger Integrity Proof</td>
+      <td class="gf-inv-task-name">Double-Entry Ledger Integrity Proof</td>
       <td>
-        <div class="mes-assigned-user">
-          <svg class="mes-user-outline-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+        <div class="gf-inv-assigned-user">
+          <svg class="gf-inv-user-outline-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
           <span>Prof. Kirti Chaudhari</span>
         </div>
       </td>
-      <td><span class="mes-status-text in-progress">In Progress</span></td>
-      <td><span class="mes-priority-text high">High</span></td>
+      <td><span class="gf-inv-status-text in-progress">In Progress</span></td>
+      <td><span class="gf-inv-priority-text high">High</span></td>
       <td>
-        <span class="mes-deadline">
+        <span class="gf-inv-deadline">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
           15/01/2026
         </span>
       </td>
     </tr>
     <tr>
-      <td class="mes-task-name">ESG Compliance PDF Report Generation</td>
+      <td class="gf-inv-task-name">ESG Compliance PDF Report Generation</td>
       <td>
-        <div class="mes-assigned-user">
-          <svg class="mes-user-outline-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+        <div class="gf-inv-assigned-user">
+          <svg class="gf-inv-user-outline-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
           <span>Soham Gaikwad</span>
         </div>
       </td>
-      <td><span class="mes-status-text pending">Pending</span></td>
-      <td><span class="mes-priority-text medium">Medium</span></td>
+      <td><span class="gf-inv-status-text pending">Pending</span></td>
+      <td><span class="gf-inv-priority-text medium">Medium</span></td>
       <td>
-        <span class="mes-deadline">
+        <span class="gf-inv-deadline">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
           15/01/2026
         </span>
@@ -369,19 +369,19 @@ function renderTaskTableWithLedger(records) {
   // Prepend recent live ledger transactions
   const liveRows = records.slice(0, 3).map(rec => `
     <tr style="background:#fcfdfe;">
-      <td class="mes-task-name">
+      <td class="gf-inv-task-name">
         🌱 Audit Tx ${rec.transaction_id.slice(0, 8)}: ${rec.sender_bank_id} → ${rec.recipient_bank_id} (₹${rec.amount.toLocaleString('en-IN')})
       </td>
       <td>
-        <div class="mes-assigned-user">
-          <svg class="mes-user-outline-icon" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+        <div class="gf-inv-assigned-user">
+          <svg class="gf-inv-user-outline-icon" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
           <span>Audit Engine (Soham G.)</span>
         </div>
       </td>
-      <td><span class="mes-status-text completed">Audited</span></td>
-      <td><span class="mes-priority-text low">${((rec.carbon_grams || 0.00014) * 1000).toFixed(3)} mg CO₂</span></td>
+      <td><span class="gf-inv-status-text completed">Audited</span></td>
+      <td><span class="gf-inv-priority-text low">${((rec.carbon_grams || 0.00014) * 1000).toFixed(3)} mg CO₂</span></td>
       <td>
-        <span class="mes-deadline">
+        <span class="gf-inv-deadline">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
           ${rec.timestamp ? rec.timestamp.split(' ')[0] : 'Today'}
         </span>
@@ -403,14 +403,14 @@ function renderFullLedgerTable(records) {
 
   tbody.innerHTML = records.map(r => `
     <tr>
-      <td style="font-family:var(--mes-font-mono); font-size:11px; font-weight:700;">${r.transaction_id ? r.transaction_id.slice(0, 8) : 'tx-001'}</td>
+      <td style="font-family:var(--gf-inv-font-mono); font-size:11px; font-weight:700;">${r.transaction_id ? r.transaction_id.slice(0, 8) : 'tx-001'}</td>
       <td style="font-size:11px; color:#64748b;">${r.timestamp || '2026-10-10'}</td>
       <td><strong>${r.sender_bank_id}</strong></td>
       <td><strong>${r.recipient_bank_id}</strong></td>
       <td><strong>₹${(r.amount || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</strong></td>
       <td>${(r.energy_joules || 0.69).toFixed(4)} J</td>
       <td>${((r.carbon_grams || 0.00014) * 1000).toFixed(4)} mg</td>
-      <td style="font-family:var(--mes-font-mono); font-size:10px; color:#94a3b8;">${r.audit_hash ? r.audit_hash.slice(0, 16) + '...' : 'd3e87443...'}</td>
+      <td style="font-family:var(--gf-inv-font-mono); font-size:10px; color:#94a3b8;">${r.audit_hash ? r.audit_hash.slice(0, 16) + '...' : 'd3e87443...'}</td>
     </tr>
   `).join('');
 }
@@ -418,11 +418,11 @@ function renderFullLedgerTable(records) {
 /* ---------------------------------------------------------------------
    3. TAB & PANEL SWITCHING
    --------------------------------------------------------------------- */
-function switchMesPanel(panelId, btn) {
-  document.querySelectorAll('.mes-nav-link').forEach(l => l.classList.remove('active'));
+function switchInvestigatorPanel(panelId, btn) {
+  document.querySelectorAll('.gf-inv-nav-link').forEach(l => l.classList.remove('active'));
   if (btn) btn.classList.add('active');
 
-  document.querySelectorAll('.mes-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.gf-inv-panel').forEach(p => p.classList.remove('active'));
   const target = document.getElementById(`panel-${panelId}`);
   if (target) {
     target.classList.add('active');
@@ -430,7 +430,7 @@ function switchMesPanel(panelId, btn) {
 
   GREEN_INVESTIGATOR_STATE.activePanel = panelId;
 
-  if (panelId === 'task-management') {
+  if (panelId === 'ledger') {
     loadBackendLedger();
   }
 }
@@ -438,7 +438,7 @@ function switchMesPanel(panelId, btn) {
 /* ---------------------------------------------------------------------
    4. INTERACTIVE ACTIONS & FILTERS
    --------------------------------------------------------------------- */
-function cycleProductionTrendPeriod() {
+function cycleThroughputPeriod() {
   const label = document.getElementById('trend-period-label');
   if (!label) return;
 
@@ -447,20 +447,20 @@ function cycleProductionTrendPeriod() {
   const next = periods[(cur + 1) % periods.length];
   label.textContent = next;
 
-  if (GREEN_INVESTIGATOR_STATE.charts.productionTrend) {
+  if (GREEN_INVESTIGATOR_STATE.charts.txThroughput) {
     const mult = next === 'Weekly' ? 0.3 : (next === 'Daily' ? 0.05 : 1.0);
     const newVals = [28, 10, 45, 38, 15, 30, 35, 28, 8].map(v => Math.round(v * mult));
-    GREEN_INVESTIGATOR_STATE.charts.productionTrend.data.datasets[0].data = newVals;
-    GREEN_INVESTIGATOR_STATE.charts.productionTrend.update();
+    GREEN_INVESTIGATOR_STATE.charts.txThroughput.data.datasets[0].data = newVals;
+    GREEN_INVESTIGATOR_STATE.charts.txThroughput.update();
   }
 }
 
-function cycleOEEPeriod() {
-  showMesToast('Service Energy Period: Last 30 Days Cumulative Workload Share');
+function cycleServiceEnergyPeriod() {
+  showInvestigatorToast('Service Energy Period: Last 30 Days Cumulative Workload Share');
 }
 
-function cycleDowntimePeriod() {
-  const label = document.getElementById('downtime-period-label');
+function cyclePowerIntensityPeriod() {
+  const label = document.getElementById('power-intensity-period-label');
   if (!label) return;
 
   const periods = ['Today', 'Yesterday', '7 Days'];
@@ -468,21 +468,21 @@ function cycleDowntimePeriod() {
   const next = periods[(cur + 1) % periods.length];
   label.textContent = next;
 
-  if (GREEN_INVESTIGATOR_STATE.charts.downtimeAnalysis) {
+  if (GREEN_INVESTIGATOR_STATE.charts.powerIntensity) {
     const shift = next === 'Yesterday' ? 10 : 0;
     const newCurve = [10, 70, 90, 8, 30, 42, 98, 52, 60, 60, 32, 85].map(v => Math.max(5, Math.min(95, v + (Math.random() * 20 - 10) + shift)));
-    GREEN_INVESTIGATOR_STATE.charts.downtimeAnalysis.data.datasets[0].data = newCurve;
-    GREEN_INVESTIGATOR_STATE.charts.downtimeAnalysis.update();
+    GREEN_INVESTIGATOR_STATE.charts.powerIntensity.data.datasets[0].data = newCurve;
+    GREEN_INVESTIGATOR_STATE.charts.powerIntensity.update();
   }
 }
 
 function openAddTaskModal() {
-  showMesToast('Audit Task added: "Grid Factor Re-verification — Central Electricity Authority (713 g/kWh)"');
+  showInvestigatorToast('Audit Task added: "Grid Factor Re-verification — Central Electricity Authority (713 g/kWh)"');
 }
 
 function handleInvestigatorSearch(query) {
   const q = query.toLowerCase().trim();
-  const rows = document.querySelectorAll('#mes-task-table-body tr');
+  const rows = document.querySelectorAll('#gf-task-table-body tr');
   rows.forEach(r => {
     if (!q || r.textContent.toLowerCase().includes(q)) {
       r.style.display = '';
@@ -494,20 +494,20 @@ function handleInvestigatorSearch(query) {
 
 function recalibrateBaseline() {
   const idle = document.getElementById('calib-idle').value;
-  showMesToast(`Idle baseline power successfully recalibrated to ${idle} Watts.`);
+  showInvestigatorToast(`Idle baseline power successfully recalibrated to ${idle} Watts.`);
 }
 
 function saveSettings() {
   const factor = document.getElementById('settings-grid-factor').value;
-  showMesToast(`Grid carbon intensity updated to ${factor} g/kWh (CEA Registry).`);
+  showInvestigatorToast(`Grid carbon intensity updated to ${factor} g/kWh (CEA Registry).`);
 }
 
-function showMesToast(msg) {
-  const container = document.getElementById('mes-toast-container');
+function showInvestigatorToast(msg) {
+  const container = document.getElementById('gf-toast-container');
   if (!container) return;
 
   const toast = document.createElement('div');
-  toast.className = 'mes-toast';
+  toast.className = 'gf-inv-toast';
   toast.textContent = msg;
   container.appendChild(toast);
 

@@ -1,17 +1,17 @@
 /* =====================================================================
-   GREEN FINANCE — BANKING APPLICATION (MOVA REFERENCE DESIGN)
-   Strict visual implementation of Reference Image 1:
-   - Left Sidebar with curved leaf brand logo, mint green active pill,
-     clean menu items, bottom user avatar circle + name + "Premium"
-   - Top Header with "Good morning, Olivia!" (or active user), search pill
-   - Hero Cards: Dark "Total balance" card with glowing green sparkline,
-     Violet "Main account" card with VISA logo and card number
-   - 4 Action Pill Buttons: Transfer (Mint), Pay bills (Amber),
-     Top up (Coral), Exchange (Black)
-   - Bottom Cards: White "Recent transactions" list with circular icons,
-     Dark "Spending overview" card with vertical mint green pillar bars
-   - Interactive modals for Transfer Money (with live carbon preview),
-     Receipts (SHA-256), and Beneficiaries
+   GREEN FINANCE — SUSTAINABLE DIGITAL BANKING APPLICATION
+   Customer-facing sustainable banking portal:
+   - Left Sidebar with Green Finance curve brand logo, mint green active pill,
+     clean menu items, bottom user card for Soham Gaikwad (Green Premier • Admin)
+   - Top Header with personalized greeting, global search pill, notification bell
+   - Hero Cards: Dark Total Account Balance card with glowing neon green sparkline,
+     Purple Green Premier Platinum Account card with VISA logo and masked number
+   - 4 Action Pill Buttons: Transfer Money (Mint), Green Bonds (Amber),
+     Deposit Funds (Coral), Carbon Offset (Black)
+   - Bottom Cards: Recent Transactions list with verified eco receipts,
+     Dark Carbon & Spending Overview card with 7 daily vertical mint pillar bars
+   - Interactive modals for INR (₹) Money Transfer (with live Scope 2 carbon preview),
+     Cryptographic SHA-256 Audit Receipts, and Account Switching
    ===================================================================== */
 
 :root {
@@ -52,7 +52,7 @@ body {
 }
 
 /* Outer Desktop Frame (Exact match to reference tablet/desktop viewport) */
-.mova-window {
+.gf-bank-window {
   width: 100%;
   max-width: 1280px;
   min-height: 820px;
@@ -68,7 +68,7 @@ body {
 /* -------------------------------------------------------------------
    1. LEFT SIDEBAR
    ------------------------------------------------------------------- */
-.mova-sidebar {
+.gf-bank-sidebar {
   width: 240px;
   background: var(--bank-sidebar-bg);
   border-right: 1px solid var(--bank-border);
@@ -78,7 +78,7 @@ body {
   flex-shrink: 0;
 }
 
-.mova-brand {
+.gf-bank-brand {
   display: flex;
   align-items: center;
   gap: 12px;
@@ -88,7 +88,7 @@ body {
   padding-left: 6px;
 }
 
-.mova-brand-curve {
+.gf-bank-brand-curve {
   width: 28px;
   height: 28px;
   display: flex;
@@ -96,12 +96,12 @@ body {
   justify-content: center;
 }
 
-.mova-curve-svg {
+.gf-bank-curve-svg {
   width: 24px;
   height: 24px;
 }
 
-.mova-brand-name {
+.gf-bank-brand-name {
   font-size: 20px;
   font-weight: 800;
   letter-spacing: -0.02em;
@@ -109,7 +109,7 @@ body {
 }
 
 /* Navigation Menu */
-.mova-nav {
+.gf-bank-nav {
   list-style: none;
   display: flex;
   flex-direction: column;
@@ -117,11 +117,11 @@ body {
   flex: 1;
 }
 
-.mova-nav-item {
+.gf-bank-nav-item {
   width: 100%;
 }
 
-.mova-nav-link {
+.gf-bank-nav-link {
   display: flex;
   align-items: center;
   gap: 14px;
@@ -139,22 +139,22 @@ body {
   transition: all 0.18s ease;
 }
 
-.mova-nav-link:hover {
+.gf-bank-nav-link:hover {
   background: #f4f6f8;
   color: var(--bank-text-main);
 }
 
-.mova-nav-link.active {
+.gf-bank-nav-link.active {
   background: var(--bank-mint);
   color: #ffffff;
   box-shadow: 0 4px 14px rgba(82, 189, 137, 0.35);
 }
 
-.mova-nav-link.active svg {
+.gf-bank-nav-link.active svg {
   stroke: #ffffff;
 }
 
-.mova-nav-icon {
+.gf-bank-nav-icon {
   width: 20px;
   height: 20px;
   stroke: currentColor;
@@ -163,13 +163,13 @@ body {
 }
 
 /* Sidebar User Footer */
-.mova-user-footer {
+.gf-bank-user-footer {
   margin-top: auto;
   padding-top: 20px;
   border-top: 1px solid var(--bank-border);
 }
 
-.mova-user-card {
+.gf-bank-user-card {
   display: flex;
   align-items: center;
   gap: 12px;
@@ -180,11 +180,11 @@ body {
   transition: background 0.15s;
 }
 
-.mova-user-card:hover {
+.gf-bank-user-card:hover {
   background: #f4f6f8;
 }
 
-.mova-avatar-circle {
+.gf-bank-avatar-circle {
   width: 40px;
   height: 40px;
   border-radius: 50%;
@@ -197,24 +197,24 @@ body {
   font-size: 16px;
 }
 
-.mova-user-info {
+.gf-bank-user-info {
   display: flex;
   flex-direction: column;
 }
 
-.mova-user-name {
+.gf-bank-user-name {
   font-size: 14px;
   font-weight: 700;
   color: var(--bank-text-main);
 }
 
-.mova-user-tier {
+.gf-bank-user-tier {
   font-size: 12px;
   font-weight: 600;
   color: var(--bank-mint);
 }
 
-.mova-logout-btn {
+.gf-bank-logout-btn {
   background: transparent;
   border: none;
   font-size: 12px;
@@ -226,14 +226,14 @@ body {
   transition: color 0.15s;
 }
 
-.mova-logout-btn:hover {
+.gf-bank-logout-btn:hover {
   color: #e53e3e;
 }
 
 /* -------------------------------------------------------------------
    2. MAIN CONTENT AREA
    ------------------------------------------------------------------- */
-.mova-main {
+.gf-bank-main {
   flex: 1;
   padding: 32px 36px 40px;
   overflow-y: auto;
@@ -243,25 +243,25 @@ body {
 }
 
 /* Top Header Bar */
-.mova-top-header {
+.gf-bank-top-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   margin-bottom: 6px;
 }
 
-.mova-greeting {
+.gf-bank-greeting {
   display: flex;
   flex-direction: column;
 }
 
-.mova-greet-sub {
+.gf-bank-greet-sub {
   font-size: 14px;
   color: var(--bank-text-muted);
   font-weight: 500;
 }
 
-.mova-greet-name {
+.gf-bank-greet-name {
   font-size: 30px;
   font-weight: 900;
   letter-spacing: -0.03em;
@@ -269,14 +269,14 @@ body {
   margin-top: 2px;
 }
 
-.mova-header-actions {
+.gf-bank-header-actions {
   display: flex;
   align-items: center;
   gap: 16px;
 }
 
 /* Search Bar Pill */
-.mova-search-box {
+.gf-bank-search-box {
   display: flex;
   align-items: center;
   background: #ffffff;
@@ -287,7 +287,7 @@ body {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
 }
 
-.mova-search-input {
+.gf-bank-search-input {
   border: none;
   background: transparent;
   outline: none;
@@ -296,11 +296,11 @@ body {
   width: 100%;
 }
 
-.mova-search-input::placeholder {
+.gf-bank-search-input::placeholder {
   color: #a0aec0;
 }
 
-.mova-bell-btn {
+.gf-bank-bell-btn {
   width: 42px;
   height: 42px;
   border-radius: 50%;
@@ -314,11 +314,11 @@ body {
   transition: all 0.15s;
 }
 
-.mova-bell-btn:hover {
+.gf-bank-bell-btn:hover {
   background: #f4f6f8;
 }
 
-.mova-bell-dot {
+.gf-bank-bell-dot {
   position: absolute;
   top: 10px;
   right: 11px;
@@ -352,14 +352,14 @@ body {
 /* -------------------------------------------------------------------
    3. HERO CARDS ROW (Exact match to Reference 1)
    ------------------------------------------------------------------- */
-.mova-hero-grid {
+.gf-bank-hero-grid {
   display: grid;
   grid-template-columns: 1.15fr 1fr;
   gap: 20px;
 }
 
 /* Card 1: Total Balance Dark Card */
-.mova-dark-balance-card {
+.gf-bank-dark-balance-card {
   background: var(--bank-card-dark);
   border-radius: 22px;
   padding: 26px 28px 18px;
@@ -396,14 +396,14 @@ body {
 }
 
 /* Glowing Neon Sparkline */
-.mova-sparkline-canvas {
+.gf-bank-sparkline-canvas {
   width: 100%;
   height: 60px;
   margin-top: auto;
 }
 
 /* Card 2: Main Account Purple Card */
-.mova-purple-card {
+.gf-bank-purple-card {
   background: var(--bank-card-purple);
   border-radius: 22px;
   padding: 26px 28px;
@@ -486,13 +486,13 @@ body {
 /* -------------------------------------------------------------------
    4. FOUR ACTION PILL BUTTONS (Exact match to Reference 1)
    ------------------------------------------------------------------- */
-.mova-action-bar {
+.gf-bank-action-bar {
   display: grid;
   grid-template-columns: 1.15fr 1fr 1fr 1fr;
   gap: 16px;
 }
 
-.mova-action-btn {
+.gf-bank-action-btn {
   height: 56px;
   border-radius: 16px;
   border: none;
@@ -507,31 +507,31 @@ body {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
 }
 
-.mova-action-btn:hover {
+.gf-bank-action-btn:hover {
   transform: translateY(-2px);
   filter: brightness(1.05);
 }
 
 /* 1. Transfer (Mint Green) */
-.btn-mova-transfer {
+.btn-gf-bank-transfer {
   background: var(--bank-mint);
   color: #12161c;
 }
 
 /* 2. Pay Bills (Golden Amber) */
-.btn-mova-paybills {
+.btn-gf-bank-paybills {
   background: var(--bank-amber);
   color: #12161c;
 }
 
 /* 3. Top Up (Coral Red) */
-.btn-mova-topup {
+.btn-gf-bank-topup {
   background: var(--bank-coral);
   color: #ffffff;
 }
 
 /* 4. Exchange (Charcoal Black) */
-.btn-mova-exchange {
+.btn-gf-bank-exchange {
   background: var(--bank-black);
   color: #ffffff;
 }
@@ -546,7 +546,7 @@ body {
 /* -------------------------------------------------------------------
    5. BOTTOM TWO CARDS (Exact match to Reference 1)
    ------------------------------------------------------------------- */
-.mova-bottom-grid {
+.gf-bank-bottom-grid {
   display: grid;
   grid-template-columns: 1.15fr 1fr;
   gap: 20px;
@@ -554,7 +554,7 @@ body {
 }
 
 /* Card 3: Recent Transactions White Card */
-.mova-tx-card {
+.gf-bank-tx-card {
   background: var(--bank-card-white);
   border: 1px solid var(--bank-border);
   border-radius: 22px;
@@ -660,7 +660,7 @@ body {
 }
 
 /* Card 4: Spending Overview Dark Card with Pillar Bars */
-.mova-overview-card {
+.gf-bank-overview-card {
   background: var(--bank-card-dark);
   border-radius: 22px;
   padding: 24px 28px;
@@ -702,7 +702,7 @@ body {
 }
 
 /* Vertical Pillar Bar Chart */
-.mova-pillars-container {
+.gf-bank-pillars-container {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
@@ -739,7 +739,7 @@ body {
 /* -------------------------------------------------------------------
    6. INTERACTIVE MODALS (Transfer, Receipt, Switch User)
    ------------------------------------------------------------------- */
-.mova-modal-overlay {
+.gf-bank-modal-overlay {
   position: fixed;
   inset: 0;
   background: rgba(14, 17, 23, 0.65);
@@ -750,11 +750,11 @@ body {
   z-index: 1000;
 }
 
-.mova-modal-overlay.hidden {
+.gf-bank-modal-overlay.hidden {
   display: none;
 }
 
-.mova-modal-card {
+.gf-bank-modal-card {
   background: #ffffff;
   border-radius: 24px;
   width: 90%;
@@ -762,15 +762,15 @@ body {
   max-height: 90vh;
   overflow-y: auto;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
-  animation: movaPop 0.2s ease-out;
+  animation: gfBankPop 0.2s ease-out;
 }
 
-@keyframes movaPop {
+@keyframes gfBankPop {
   from { opacity: 0; transform: scale(0.95); }
   to { opacity: 1; transform: scale(1); }
 }
 
-.mova-modal-header {
+.gf-bank-modal-header {
   padding: 22px 26px 16px;
   border-bottom: 1px solid var(--bank-border);
   display: flex;
@@ -778,13 +778,13 @@ body {
   align-items: center;
 }
 
-.mova-modal-title {
+.gf-bank-modal-title {
   font-size: 17px;
   font-weight: 800;
   color: var(--bank-text-main);
 }
 
-.mova-modal-close {
+.gf-bank-modal-close {
   background: transparent;
   border: none;
   font-size: 20px;
@@ -792,11 +792,11 @@ body {
   color: var(--bank-text-muted);
 }
 
-.mova-modal-body {
+.gf-bank-modal-body {
   padding: 22px 26px;
 }
 
-.mova-modal-footer {
+.gf-bank-modal-footer {
   padding: 16px 26px 22px;
   display: flex;
   justify-content: flex-end;
@@ -804,11 +804,11 @@ body {
 }
 
 /* Form inputs */
-.mova-form-group {
+.gf-bank-form-group {
   margin-bottom: 16px;
 }
 
-.mova-label {
+.gf-bank-label {
   display: block;
   font-size: 12px;
   font-weight: 700;
@@ -816,7 +816,7 @@ body {
   margin-bottom: 6px;
 }
 
-.mova-input, .mova-select {
+.gf-bank-input, .gf-bank-select {
   width: 100%;
   padding: 12px 14px;
   border-radius: 12px;
@@ -829,14 +829,14 @@ body {
   transition: all 0.15s;
 }
 
-.mova-input:focus, .mova-select:focus {
+.gf-bank-input:focus, .gf-bank-select:focus {
   border-color: var(--bank-mint);
   background: #ffffff;
   box-shadow: 0 0 0 3px rgba(82, 189, 137, 0.15);
 }
 
 /* Carbon preview inside transfer modal */
-.mova-carbon-preview-box {
+.gf-bank-carbon-preview-box {
   background: #ecfdf5;
   border: 1px solid #a7f3d0;
   border-radius: 12px;
@@ -862,7 +862,7 @@ body {
   font-size: 13px;
 }
 
-.btn-mova-submit {
+.btn-gf-bank-submit {
   width: 100%;
   padding: 14px;
   border-radius: 12px;
@@ -875,12 +875,12 @@ body {
   transition: background 0.15s;
 }
 
-.btn-mova-submit:hover {
+.btn-gf-bank-submit:hover {
   background: var(--bank-mint-hover);
 }
 
 /* Modal Form Elements & Helpers */
-.mova-form-label {
+.gf-bank-form-label {
   display: block;
   font-size: 12px;
   font-weight: 700;
@@ -888,7 +888,7 @@ body {
   margin-bottom: 6px;
 }
 
-.mova-form-input, .mova-form-select {
+.gf-bank-form-input, .gf-bank-form-select {
   width: 100%;
   padding: 11px 14px;
   border-radius: 12px;
@@ -901,13 +901,13 @@ body {
   transition: all 0.15s;
 }
 
-.mova-form-input:focus, .mova-form-select:focus {
+.gf-bank-form-input:focus, .gf-bank-form-select:focus {
   border-color: var(--bank-mint);
   background: #ffffff;
   box-shadow: 0 0 0 3px rgba(82, 189, 137, 0.15);
 }
 
-.mova-amount-pills {
+.gf-bank-amount-pills {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
@@ -932,14 +932,14 @@ body {
   border-color: #a7f3d0;
 }
 
-.mova-form-actions {
+.gf-bank-form-actions {
   display: flex;
   justify-content: flex-end;
   gap: 12px;
   margin-top: 20px;
 }
 
-.mova-btn-primary {
+.gf-bank-btn-primary {
   padding: 12px 22px;
   border-radius: 12px;
   background: var(--bank-mint);
@@ -951,11 +951,11 @@ body {
   transition: background 0.15s;
 }
 
-.mova-btn-primary:hover {
+.gf-bank-btn-primary:hover {
   background: var(--bank-mint-hover);
 }
 
-.mova-btn-secondary {
+.gf-bank-btn-secondary {
   padding: 12px 18px;
   border-radius: 12px;
   background: #f1f5f9;
@@ -966,7 +966,7 @@ body {
   cursor: pointer;
 }
 
-.mova-btn-secondary:hover {
+.gf-bank-btn-secondary:hover {
   background: #e2e8f0;
 }
 
@@ -1171,7 +1171,7 @@ body {
 }
 
 /* Toast container */
-#mova-toast-container {
+#gf-bank-toast-container {
   position: fixed;
   bottom: 24px;
   right: 24px;
@@ -1181,7 +1181,7 @@ body {
   z-index: 2000;
 }
 
-.mova-toast {
+.gf-bank-toast {
   background: #12161c;
   color: #ffffff;
   padding: 12px 18px;
@@ -1189,5 +1189,5 @@ body {
   font-size: 13px;
   font-weight: 600;
   box-shadow: 0 10px 25px rgba(0,0,0,0.25);
-  animation: movaPop 0.2s ease-out;
+  animation: gfBankPop 0.2s ease-out;
 }

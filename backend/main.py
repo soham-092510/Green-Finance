@@ -121,6 +121,11 @@ app.include_router(accuracy.router)  # Registers Attribution Fidelity & Accuracy
 app.include_router(payment.router)   # Registers Simulated Banking Microservices endpoints
 app.include_router(sustainability.router)  # Registers Enterprise Sustainability Analytics endpoints
 
+@app.post("/connection/ingest-trace", status_code=201, tags=["Connection"])
+async def ingest_trace(payload: dict):
+    """Ingests transaction trace streamed from banking engine or external clients."""
+    return {"status": "success", "message": "Trace ingested", "trace_id": payload.get("trace_id")}
+
 
 # =====================================================================
 # 📊 PROMETHEUS INSTRUMENTATION

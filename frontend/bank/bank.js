@@ -654,11 +654,11 @@ function openSupportModal() {
 }
 
 function openAllTransactionsModal() {
-  window.location.href = '/investigator#task-management';
+  window.location.href = '/investigator#ledger';
 }
 
 function switchNav(route, btn) {
-  document.querySelectorAll('.mova-nav-link').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.gf-bank-nav-link').forEach(el => el.classList.remove('active'));
   if (btn) btn.classList.add('active');
 }
 
@@ -679,11 +679,11 @@ function toggleNotifications() {
 }
 
 function showToast(msg) {
-  const container = document.getElementById('mova-toast-container');
+  const container = document.getElementById('gf-bank-toast-container');
   if (!container) return;
 
   const toast = document.createElement('div');
-  toast.className = 'mova-toast';
+  toast.className = 'gf-bank-toast';
   toast.textContent = msg;
   container.appendChild(toast);
 
