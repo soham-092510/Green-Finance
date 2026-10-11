@@ -27,3 +27,9 @@ Thumbs.db
 
 # Migrations (optional)
 alembic/versions/*
+
+# Presentations & Prompts (Local Only)
+Documents/*Presentation*
+Documents/*Canva*
+Documents/*Prompt*
+Documents/*Phase*
