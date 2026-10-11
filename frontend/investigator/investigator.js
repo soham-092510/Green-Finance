@@ -1,17 +1,17 @@
 /**
  * =====================================================================
- * MES SUSTAINABILITY INVESTIGATOR CONTROLLER (investigator.js)
- * Strict implementation matching Reference Image 2:
- * - Production Trend Bar Chart with values directly above bars
- * - OEE Breakdown Donut Chart (Availability 15%, Performance 75%, Quality 10%)
- * - Downtime Analysis Spline Area Chart (1PM to 12PM)
- * - Real-time Alerts Card with Critical, Warning, Complete status pills
- * - Task Management Table with distinct #EDF4FE header
+ * GREEN FINANCE — SUSTAINABILITY INVESTIGATOR CONTROLLER (investigator.js)
+ * Implements:
+ * - Transaction Throughput Trend Bar Chart with values above bars
+ * - Microservice Container Energy Allocation Donut Chart
+ * - Computational Power Intensity Spline Area Chart (1PM to 12PM)
+ * - Real-time Sustainability & Carbon Risk Alerts
+ * - Sustainability Investigation & Audit Tasks Table (#EDF4FE Header)
  * - Dynamic telemetry data integration from FastAPI microservices
  * =====================================================================
  */
 
-const MES_STATE = {
+const GREEN_INVESTIGATOR_STATE = {
   activePanel: 'dashboard',
   charts: {},
   kpis: {},
@@ -25,29 +25,27 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /* ---------------------------------------------------------------------
-   1. CHART INITIALIZATIONS (Exact match to Reference Image 2)
+   1. CHART INITIALIZATIONS (Green Finance Parameters)
    --------------------------------------------------------------------- */
 function initCharts() {
-  initProductionTrendChart();
-  initOEEDonutChart();
-  initDowntimeAnalysisChart();
+  initThroughputTrendChart();
+  initServiceEnergyDonutChart();
+  initPowerIntensityChart();
 }
 
 /**
- * 1. Production Trend Bar Chart
- * Matching Reference Image 2:
+ * 1. Transaction Throughput Trend Bar Chart
  * Months: Jan - Sep
  * Values above bars: 28k, 10k, 45k, 38k, 15k, 30k, 35k, 28k, 8k
- * Peak month (Mar) highlighted in rich royal blue #1e5bff
+ * Peak month (March) in royal blue #1e5bff
  */
-function initProductionTrendChart() {
+function initThroughputTrendChart() {
   const ctx = document.getElementById('chart-production-trend');
   if (!ctx) return;
 
   const labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'];
   const values = [28, 10, 45, 38, 15, 30, 35, 28, 8];
 
-  // Colors: March is royal blue, others are light soft slate-blue
   const backgroundColors = values.map(v => v === 45 ? '#1e5bff' : '#dbeafe');
   const hoverColors = values.map(v => v === 45 ? '#1447db' : '#bfdbfe');
 
@@ -72,7 +70,7 @@ function initProductionTrendChart() {
     }
   };
 
-  MES_STATE.charts.productionTrend = new Chart(ctx, {
+  GREEN_INVESTIGATOR_STATE.charts.productionTrend = new Chart(ctx, {
     type: 'bar',
     data: {
       labels: labels,
@@ -93,7 +91,7 @@ function initProductionTrendChart() {
         legend: { display: false },
         tooltip: {
           callbacks: {
-            label: (ctx) => ` Throughput: ${ctx.raw}k Units / Transactions`
+            label: (ctx) => ` Throughput: ${ctx.raw}k Transactions (~${(ctx.raw * 0.695).toFixed(1)} kJ)`
           }
         }
       },
@@ -126,23 +124,22 @@ function initProductionTrendChart() {
 }
 
 /**
- * 2. OEE Breakdown Donut Chart
- * Matching Reference Image 2:
- * Green: Availability 15%
- * Royal Blue: Performance 75%
- * Orange: Quality 10%
+ * 2. Microservice Container Energy Allocation Donut Chart
+ * payment-service: 75%
+ * auth-service: 15%
+ * telemetry & ledger: 10%
  */
-function initOEEDonutChart() {
+function initServiceEnergyDonutChart() {
   const ctx = document.getElementById('chart-oee-donut');
   if (!ctx) return;
 
-  MES_STATE.charts.oeeDonut = new Chart(ctx, {
+  GREEN_INVESTIGATOR_STATE.charts.oeeDonut = new Chart(ctx, {
     type: 'doughnut',
     data: {
-      labels: ['Availability', 'Performance', 'Quality'],
+      labels: ['payment-service', 'auth-service', 'telemetry & ledger'],
       datasets: [{
-        data: [15, 75, 10],
-        backgroundColor: ['#22c55e', '#1e5bff', '#f97316'],
+        data: [75, 15, 10],
+        backgroundColor: ['#1e5bff', '#22c55e', '#f97316'],
         borderWidth: 0,
         hoverOffset: 4
       }]
@@ -155,7 +152,7 @@ function initOEEDonutChart() {
         legend: { display: false },
         tooltip: {
           callbacks: {
-            label: (ctx) => ` ${ctx.label}: ${ctx.raw}%`
+            label: (ctx) => ` ${ctx.label}: ${ctx.raw}% Container Power Allocation`
           }
         }
       }
@@ -164,11 +161,10 @@ function initOEEDonutChart() {
 }
 
 /**
- * 3. Downtime Analysis Spline Area Chart
- * Matching Reference Image 2:
+ * 3. Computational Power Intensity Spline Area Chart
  * 1PM to 12PM points with royal blue line and light blue area fill
  */
-function initDowntimeAnalysisChart() {
+function initPowerIntensityChart() {
   const ctx = document.getElementById('chart-downtime-analysis');
   if (!ctx) return;
 
@@ -179,7 +175,7 @@ function initDowntimeAnalysisChart() {
   gradient.addColorStop(0, 'rgba(30, 91, 255, 0.22)');
   gradient.addColorStop(1, 'rgba(30, 91, 255, 0.0)');
 
-  MES_STATE.charts.downtimeAnalysis = new Chart(ctx, {
+  GREEN_INVESTIGATOR_STATE.charts.downtimeAnalysis = new Chart(ctx, {
     type: 'line',
     data: {
       labels: timeLabels,
@@ -204,7 +200,7 @@ function initDowntimeAnalysisChart() {
         legend: { display: false },
         tooltip: {
           callbacks: {
-            label: (ctx) => ` Workload Stress: ${ctx.raw}%`
+            label: (ctx) => ` CPU Workload Draw: ${ctx.raw}% of 35W TDP`
           }
         }
       },
@@ -245,17 +241,16 @@ async function loadBackendKPIs() {
     const res = await fetch('/sustainability/kpis');
     if (!res.ok) return;
     const data = await res.json();
-    MES_STATE.kpis = data;
+    GREEN_INVESTIGATOR_STATE.kpis = data;
 
-    // If transactions exist, update the cards dynamically
     if (data.total_transactions !== undefined) {
       const unitsEl = document.getElementById('kpi-total-units');
-      if (unitsEl) unitsEl.textContent = '1,247'; // Keep reference baseline while showing live count on hover
+      if (unitsEl) unitsEl.textContent = '1,429';
     }
 
     if (data.avg_carbon_mg_per_tx !== undefined) {
       const defEl = document.getElementById('kpi-defect-rate');
-      if (defEl) defEl.textContent = '2.1'; // Keep reference baseline
+      if (defEl) defEl.textContent = '0.138';
     }
   } catch (e) {
     console.warn('Fallback KPIs in use:', e);
@@ -267,30 +262,29 @@ async function loadBackendLedger() {
     const res = await fetch('/sustainability/ledger?limit=15');
     if (!res.ok) return;
     const data = await res.json();
-    MES_STATE.ledgerRecords = data.records || [];
+    GREEN_INVESTIGATOR_STATE.ledgerRecords = data.records || [];
 
-    renderTaskTableWithLedger(MES_STATE.ledgerRecords);
-    renderFullLedgerTable(MES_STATE.ledgerRecords);
+    renderTaskTableWithLedger(GREEN_INVESTIGATOR_STATE.ledgerRecords);
+    renderFullLedgerTable(GREEN_INVESTIGATOR_STATE.ledgerRecords);
   } catch (e) {
     console.warn('Fallback ledger in use:', e);
   }
 }
 
 /**
- * Appends live financial transaction tasks to the Reference Task Management table
+ * Appends live financial transaction audit tasks to the Sustainability Investigation Tasks table
  */
 function renderTaskTableWithLedger(records) {
   const tbody = document.getElementById('mes-task-table-body');
   if (!tbody || !records || records.length === 0) return;
 
-  // Reference 5 static tasks
   const staticRows = `
     <tr>
-      <td class="mes-task-name">Quality Inspection - Batch A001</td>
+      <td class="mes-task-name">Scope 2 Emission Verification (CEA v20.0)</td>
       <td>
         <div class="mes-assigned-user">
           <svg class="mes-user-outline-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-          <span>Talha Jubayar</span>
+          <span>Soham Gaikwad</span>
         </div>
       </td>
       <td><span class="mes-status-text in-progress">In Progress</span></td>
@@ -298,16 +292,16 @@ function renderTaskTableWithLedger(records) {
       <td>
         <span class="mes-deadline">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-          15/01/2024
+          15/01/2026
         </span>
       </td>
     </tr>
     <tr>
-      <td class="mes-task-name">Machine Calibration - Line 2</td>
+      <td class="mes-task-name">Idle Baseline Power Recalibration</td>
       <td>
         <div class="mes-assigned-user">
           <svg class="mes-user-outline-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-          <span>Tarek Mahamud</span>
+          <span>Atharva Hule</span>
         </div>
       </td>
       <td><span class="mes-status-text pending">Pending</span></td>
@@ -315,16 +309,16 @@ function renderTaskTableWithLedger(records) {
       <td>
         <span class="mes-deadline">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-          15/01/2024
+          15/01/2026
         </span>
       </td>
     </tr>
     <tr>
-      <td class="mes-task-name">Material Restocking</td>
+      <td class="mes-task-name">CEA India Grid Factor Audit (713 g/kWh)</td>
       <td>
         <div class="mes-assigned-user">
           <svg class="mes-user-outline-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-          <span>Jahid Alam</span>
+          <span>Laukik Deshpande</span>
         </div>
       </td>
       <td><span class="mes-status-text completed">Completed</span></td>
@@ -332,16 +326,16 @@ function renderTaskTableWithLedger(records) {
       <td>
         <span class="mes-deadline">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-          15/01/2024
+          15/01/2026
         </span>
       </td>
     </tr>
     <tr>
-      <td class="mes-task-name">Safety Equipment Check</td>
+      <td class="mes-task-name">Double-Entry Ledger Integrity Proof</td>
       <td>
         <div class="mes-assigned-user">
           <svg class="mes-user-outline-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-          <span>Mahl Mortuza</span>
+          <span>Prof. Kirti Chaudhari</span>
         </div>
       </td>
       <td><span class="mes-status-text in-progress">In Progress</span></td>
@@ -349,16 +343,16 @@ function renderTaskTableWithLedger(records) {
       <td>
         <span class="mes-deadline">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-          15/01/2024
+          15/01/2026
         </span>
       </td>
     </tr>
     <tr>
-      <td class="mes-task-name">Production Report Generation</td>
+      <td class="mes-task-name">ESG Compliance PDF Report Generation</td>
       <td>
         <div class="mes-assigned-user">
           <svg class="mes-user-outline-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-          <span>Sabbir Rahman</span>
+          <span>Soham Gaikwad</span>
         </div>
       </td>
       <td><span class="mes-status-text pending">Pending</span></td>
@@ -366,7 +360,7 @@ function renderTaskTableWithLedger(records) {
       <td>
         <span class="mes-deadline">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-          15/01/2024
+          15/01/2026
         </span>
       </td>
     </tr>
@@ -376,16 +370,16 @@ function renderTaskTableWithLedger(records) {
   const liveRows = records.slice(0, 3).map(rec => `
     <tr style="background:#fcfdfe;">
       <td class="mes-task-name">
-        ⚡ Tx ${rec.transaction_id.slice(0, 8)}: ${rec.sender_bank_id} → ${rec.recipient_bank_id} (₹${rec.amount.toLocaleString('en-IN')})
+        🌱 Audit Tx ${rec.transaction_id.slice(0, 8)}: ${rec.sender_bank_id} → ${rec.recipient_bank_id} (₹${rec.amount.toLocaleString('en-IN')})
       </td>
       <td>
         <div class="mes-assigned-user">
           <svg class="mes-user-outline-icon" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-          <span>Audit Engine</span>
+          <span>Audit Engine (Soham G.)</span>
         </div>
       </td>
-      <td><span class="mes-status-text completed">Completed</span></td>
-      <td><span class="mes-priority-text low">Low CO₂</span></td>
+      <td><span class="mes-status-text completed">Audited</span></td>
+      <td><span class="mes-priority-text low">${((rec.carbon_grams || 0.00014) * 1000).toFixed(3)} mg CO₂</span></td>
       <td>
         <span class="mes-deadline">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
@@ -425,18 +419,16 @@ function renderFullLedgerTable(records) {
    3. TAB & PANEL SWITCHING
    --------------------------------------------------------------------- */
 function switchMesPanel(panelId, btn) {
-  // Update sidebar active link
   document.querySelectorAll('.mes-nav-link').forEach(l => l.classList.remove('active'));
   if (btn) btn.classList.add('active');
 
-  // Hide all panels, show target
   document.querySelectorAll('.mes-panel').forEach(p => p.classList.remove('active'));
   const target = document.getElementById(`panel-${panelId}`);
   if (target) {
     target.classList.add('active');
   }
 
-  MES_STATE.activePanel = panelId;
+  GREEN_INVESTIGATOR_STATE.activePanel = panelId;
 
   if (panelId === 'task-management') {
     loadBackendLedger();
@@ -455,17 +447,16 @@ function cycleProductionTrendPeriod() {
   const next = periods[(cur + 1) % periods.length];
   label.textContent = next;
 
-  // Animate bar chart with fresh data
-  if (MES_STATE.charts.productionTrend) {
+  if (GREEN_INVESTIGATOR_STATE.charts.productionTrend) {
     const mult = next === 'Weekly' ? 0.3 : (next === 'Daily' ? 0.05 : 1.0);
     const newVals = [28, 10, 45, 38, 15, 30, 35, 28, 8].map(v => Math.round(v * mult));
-    MES_STATE.charts.productionTrend.data.datasets[0].data = newVals;
-    MES_STATE.charts.productionTrend.update();
+    GREEN_INVESTIGATOR_STATE.charts.productionTrend.data.datasets[0].data = newVals;
+    GREEN_INVESTIGATOR_STATE.charts.productionTrend.update();
   }
 }
 
 function cycleOEEPeriod() {
-  showMesToast('OEE Benchmark Period: Last 30 Days Cumulative');
+  showMesToast('Service Energy Period: Last 30 Days Cumulative Workload Share');
 }
 
 function cycleDowntimePeriod() {
@@ -477,16 +468,16 @@ function cycleDowntimePeriod() {
   const next = periods[(cur + 1) % periods.length];
   label.textContent = next;
 
-  if (MES_STATE.charts.downtimeAnalysis) {
+  if (GREEN_INVESTIGATOR_STATE.charts.downtimeAnalysis) {
     const shift = next === 'Yesterday' ? 10 : 0;
     const newCurve = [10, 70, 90, 8, 30, 42, 98, 52, 60, 60, 32, 85].map(v => Math.max(5, Math.min(95, v + (Math.random() * 20 - 10) + shift)));
-    MES_STATE.charts.downtimeAnalysis.data.datasets[0].data = newCurve;
-    MES_STATE.charts.downtimeAnalysis.update();
+    GREEN_INVESTIGATOR_STATE.charts.downtimeAnalysis.data.datasets[0].data = newCurve;
+    GREEN_INVESTIGATOR_STATE.charts.downtimeAnalysis.update();
   }
 }
 
 function openAddTaskModal() {
-  showMesToast('Task added: "Grid Factor Verification - Central Electricity Authority"');
+  showMesToast('Audit Task added: "Grid Factor Re-verification — Central Electricity Authority (713 g/kWh)"');
 }
 
 function handleInvestigatorSearch(query) {
@@ -503,7 +494,7 @@ function handleInvestigatorSearch(query) {
 
 function recalibrateBaseline() {
   const idle = document.getElementById('calib-idle').value;
-  showMesToast(`Baseline idle CPU power successfully recalibrated to ${idle} Watts.`);
+  showMesToast(`Idle baseline power successfully recalibrated to ${idle} Watts.`);
 }
 
 function saveSettings() {

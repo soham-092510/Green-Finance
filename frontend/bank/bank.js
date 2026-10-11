@@ -1,30 +1,33 @@
 /**
  * =====================================================================
- * MOVA BANKING APPLICATION CONTROLLER (bank.js)
- * Strict implementation matching Reference Image 1:
- * - Glowing green sparkline canvas
- * - Live INR (₹) balances and atomic transfers
+ * GREEN FINANCE — BANKING APPLICATION CONTROLLER (bank.js)
+ * Implements:
+ * - Real-time banking operations in INR (₹)
+ * - Soham Gaikwad (Admin) default profile
+ * - Green Bond investments & eco transactions
+ * - Glowing neon green sparkline canvas
  * - Real-time computational energy (Joules) & Scope 2 CO₂ estimation
  * - Cryptographic SHA-256 audit digest receipts
  * - Dynamic Recent Transactions and Spending Overview pillars
  * =====================================================================
  */
 
-const MOVA_STATE = {
+const GREEN_BANK_STATE = {
   currentUser: {
-    username: 'olivia_rhye',
-    name: 'Olivia Rhye',
-    firstName: 'Olivia',
-    bank_id: 'OLIV5678',
-    card_mask: '•••• 5678',
-    tier: 'Premium',
-    avatar: 'O'
+    username: 'soham_gaikwad',
+    name: 'Soham Gaikwad',
+    firstName: 'Soham',
+    bank_id: 'HDFC9999',
+    card_mask: 'HDFC •••• 9999',
+    tier: 'Green Premier • Admin',
+    avatar: 'SG'
   },
   accounts: [],
   transactions: [],
-  totalBalance: 24560.00,
-  mainAccountBalance: 9560.00,
-  spendingTotal: 1820.00,
+  totalBalance: 26289.38,
+  mainAccountBalance: 26289.38,
+  spendingTotal: 8100.00,
+  spendingCarbon: 0.89,
   spendingPeriodIndex: 0,
   spendingPeriods: ['This month', 'Last month', 'This year']
 };
@@ -46,10 +49,10 @@ document.addEventListener('DOMContentLoaded', () => {
    1. USER SESSION MANAGEMENT
    --------------------------------------------------------------------- */
 function initUserSession() {
-  const saved = localStorage.getItem('mova_active_user');
+  const saved = localStorage.getItem('green_bank_active_user');
   if (saved) {
     try {
-      MOVA_STATE.currentUser = JSON.parse(saved);
+      GREEN_BANK_STATE.currentUser = JSON.parse(saved);
     } catch (e) {
       console.warn('Could not parse saved user', e);
     }
@@ -58,19 +61,19 @@ function initUserSession() {
 }
 
 function renderUserInterface() {
-  const u = MOVA_STATE.currentUser;
+  const u = GREEN_BANK_STATE.currentUser;
   
   const greetName = document.getElementById('header-greet-name');
   if (greetName) greetName.textContent = `${u.firstName || u.name.split(' ')[0]}!`;
 
   const sbAvatar = document.getElementById('sidebar-avatar');
-  if (sbAvatar) sbAvatar.textContent = u.avatar || u.name.charAt(0);
+  if (sbAvatar) sbAvatar.textContent = u.avatar || u.name.slice(0, 2).toUpperCase();
 
   const sbName = document.getElementById('sidebar-user-name');
   if (sbName) sbName.textContent = u.name;
 
   const sbTier = document.getElementById('sidebar-user-tier');
-  if (sbTier) sbTier.textContent = u.tier || 'Client';
+  if (sbTier) sbTier.textContent = u.tier || 'Green Premier';
 
   const cardMask = document.getElementById('card-masked-num');
   if (cardMask) cardMask.textContent = u.card_mask || `•••• ${u.bank_id.slice(-4)}`;
@@ -79,44 +82,33 @@ function renderUserInterface() {
   const srcSelect = document.getElementById('transfer-source-acc');
   if (srcSelect) {
     srcSelect.innerHTML = `
-      <option value="${u.bank_id}" selected>Main Account • ${u.bank_id} (${formatINR(MOVA_STATE.mainAccountBalance)})</option>
-      <option value="HDFC9999">Savings Account • HDFC9999 (₹26,289.38)</option>
+      <option value="${u.bank_id}" selected>${u.name} • ${u.bank_id} (${formatINR(GREEN_BANK_STATE.mainAccountBalance)})</option>
       <option value="DEMO0001">Investor Reserve • DEMO0001 (₹45,000.00)</option>
+      <option value="ALICE101">Alice Smith • ALICE101 (₹18,200.00)</option>
     `;
   }
 }
 
 function switchUser(userId) {
   const users = {
-    'olivia_rhye': {
-      username: 'olivia_rhye',
-      name: 'Olivia Rhye',
-      firstName: 'Olivia',
-      bank_id: 'OLIV5678',
-      card_mask: '•••• 5678',
-      tier: 'Premium',
-      avatar: 'O',
-      mainBal: 9560.00,
-      totalBal: 24560.00
-    },
     'soham_gaikwad': {
       username: 'soham_gaikwad',
       name: 'Soham Gaikwad',
       firstName: 'Soham',
       bank_id: 'HDFC9999',
-      card_mask: '•••• 9999',
-      tier: 'Admin',
+      card_mask: 'HDFC •••• 9999',
+      tier: 'Green Premier • Admin',
       avatar: 'SG',
       mainBal: 26289.38,
       totalBal: 58240.00
     },
     'demo_user': {
       username: 'demo_user',
-      name: 'Demo User',
-      firstName: 'Demo',
+      name: 'Demo Investor',
+      firstName: 'Investor',
       bank_id: 'DEMO0001',
-      card_mask: '•••• 0001',
-      tier: 'Investor',
+      card_mask: 'AXIS •••• 0001',
+      tier: 'ESG Investor',
       avatar: 'DU',
       mainBal: 45000.00,
       totalBal: 85000.00
@@ -126,8 +118,8 @@ function switchUser(userId) {
       name: 'Alice Smith',
       firstName: 'Alice',
       bank_id: 'ALICE101',
-      card_mask: '•••• 1101',
-      tier: 'Personal',
+      card_mask: 'HDFC •••• 1101',
+      tier: 'Retail Client',
       avatar: 'AS',
       mainBal: 18200.00,
       totalBal: 32400.00
@@ -137,30 +129,24 @@ function switchUser(userId) {
       name: 'Bob Kumar',
       firstName: 'Bob',
       bank_id: 'BOB202',
-      card_mask: '•••• 2202',
-      tier: 'Personal',
+      card_mask: 'ICIC •••• 2202',
+      tier: 'Corporate Client',
       avatar: 'BK',
       mainBal: 12400.00,
       totalBal: 21900.00
     }
   };
 
-  const selected = users[userId] || users['olivia_rhye'];
-  MOVA_STATE.currentUser = selected;
-  MOVA_STATE.mainAccountBalance = selected.mainBal;
-  MOVA_STATE.totalBalance = selected.totalBal;
+  const selected = users[userId] || users['soham_gaikwad'];
+  GREEN_BANK_STATE.currentUser = selected;
+  GREEN_BANK_STATE.mainAccountBalance = selected.mainBal;
+  GREEN_BANK_STATE.totalBalance = selected.totalBal;
 
-  localStorage.setItem('mova_active_user', JSON.stringify(selected));
+  localStorage.setItem('green_bank_active_user', JSON.stringify(selected));
   renderUserInterface();
   updateBalanceDisplays();
   closeModal('modal-user');
   showToast(`Switched account to ${selected.name}`);
-}
-
-function logoutUser() {
-  localStorage.removeItem('mova_active_user');
-  switchUser('olivia_rhye');
-  showToast('Logged out to default profile');
 }
 
 /* ---------------------------------------------------------------------
@@ -182,7 +168,6 @@ function drawNeonSparkline() {
 
   ctx.clearRect(0, 0, w, h);
 
-  // Normalised points matching Reference Image 1's wave profile
   const rawPoints = [
     { x: 0.00, y: 0.70 },
     { x: 0.10, y: 0.74 },
@@ -242,7 +227,6 @@ function drawNeonSparkline() {
   ctx.lineJoin = 'round';
   ctx.stroke();
 
-  // Reset shadow for subsequent drawings
   ctx.shadowBlur = 0;
 }
 
@@ -254,12 +238,13 @@ async function loadBackendAccounts() {
     const res = await fetch('/payment/accounts');
     if (!res.ok) return;
     const data = await res.json();
-    MOVA_STATE.accounts = data;
+    GREEN_BANK_STATE.accounts = data;
 
     // Look up current user's balance
-    const current = data.find(a => a.bank_id === MOVA_STATE.currentUser.bank_id);
+    const current = data.find(a => a.bank_id === GREEN_BANK_STATE.currentUser.bank_id);
     if (current) {
-      MOVA_STATE.mainAccountBalance = current.balance;
+      GREEN_BANK_STATE.mainAccountBalance = current.balance;
+      GREEN_BANK_STATE.totalBalance = current.balance + 31950.62;
     }
     updateBalanceDisplays();
   } catch (e) {
@@ -272,22 +257,25 @@ async function loadBackendTransactions() {
     const res = await fetch('/payment/transactions');
     if (!res.ok) return;
     const data = await res.json();
-    MOVA_STATE.transactions = data;
+    GREEN_BANK_STATE.transactions = data;
     renderRecentTransactions(data);
   } catch (e) {
-    console.warn('Using standard static transactions:', e);
+    console.warn('Using standard green transactions:', e);
   }
 }
 
 function updateBalanceDisplays() {
   const totDisp = document.getElementById('total-balance-display');
-  if (totDisp) totDisp.textContent = formatINR(MOVA_STATE.totalBalance);
+  if (totDisp) totDisp.textContent = formatINR(GREEN_BANK_STATE.totalBalance);
 
   const mainDisp = document.getElementById('main-account-balance');
-  if (mainDisp) mainDisp.textContent = formatINR(MOVA_STATE.mainAccountBalance);
+  if (mainDisp) mainDisp.textContent = formatINR(GREEN_BANK_STATE.mainAccountBalance);
 
   const spendDisp = document.getElementById('spending-total-val');
-  if (spendDisp) spendDisp.textContent = formatINR(MOVA_STATE.spendingTotal);
+  if (spendDisp) spendDisp.textContent = formatINR(GREEN_BANK_STATE.spendingTotal);
+
+  const spendCarb = document.getElementById('spending-carbon-val');
+  if (spendCarb) spendCarb.textContent = `${GREEN_BANK_STATE.spendingCarbon.toFixed(2)} mg CO₂`;
 }
 
 function formatINR(val) {
@@ -305,52 +293,52 @@ function renderRecentTransactions(liveList) {
   const list = document.getElementById('recent-transactions-list');
   if (!list) return;
 
-  // Static 4 reference items from Reference Image 1
+  // Real Green Finance reference items
   const staticItems = [
     {
-      name: 'Amazon',
-      time: '7 Aug, 20:24',
-      amount: -78.90,
+      name: 'Green Sovereign Bond 2026',
+      time: '10 Oct, 18:30 • Clean Energy',
+      amount: -5000.00,
       avatarClass: 'amazon',
-      avatarContent: 'a',
-      desc: 'Amazon Marketplace Online Shopping'
+      avatarContent: '🌱',
+      desc: 'Clean Solar Infrastructure Sovereign Bond Investment'
     },
     {
-      name: 'Spotify',
-      time: '13 Aug, 20:24',
-      amount: -9.99,
+      name: 'Tata Solar Utility',
+      time: '09 Oct, 14:15 • Solar Tariff',
+      amount: -1850.00,
       avatarClass: 'spotify',
-      avatarSvg: '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 11.5c3-1 6-0.8 8.5.5M8.5 14.2c2.5-.8 5-.6 7 .4M9 17c2-.6 4-.5 5.5.3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>',
-      desc: 'Spotify Premium Streaming Monthly Subscription'
+      avatarContent: '⚡',
+      desc: 'Tata Power Rooftop Solar Net Metering Tariff'
     },
     {
-      name: 'Salary',
-      time: '7 Aug, 20:24',
-      amount: 2450.00,
+      name: 'Corporate ESG Payroll',
+      time: '01 Oct, 09:00 • Salary Credit',
+      amount: 25000.00,
       avatarClass: 'salary',
       avatarSvg: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>',
-      desc: 'Enterprise Payroll Direct Salary Credit'
+      desc: 'Enterprise Payroll Direct Salary Credit with Scope 2 Attribution'
     },
     {
-      name: 'Starbucks',
-      time: '7 Aug, 20:24',
-      amount: -4.50,
+      name: 'Bank of Maharashtra (MAH123)',
+      time: '28 Sep, 11:20 • Inter-Bank UPI',
+      amount: -1250.00,
       avatarClass: 'starbucks',
-      avatarSvg: '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/><path d="M12 6a6 6 0 0 0-6 6c0 3.3 2.7 6 6 6s6-2.7 6-6a6 6 0 0 0-6-6zm0 10a4 4 0 1 1 0-8 4 4 0 0 1 0 8z" fill="#ffffff"/></svg>',
-      desc: 'Starbucks Coffee POS Payment'
+      avatarContent: '🏛️',
+      desc: 'UPI Double-Entry Transfer (0.695 J, 0.138 mg CO₂)'
     }
   ];
 
   // If live transactions exist, prepend the most recent ones
   const dynamicItems = (liveList || []).slice(0, 3).map(tx => {
-    const isCredit = tx.recipient_bank_id === MOVA_STATE.currentUser.bank_id;
+    const isCredit = tx.recipient_bank_id === GREEN_BANK_STATE.currentUser.bank_id;
     return {
-      name: isCredit ? `From: ${tx.sender_bank_id}` : `To: ${tx.recipient_bank_id}`,
-      time: tx.timestamp ? tx.timestamp.split('T')[1] || tx.timestamp : 'Just now',
+      name: isCredit ? `Credit from: ${tx.sender_bank_id}` : `Transfer to: ${tx.recipient_bank_id}`,
+      time: tx.timestamp ? tx.timestamp.replace('T', ' ').slice(0, 16) : 'Just now',
       amount: isCredit ? tx.amount : -tx.amount,
       avatarClass: 'bank',
       avatarContent: '₹',
-      desc: tx.description || 'UPI Transfer Payment',
+      desc: tx.description || 'UPI Inter-Bank Transfer',
       txRaw: tx
     };
   });
@@ -365,7 +353,7 @@ function renderRecentTransactions(liveList) {
 
     const avatarHtml = item.avatarSvg 
       ? `<div class="tx-avatar ${item.avatarClass}">${item.avatarSvg}</div>`
-      : `<div class="tx-avatar ${item.avatarClass}">${item.avatarContent || '🏛️'}</div>`;
+      : `<div class="tx-avatar ${item.avatarClass}">${item.avatarContent || '🌱'}</div>`;
 
     return `
       <li class="tx-item" onclick="handleTxItemClick(${idx})">
@@ -381,12 +369,11 @@ function renderRecentTransactions(liveList) {
     `;
   }).join('');
 
-  // Store active rendered items for receipt modals
-  MOVA_STATE._renderedItems = allItems;
+  GREEN_BANK_STATE._renderedItems = allItems;
 }
 
 function handleTxItemClick(idx) {
-  const item = MOVA_STATE._renderedItems ? MOVA_STATE._renderedItems[idx] : null;
+  const item = GREEN_BANK_STATE._renderedItems ? GREEN_BANK_STATE._renderedItems[idx] : null;
   if (!item) return;
 
   if (item.txRaw) {
@@ -400,15 +387,16 @@ function handleTxItemClick(idx) {
    5. SPENDING OVERVIEW & PILLARS
    --------------------------------------------------------------------- */
 function cycleSpendingPeriod() {
-  MOVA_STATE.spendingPeriodIndex = (MOVA_STATE.spendingPeriodIndex + 1) % MOVA_STATE.spendingPeriods.length;
-  const label = MOVA_STATE.spendingPeriods[MOVA_STATE.spendingPeriodIndex];
+  GREEN_BANK_STATE.spendingPeriodIndex = (GREEN_BANK_STATE.spendingPeriodIndex + 1) % GREEN_BANK_STATE.spendingPeriods.length;
+  const label = GREEN_BANK_STATE.spendingPeriods[GREEN_BANK_STATE.spendingPeriodIndex];
   
   const labelEl = document.getElementById('spending-period-label');
   if (labelEl) labelEl.textContent = label;
 
-  const multipliers = [1.0, 1.25, 12.4];
-  const mult = multipliers[MOVA_STATE.spendingPeriodIndex];
-  MOVA_STATE.spendingTotal = 1820.00 * mult;
+  const multipliers = [1.0, 1.35, 11.8];
+  const mult = multipliers[GREEN_BANK_STATE.spendingPeriodIndex];
+  GREEN_BANK_STATE.spendingTotal = 8100.00 * mult;
+  GREEN_BANK_STATE.spendingCarbon = 0.89 * mult;
   updateBalanceDisplays();
 
   // Vary pillar heights dynamically
@@ -478,7 +466,7 @@ async function handleTransferSubmit(e) {
   }
   const amount = parseFloat(document.getElementById('transfer-amount-input').value) || 1250;
   const paymentType = document.getElementById('transfer-payment-type').value;
-  const note = document.getElementById('transfer-note').value || 'Mova Transfer';
+  const note = document.getElementById('transfer-note').value || 'Green Finance Transfer';
 
   const payload = {
     source_account: srcAcc,
@@ -504,15 +492,14 @@ async function handleTransferSubmit(e) {
     const txData = await res.json();
 
     // Deduct from balance locally
-    MOVA_STATE.mainAccountBalance = Math.max(0, MOVA_STATE.mainAccountBalance - amount);
-    MOVA_STATE.totalBalance = Math.max(0, MOVA_STATE.totalBalance - amount);
+    GREEN_BANK_STATE.mainAccountBalance = Math.max(0, GREEN_BANK_STATE.mainAccountBalance - amount);
+    GREEN_BANK_STATE.totalBalance = Math.max(0, GREEN_BANK_STATE.totalBalance - amount);
     updateBalanceDisplays();
 
     closeModal('modal-transfer');
     showLiveReceipt(txData);
     showToast(`Transfer of ${formatINR(amount)} completed!`);
 
-    // Reload backend ledger in background
     loadBackendTransactions();
   } catch (error) {
     console.error('Transfer failed:', error);
@@ -532,8 +519,8 @@ function showLiveReceipt(tx) {
   document.getElementById('rcpt-amount').textContent = formatINR(tx.amount);
   document.getElementById('rcpt-txid').textContent = tx.transaction_id || '9a81d666-dbb4-4770-987a';
   document.getElementById('rcpt-time').textContent = `${tx.timestamp || new Date().toISOString().replace('T', ' ').slice(0, 19)} IST`;
-  document.getElementById('rcpt-sender').textContent = `${tx.sender_bank_id || 'HDFC9999'} (${MOVA_STATE.currentUser.name})`;
-  document.getElementById('rcpt-recipient').textContent = `${tx.recipient_bank_id || 'MAH123'} (Verified Creditor)`;
+  document.getElementById('rcpt-sender').textContent = `${tx.sender_bank_id || 'HDFC9999'} (${GREEN_BANK_STATE.currentUser.name})`;
+  document.getElementById('rcpt-recipient').textContent = `${tx.recipient_bank_id || 'MAH123'} (Verified Beneficiary)`;
   
   const energyJ = tx.energy_joules || 0.6952;
   document.getElementById('rcpt-energy').textContent = `${energyJ.toFixed(4)} Joules (${(energyJ / 3600000).toExponential(2)} kWh)`;
@@ -552,12 +539,12 @@ function showStaticReceipt(merchant, amt, desc) {
   
   document.getElementById('rcpt-amount').textContent = (isPos ? '+ ' : '- ') + formatINR(absAmt);
   document.getElementById('rcpt-txid').textContent = 'tx-' + Math.random().toString(36).substring(2, 10) + '-' + Math.random().toString(36).substring(2, 6);
-  document.getElementById('rcpt-time').textContent = '2026-08-13 20:24:00 IST';
-  document.getElementById('rcpt-sender').textContent = isPos ? `${merchant} Direct Pay` : `${MOVA_STATE.currentUser.bank_id} (${MOVA_STATE.currentUser.name})`;
-  document.getElementById('rcpt-recipient').textContent = isPos ? `${MOVA_STATE.currentUser.bank_id} (Main Account)` : `${merchant} (POS Creditor)`;
-  document.getElementById('rcpt-energy').textContent = '0.4820 Joules (1.34e-7 kWh)';
-  document.getElementById('rcpt-carbon').textContent = '0.0955 mg CO₂ (0.000095 g)';
-  document.getElementById('rcpt-hash').textContent = 'e4b988f4c' + Math.random().toString(16).substring(2, 14) + 'a97f10b71946c109a';
+  document.getElementById('rcpt-time').textContent = '2026-10-10 18:30:00 IST';
+  document.getElementById('rcpt-sender').textContent = isPos ? `${merchant}` : `${GREEN_BANK_STATE.currentUser.bank_id} (${GREEN_BANK_STATE.currentUser.name})`;
+  document.getElementById('rcpt-recipient').textContent = isPos ? `${GREEN_BANK_STATE.currentUser.bank_id} (Main Account)` : `${merchant}`;
+  document.getElementById('rcpt-energy').textContent = '0.6952 Joules (1.93e-7 kWh)';
+  document.getElementById('rcpt-carbon').textContent = '0.1376 mg CO₂ (0.000138 g)';
+  document.getElementById('rcpt-hash').textContent = 'd3e87443725e8f8e9348140a88e8a58ec63ab14be3014a71249d5848c3d5d6e2';
 
   openModal('modal-receipt');
 }
@@ -569,7 +556,7 @@ function quickPayBill(billName, amount) {
   closeModal('modal-paybills');
   document.getElementById('transfer-dest-acc').value = 'manual';
   document.getElementById('manual-recipient-group').classList.remove('hidden');
-  document.getElementById('manual-recipient-id').value = billName.split(' ')[0].toUpperCase() + 'BILL';
+  document.getElementById('manual-recipient-id').value = billName.split(' ')[0].toUpperCase() + 'ECO';
   document.getElementById('transfer-amount-input').value = amount;
   document.getElementById('transfer-note').value = billName;
   updateCarbonPreview();
@@ -578,16 +565,16 @@ function quickPayBill(billName, amount) {
 
 function executeTopUp() {
   const amt = parseFloat(document.getElementById('topup-amount').value) || 5000;
-  MOVA_STATE.mainAccountBalance += amt;
-  MOVA_STATE.totalBalance += amt;
+  GREEN_BANK_STATE.mainAccountBalance += amt;
+  GREEN_BANK_STATE.totalBalance += amt;
   updateBalanceDisplays();
   closeModal('modal-topup');
-  showToast(`Successfully deposited ${formatINR(amt)} into your Main Account!`);
+  showToast(`Successfully deposited ${formatINR(amt)} into your Green Finance account!`);
 }
 
 async function executeBatchSimulation(count) {
   const feedback = document.getElementById('exchange-feedback');
-  if (feedback) feedback.textContent = `Dispatching ${count} concurrent transactions...`;
+  if (feedback) feedback.textContent = `Dispatching ${count} concurrent microservice transactions...`;
 
   let successCount = 0;
   for (let i = 0; i < count; i++) {
@@ -655,23 +642,19 @@ function openUserModal() {
 }
 
 function openCardsModal() {
-  showToast('Cards view: Visa Debit •••• 5678 active');
+  showToast('Green Accounts: HDFC9999 Active (RuPay/VISA Platinum)');
 }
 
 function openAnalyticsModal() {
   window.location.href = '/investigator';
 }
 
-function openSettingsModal() {
-  showToast('Settings: High-contrast mode & UPI encryption enabled');
-}
-
 function openSupportModal() {
-  showToast('Support: 24/7 Green Banking desk reachable at support@greenfinance.io');
+  showToast('Green Finance ESG Helpdesk: support@greenfinance.io (S.P.I.T. Mumbai)');
 }
 
 function openAllTransactionsModal() {
-  window.location.href = '/investigator';
+  window.location.href = '/investigator#task-management';
 }
 
 function switchNav(route, btn) {
@@ -692,7 +675,7 @@ function handleGlobalSearch(query) {
 }
 
 function toggleNotifications() {
-  showToast('No unread alerts. All carbon audit ledgers are in compliance.');
+  showToast('All transaction carbon audit ledgers are strictly compliant with CEA India baseline.');
 }
 
 function showToast(msg) {

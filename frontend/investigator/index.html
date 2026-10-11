@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Green Finance | Sustainability Investigator (MES)</title>
-  <meta name="description" content="Industrial Sustainability Analytics, Telemetry-Driven Carbon Accounting & Auditing Dashboard" />
+  <title>Green Finance | Sustainability Investigator</title>
+  <meta name="description" content="Green Finance Sustainability Investigator - Real-Time Energy Observability & Scope 2 Computational Carbon Auditing" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -13,22 +13,25 @@
 </head>
 <body>
 
-  <!-- Outer Desktop MES Window (Strict match to Reference Image 2) -->
+  <!-- Outer Desktop Window (Same clean layout from Reference Image 2) -->
   <div class="mes-window">
 
     <!-- ================= 1. LEFT SIDEBAR ================= -->
-    <aside class="mes-sidebar" role="navigation" aria-label="MES Navigation">
-      <!-- Blue Concentric Emblem + MES Brand -->
-      <a href="/investigator" class="mes-brand" aria-label="MES Sustainability Investigator">
+    <aside class="mes-sidebar" role="navigation" aria-label="Sustainability Investigator Navigation">
+      <!-- Green Finance Concentric Emblem -->
+      <a href="/investigator" class="mes-brand" aria-label="Green Finance Sustainability Investigator">
         <div class="mes-brand-logo">
           <div class="mes-logo-outer">
             <div class="mes-logo-inner"></div>
           </div>
         </div>
-        <span class="mes-brand-text">MES</span>
+        <div style="display:flex; flex-direction:column;">
+          <span class="mes-brand-text" style="font-size:18px; line-height:1.1;">Green Finance</span>
+          <span style="font-size:9.5px; font-weight:800; color:#1e5bff; letter-spacing:0.06em; text-transform:uppercase;">INVESTIGATOR</span>
+        </div>
       </a>
 
-      <!-- Navigation List matching Reference Image 2 -->
+      <!-- Navigation List (Organized around Green Finance) -->
       <ul class="mes-nav">
         <li class="mes-nav-item">
           <button class="mes-nav-link active" onclick="switchMesPanel('dashboard', this)">
@@ -47,7 +50,7 @@
               <path d="M3 3v18h18"></path>
               <path d="M18 9l-5 5-4-4-3 3"></path>
             </svg>
-            <span>Production overview</span>
+            <span>Workload Telemetry</span>
           </button>
         </li>
         <li class="mes-nav-item">
@@ -55,7 +58,7 @@
             <svg class="mes-nav-icon" viewBox="0 0 24 24">
               <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
             </svg>
-            <span>Performence Metrics</span>
+            <span>Attribution & Fidelity</span>
           </button>
         </li>
         <li class="mes-nav-item">
@@ -65,7 +68,7 @@
               <rect x="9" y="3" width="6" height="4" rx="1"></rect>
               <path d="M9 14l2 2 4-4"></path>
             </svg>
-            <span>Task Management</span>
+            <span>Carbon Ledger</span>
           </button>
         </li>
         <li class="mes-nav-item">
@@ -74,7 +77,7 @@
               <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
               <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
             </svg>
-            <span>Alert & Notification</span>
+            <span>Basel Risk & Alerts</span>
           </button>
         </li>
         <li class="mes-nav-item">
@@ -85,7 +88,7 @@
               <line x1="16" y1="13" x2="8" y2="13"></line>
               <line x1="16" y1="17" x2="8" y2="17"></line>
             </svg>
-            <span>Report</span>
+            <span>ESG Audit Reports</span>
           </button>
         </li>
         <li class="mes-nav-item">
@@ -94,17 +97,15 @@
               <circle cx="12" cy="12" r="3"></circle>
               <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
             </svg>
-            <span>Settings</span>
+            <span>CEA Grid Settings</span>
           </button>
         </li>
         <li class="mes-nav-item">
-          <a href="/bank" class="mes-nav-link" style="color:#ef4444;">
-            <svg class="mes-nav-icon" viewBox="0 0 24 24" style="stroke:#ef4444;">
-              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-              <polyline points="16 17 21 12 16 7"></polyline>
-              <line x1="21" y1="12" x2="9" y2="12"></line>
+          <a href="/bank" class="mes-nav-link" style="color:#059669;">
+            <svg class="mes-nav-icon" viewBox="0 0 24 24" style="stroke:#059669;">
+              <path d="M3 10.5L12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1v-9.5z"/>
             </svg>
-            <span>Logout</span>
+            <span>Bank Portal</span>
           </a>
         </li>
       </ul>
@@ -112,8 +113,8 @@
       <!-- Transparency notice footer -->
       <div class="mes-sidebar-footer">
         <div class="mes-footer-meta">
-          <strong>Green Finance Suite</strong><br>
-          CEA India Factor: 713 g/kWh<br>
+          <strong>S.P.I.T. Mumbai • Group 13</strong><br>
+          CEA Factor: <strong>713 g/kWh</strong><br>
           Telemetry: <span class="mes-badge simulated">SIMULATED</span>
         </div>
       </div>
@@ -126,7 +127,7 @@
       <header class="mes-header">
         <!-- Search Keyword Pill -->
         <div class="mes-search-box">
-          <input type="text" class="mes-search-input" id="mes-search" placeholder="Enter your keywords..." oninput="handleInvestigatorSearch(this.value)" />
+          <input type="text" class="mes-search-input" id="mes-search" placeholder="Search transactions, services, audit hashes..." oninput="handleInvestigatorSearch(this.value)" />
           <svg class="mes-search-icon" viewBox="0 0 24 24">
             <circle cx="11" cy="11" r="8"></circle>
             <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
@@ -136,19 +137,19 @@
         <!-- Header Actions -->
         <div class="mes-header-right">
           <!-- Notification Bell -->
-          <button class="mes-bell-btn" onclick="showMesToast('All sustainability parameters operating within threshold.')" title="Alerts" aria-label="Alerts">
+          <button class="mes-bell-btn" onclick="showMesToast('All computational microservices operating within ESG threshold.')" title="Alerts" aria-label="Alerts">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2">
               <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
               <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
             </svg>
           </button>
 
-          <!-- User Profile: Abu Talha, Operation Manager -->
-          <div class="mes-user-profile" onclick="showMesToast('Active Lead Investigator: Abu Talha / Soham Gaikwad')">
-            <div class="mes-avatar-circle" id="mes-avatar">AT</div>
+          <!-- User Profile: Soham Gaikwad / Lead Investigator -->
+          <div class="mes-user-profile" onclick="showMesToast('Active Lead Investigator: Soham Gaikwad (Group 13, S.P.I.T. Mumbai)')">
+            <div class="mes-avatar-circle" id="mes-avatar">SG</div>
             <div class="mes-user-meta">
-              <span class="mes-user-name" id="mes-name">Abu Talha</span>
-              <span class="mes-user-role" id="mes-role">Operation Manager</span>
+              <span class="mes-user-name" id="mes-name">Soham Gaikwad</span>
+              <span class="mes-user-role" id="mes-role">Lead Sustainability Investigator</span>
             </div>
           </div>
 
@@ -162,20 +163,20 @@
       <!-- Main Panels Container -->
       <div class="mes-content-body">
 
-        <!-- ================= PANEL 1: PRIMARY DASHBOARD (Reference Image 2) ================= -->
+        <!-- ================= PANEL 1: PRIMARY DASHBOARD (Same layout from Reference Image 2) ================= -->
         <section id="panel-dashboard" class="mes-panel active">
 
-          <!-- 4 HERO KPI CARDS IN A ROW -->
+          <!-- 4 HERO KPI CARDS IN A ROW (Green Finance Parameters) -->
           <div class="mes-kpi-grid">
-            <!-- 1. Total Production -->
+            <!-- 1. Total Transactions -->
             <div class="mes-kpi-card">
               <div class="mes-kpi-header">
-                <span class="mes-kpi-title">Total Production</span>
-                <button class="mes-dots-btn" onclick="showMesToast('Total Workload Throughput: 1,247 Units / 8 Completed Transactions')">•••</button>
+                <span class="mes-kpi-title">Total Transactions</span>
+                <button class="mes-dots-btn" onclick="showMesToast('Workload Throughput: 1,429 Completed Transactions across payment-service')">•••</button>
               </div>
               <div class="mes-kpi-val-row">
-                <span class="mes-kpi-value" id="kpi-total-units">1,247</span>
-                <span class="mes-kpi-unit">Units</span>
+                <span class="mes-kpi-value" id="kpi-total-units">1,429</span>
+                <span class="mes-kpi-unit">Tx</span>
               </div>
               <span class="mes-kpi-trend up-blue">
                 <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="18 15 12 9 6 15"></polyline></svg>
@@ -183,64 +184,64 @@
               </span>
             </div>
 
-            <!-- 2. Avg. Cycle Time -->
+            <!-- 2. Attributed Energy / Tx -->
             <div class="mes-kpi-card">
               <div class="mes-kpi-header">
-                <span class="mes-kpi-title">Avg. Cycle Time</span>
-                <button class="mes-dots-btn" onclick="showMesToast('Avg Computational Execution Time: 2.4 min / 0.69 J per transaction')">•••</button>
+                <span class="mes-kpi-title">Attributed Energy / Tx</span>
+                <button class="mes-dots-btn" onclick="showMesToast('Marginal Computational Energy: 0.695 Joules per transaction (eBPF telemetry)')">•••</button>
               </div>
               <div class="mes-kpi-val-row">
-                <span class="mes-kpi-value" id="kpi-cycle-time">2.4</span>
-                <span class="mes-kpi-unit">min</span>
+                <span class="mes-kpi-value" id="kpi-cycle-time">0.695</span>
+                <span class="mes-kpi-unit">Joules</span>
               </div>
-              <span class="mes-kpi-trend down-red">
+              <span class="mes-kpi-trend down-red" style="color:#059669; background:#ecfdf5;">
                 <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                <span>3.1% from last week</span>
+                <span>3.1% energy saved</span>
               </span>
             </div>
 
-            <!-- 3. Machine Utilization -->
+            <!-- 3. Attribution Fidelity -->
             <div class="mes-kpi-card">
               <div class="mes-kpi-header">
-                <span class="mes-kpi-title">Machine Utilization</span>
-                <button class="mes-dots-btn" onclick="showMesToast('Attribution Fidelity: 85.7% physical telemetry / 96.2% statistical confidence')">•••</button>
+                <span class="mes-kpi-title">Attribution Fidelity</span>
+                <button class="mes-dots-btn" onclick="showMesToast('Attribution Confidence: 96.2% statistical R² correlation vs physical telemetry')">•••</button>
               </div>
               <div class="mes-kpi-val-row">
-                <span class="mes-kpi-value" id="kpi-utilization">85.7</span>
+                <span class="mes-kpi-value" id="kpi-utilization">96.2</span>
                 <span class="mes-kpi-unit">%</span>
               </div>
               <span class="mes-kpi-trend up-blue">
                 <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="18 15 12 9 6 15"></polyline></svg>
-                <span>5.4% from last week</span>
+                <span>5.4% model confidence</span>
               </span>
             </div>
 
-            <!-- 4. Defect Rate -->
+            <!-- 4. Carbon Intensity / Tx -->
             <div class="mes-kpi-card">
               <div class="mes-kpi-header">
-                <span class="mes-kpi-title">Defect Rate</span>
-                <button class="mes-dots-btn" onclick="showMesToast('Emission Intensity Defect Rate: 2.1% (Target < 0.20 mg CO₂/tx)')">•••</button>
+                <span class="mes-kpi-title">Carbon Intensity / Tx</span>
+                <button class="mes-dots-btn" onclick="showMesToast('Carbon Footprint: 0.138 mg CO₂/tx (Target < 0.20 mg - PASS)')">•••</button>
               </div>
               <div class="mes-kpi-val-row">
-                <span class="mes-kpi-value" id="kpi-defect-rate">2.1</span>
-                <span class="mes-kpi-unit">%</span>
+                <span class="mes-kpi-value" id="kpi-defect-rate">0.138</span>
+                <span class="mes-kpi-unit">mg CO₂</span>
               </div>
-              <span class="mes-kpi-trend down-red">
+              <span class="mes-kpi-trend down-red" style="color:#059669; background:#ecfdf5;">
                 <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                <span>1.2% from last week</span>
+                <span>Target &lt; 0.20 mg (PASS)</span>
               </span>
             </div>
           </div>
 
-          <!-- 2x2 ANALYTICAL CHARTS GRID -->
+          <!-- 2x2 ANALYTICAL CHARTS GRID (Green Finance Parameters) -->
           <div class="mes-charts-grid">
 
-            <!-- Chart 1: Production Trend (Bar chart with numbers above bars) -->
+            <!-- Chart 1: Transaction Throughput & Energy Trend (Bar chart) -->
             <div class="mes-chart-card">
               <div class="mes-card-top">
                 <div class="mes-card-header-meta">
-                  <h3 class="mes-card-title">Production Trend</h3>
-                  <span class="mes-card-subtitle">Units produced over time</span>
+                  <h3 class="mes-card-title">Transaction Throughput Trend</h3>
+                  <span class="mes-card-subtitle">Financial volume &amp; energy load over time</span>
                 </div>
                 <button class="mes-blue-pill-btn" onclick="cycleProductionTrendPeriod()">
                   <span id="trend-period-label">Monthly</span>
@@ -252,12 +253,12 @@
               </div>
             </div>
 
-            <!-- Chart 2: OEE Breakdown (Donut chart with 10%, 15%, 75%) -->
+            <!-- Chart 2: Microservice Energy Breakdown (Donut chart) -->
             <div class="mes-chart-card">
               <div class="mes-card-top">
                 <div class="mes-card-header-meta">
-                  <h3 class="mes-card-title">OEE Breakdown</h3>
-                  <span class="mes-card-subtitle">Overall Equipment Effectiveness</span>
+                  <h3 class="mes-card-title">Service Energy Breakdown</h3>
+                  <span class="mes-card-subtitle">Microservice container power allocation share</span>
                 </div>
                 <button class="mes-blue-pill-btn" onclick="cycleOEEPeriod()">
                   <span>Monthly</span>
@@ -270,30 +271,30 @@
                 </div>
                 <div class="mes-donut-legend">
                   <div class="mes-legend-row">
-                    <span class="mes-legend-dot green"></span>
-                    <span>Availability</span>
-                    <span class="mes-legend-pct">15%</span>
-                  </div>
-                  <div class="mes-legend-row">
                     <span class="mes-legend-dot blue"></span>
-                    <span>Performance</span>
+                    <span>payment-service</span>
                     <span class="mes-legend-pct">75%</span>
                   </div>
                   <div class="mes-legend-row">
+                    <span class="mes-legend-dot green"></span>
+                    <span>auth-service</span>
+                    <span class="mes-legend-pct">15%</span>
+                  </div>
+                  <div class="mes-legend-row">
                     <span class="mes-legend-dot orange"></span>
-                    <span>Quality</span>
+                    <span>telemetry &amp; ledger</span>
                     <span class="mes-legend-pct">10%</span>
                   </div>
                 </div>
               </div>
             </div>
 
-            <!-- Chart 3: Downtime Analysis (Spline line area chart) -->
+            <!-- Chart 3: Computational Power Intensity (Spline line area chart) -->
             <div class="mes-chart-card">
               <div class="mes-card-top">
                 <div class="mes-card-header-meta">
-                  <h3 class="mes-card-title">Downtime Analysis</h3>
-                  <span class="mes-card-subtitle">Hours by reason category</span>
+                  <h3 class="mes-card-title">Computational Power Intensity</h3>
+                  <span class="mes-card-subtitle">Attributed CPU wattage profile across hours</span>
                 </div>
                 <button class="mes-blue-pill-btn" onclick="cycleDowntimePeriod()">
                   <span id="downtime-period-label">Today</span>
@@ -305,13 +306,13 @@
               </div>
             </div>
 
-            <!-- Card 4: Real-time Alerts (3 cards with Critical, Warning, Complete pills) -->
+            <!-- Card 4: Real-time Sustainability Alerts (3 cards with Critical, Warning, Complete) -->
             <div class="mes-chart-card">
               <div class="mes-card-top">
                 <div class="mes-card-header-meta">
                   <h3 class="mes-card-title">
                     <span class="mes-alert-icon-head">✦</span>
-                    <span>Real-time Alerts</span>
+                    <span>Real-time Sustainability Alerts</span>
                   </h3>
                 </div>
                 <button class="mes-blue-pill-btn" onclick="switchMesPanel('alert-notification')">
@@ -327,8 +328,8 @@
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
                     </div>
                     <div class="mes-alert-text">
-                      <span class="mes-alert-title">Machine A1 Temperature High</span>
-                      <span class="mes-alert-desc">Temperature exceeds safe operating limits</span>
+                      <span class="mes-alert-title">Payment Service High Power Draw</span>
+                      <span class="mes-alert-desc">Container attributed load exceeds 25.0 W threshold</span>
                     </div>
                   </div>
                   <div class="mes-alert-item-right">
@@ -347,8 +348,8 @@
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
                     </div>
                     <div class="mes-alert-text">
-                      <span class="mes-alert-title">Material Stock Low</span>
-                      <span class="mes-alert-desc">Raw material inventory below threshold</span>
+                      <span class="mes-alert-title">Grid Carbon Intensity Factor Warning</span>
+                      <span class="mes-alert-desc">CEA India grid factor active: 713.0 g CO₂/kWh</span>
                     </div>
                   </div>
                   <div class="mes-alert-item-right">
@@ -367,8 +368,8 @@
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
                     </div>
                     <div class="mes-alert-text">
-                      <span class="mes-alert-title">Production Target Achieved</span>
-                      <span class="mes-alert-desc">Daily production goal reached ahead of schedule</span>
+                      <span class="mes-alert-title">Scope 2 ESG Target Compliant</span>
+                      <span class="mes-alert-desc">Monthly transaction footprint &lt; 12.0 g CO₂ budget</span>
                     </div>
                   </div>
                   <div class="mes-alert-item-right">
@@ -384,7 +385,7 @@
 
           </div>
 
-          <!-- BOTTOM SECTION: TASK MANAGEMENT TABLE (Distinct #EDF4FE Header) -->
+          <!-- BOTTOM SECTION: SUSTAINABILITY INVESTIGATION TASKS TABLE (#EDF4FE Header) -->
           <div class="mes-task-section">
             <div class="mes-task-header">
               <div class="mes-task-title-wrap">
@@ -397,7 +398,7 @@
                   <circle cx="8" cy="16" r="1.5"></circle>
                   <line x1="12" y1="16" x2="17" y2="16"></line>
                 </svg>
-                <h3 class="mes-task-title">Task Management</h3>
+                <h3 class="mes-task-title">Sustainability Investigation &amp; Audit Tasks</h3>
               </div>
               <button class="mes-btn mes-btn-primary" onclick="openAddTaskModal()">
                 Add Task
@@ -408,8 +409,8 @@
               <table class="mes-table">
                 <thead>
                   <tr>
-                    <th>Task Name</th>
-                    <th>Assigned To</th>
+                    <th>Audit Task Name</th>
+                    <th>Assigned Investigator</th>
                     <th>Status</th>
                     <th>Priority</th>
                     <th>Deadline</th>
@@ -418,11 +419,11 @@
                 <tbody id="mes-task-table-body">
                   <!-- Row 1 -->
                   <tr>
-                    <td class="mes-task-name">Quality Inspection - Batch A001</td>
+                    <td class="mes-task-name">Scope 2 Emission Verification (CEA v20.0)</td>
                     <td>
                       <div class="mes-assigned-user">
                         <svg class="mes-user-outline-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                        <span>Talha Jubayar</span>
+                        <span>Soham Gaikwad</span>
                       </div>
                     </td>
                     <td><span class="mes-status-text in-progress">In Progress</span></td>
@@ -430,18 +431,18 @@
                     <td>
                       <span class="mes-deadline">
                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                        15/01/2024
+                        15/01/2026
                       </span>
                     </td>
                   </tr>
 
                   <!-- Row 2 -->
                   <tr>
-                    <td class="mes-task-name">Machine Calibration - Line 2</td>
+                    <td class="mes-task-name">Idle Baseline Power Recalibration</td>
                     <td>
                       <div class="mes-assigned-user">
                         <svg class="mes-user-outline-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                        <span>Tarek Mahamud</span>
+                        <span>Atharva Hule</span>
                       </div>
                     </td>
                     <td><span class="mes-status-text pending">Pending</span></td>
@@ -449,18 +450,18 @@
                     <td>
                       <span class="mes-deadline">
                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                        15/01/2024
+                        15/01/2026
                       </span>
                     </td>
                   </tr>
 
                   <!-- Row 3 -->
                   <tr>
-                    <td class="mes-task-name">Material Restocking</td>
+                    <td class="mes-task-name">CEA India Grid Factor Audit (713 g/kWh)</td>
                     <td>
                       <div class="mes-assigned-user">
                         <svg class="mes-user-outline-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                        <span>Jahid Alam</span>
+                        <span>Laukik Deshpande</span>
                       </div>
                     </td>
                     <td><span class="mes-status-text completed">Completed</span></td>
@@ -468,18 +469,18 @@
                     <td>
                       <span class="mes-deadline">
                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                        15/01/2024
+                        15/01/2026
                       </span>
                     </td>
                   </tr>
 
                   <!-- Row 4 -->
                   <tr>
-                    <td class="mes-task-name">Safety Equipment Check</td>
+                    <td class="mes-task-name">Double-Entry Ledger Integrity Proof</td>
                     <td>
                       <div class="mes-assigned-user">
                         <svg class="mes-user-outline-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                        <span>Mahl Mortuza</span>
+                        <span>Prof. Kirti Chaudhari</span>
                       </div>
                     </td>
                     <td><span class="mes-status-text in-progress">In Progress</span></td>
@@ -487,18 +488,18 @@
                     <td>
                       <span class="mes-deadline">
                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                        15/01/2024
+                        15/01/2026
                       </span>
                     </td>
                   </tr>
 
                   <!-- Row 5 -->
                   <tr>
-                    <td class="mes-task-name">Production Report Generation</td>
+                    <td class="mes-task-name">ESG Compliance PDF Report Generation</td>
                     <td>
                       <div class="mes-assigned-user">
                         <svg class="mes-user-outline-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                        <span>Sabbir Rahman</span>
+                        <span>Soham Gaikwad</span>
                       </div>
                     </td>
                     <td><span class="mes-status-text pending">Pending</span></td>
@@ -506,7 +507,7 @@
                     <td>
                       <span class="mes-deadline">
                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                        15/01/2024
+                        15/01/2026
                       </span>
                     </td>
                   </tr>
@@ -517,15 +518,15 @@
 
         </section>
 
-        <!-- ================= PANEL 2: PRODUCTION OVERVIEW (Telemetry & Microservices) ================= -->
+        <!-- ================= PANEL 2: WORKLOAD TELEMETRY ================= -->
         <section id="panel-production-overview" class="mes-panel">
           <div class="mes-card">
             <div class="mes-card-header">
-              <h3 class="mes-card-h3">Production & Microservices Telemetry</h3>
+              <h3 class="mes-card-h3">Container Telemetry &amp; Microservices Power</h3>
               <span class="mes-badge simulated">Kepler PromQL Scraped</span>
             </div>
             <p style="font-size:13px; color:#64748b; margin-bottom:18px;">
-              Continuous computational power tracking across core containerized services: Auth, Payment, Ledger, and Telemetry.
+              Continuous computational power tracking across core containerized financial services: Auth, Payment, Ledger, and Telemetry.
             </p>
             <div class="mes-grid-2">
               <div style="background:#f8fafc; padding:16px; border-radius:12px; border:1px solid #e2e8f0;">
@@ -542,11 +543,11 @@
           </div>
         </section>
 
-        <!-- ================= PANEL 3: PERFORMANCE METRICS (Baseline & Fidelity) ================= -->
+        <!-- ================= PANEL 3: ATTRIBUTION & FIDELITY ================= -->
         <section id="panel-performance-metrics" class="mes-panel">
           <div class="mes-card">
             <div class="mes-card-header">
-              <h3 class="mes-card-h3">Attribution Fidelity & Baseline Calibration</h3>
+              <h3 class="mes-card-h3">Attribution Fidelity &amp; Baseline Calibration</h3>
               <span class="mes-badge calculated">Statistical Model</span>
             </div>
             <div class="mes-grid-2">
@@ -562,19 +563,19 @@
                 <button class="mes-btn mes-btn-primary" onclick="recalibrateBaseline()">Recalibrate Baseline →</button>
               </div>
               <div style="background:#f8fafc; padding:18px; border-radius:12px; border:1px solid #e2e8f0;">
-                <h4 style="font-size:13px; font-weight:800; margin-bottom:8px;">Fidelity Metrics</h4>
+                <h4 style="font-size:13px; font-weight:800; margin-bottom:8px;">Model Accuracy &amp; Integrity</h4>
                 <div style="font-size:12px; line-height:1.8; color:#475569;">
                   • Statistical R² Correlation: <strong>0.962 (96.2%)</strong><br>
                   • Scope 2 Method: <strong>Location-Based CEA India</strong><br>
                   • Telemetry Latency: <strong>&lt; 150 ms</strong><br>
-                  • Double-Entry Balance Check: <strong class="mes-status-text completed">PASS (Atomic)</strong>
+                  • Double-Entry Balance Proof: <strong class="mes-status-text completed">PASS (Atomic)</strong>
                 </div>
               </div>
             </div>
           </div>
         </section>
 
-        <!-- ================= PANEL 4: TASK MANAGEMENT (Audited Carbon Ledger) ================= -->
+        <!-- ================= PANEL 4: AUDITED CARBON LEDGER ================= -->
         <section id="panel-task-management" class="mes-panel">
           <div class="mes-card">
             <div class="mes-card-header">
@@ -605,24 +606,43 @@
           </div>
         </section>
 
-        <!-- ================= PANEL 5: ALERTS & RECOMMENDATIONS ================= -->
+        <!-- ================= PANEL 5: BASEL RISK & ALERTS ================= -->
         <section id="panel-alert-notification" class="mes-panel">
           <div class="mes-card">
             <div class="mes-card-header">
-              <h3 class="mes-card-h3">Active Environmental & Operational Alerts</h3>
-              <span class="mes-badge simulated">Threshold Engine</span>
+              <h3 class="mes-card-h3">Environmental &amp; Computational Risk Alerts</h3>
+              <span class="mes-badge simulated">Automated Rule Engine</span>
             </div>
             <div id="full-alerts-container">
-              <!-- Dynamically populated -->
+              <div class="mes-alert-card-item" style="margin-bottom:12px;">
+                <div class="mes-alert-item-left">
+                  <div class="mes-alert-warning-icon">⚠️</div>
+                  <div class="mes-alert-text">
+                    <span class="mes-alert-title">Carbon Emission Spike Detected (> 12.0 g CO₂ Threshold)</span>
+                    <span class="mes-alert-desc">Prometheus alert rule triggered on payment-service container burst</span>
+                  </div>
+                </div>
+                <span class="mes-status-pill critical">Critical</span>
+              </div>
+              <div class="mes-alert-card-item">
+                <div class="mes-alert-item-left">
+                  <div class="mes-alert-warning-icon">ℹ️</div>
+                  <div class="mes-alert-text">
+                    <span class="mes-alert-title">CEA India Grid Baseline Active</span>
+                    <span class="mes-alert-desc">All Scope 2 emissions evaluated at 713.0 g CO₂/kWh</span>
+                  </div>
+                </div>
+                <span class="mes-status-pill complete">Compliant</span>
+              </div>
             </div>
           </div>
         </section>
 
-        <!-- ================= PANEL 6: REPORT (PDF & CSV Export) ================= -->
+        <!-- ================= PANEL 6: ESG AUDIT REPORTS (PDF & CSV Export) ================= -->
         <section id="panel-report" class="mes-panel">
           <div class="mes-card">
             <div class="mes-card-header">
-              <h3 class="mes-card-h3">Sustainability Audit Reports</h3>
+              <h3 class="mes-card-h3">Official Sustainability Audit Reports</h3>
               <span class="mes-badge calculated">Official Audit</span>
             </div>
             <p style="font-size:13px; color:#64748b; margin-bottom:20px;">
@@ -631,7 +651,7 @@
             <div style="display:flex; gap:14px;">
               <a href="/sustainability/report/pdf" target="_blank" class="mes-btn mes-btn-primary" style="text-decoration:none;">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
-                Download PDF Report
+                Download Official Audit PDF
               </a>
               <a href="/sustainability/report/csv" target="_blank" class="mes-btn mes-btn-secondary" style="text-decoration:none;">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
@@ -641,7 +661,7 @@
           </div>
         </section>
 
-        <!-- ================= PANEL 7: SETTINGS (CEA Registry & PromQL) ================= -->
+        <!-- ================= PANEL 7: CEA GRID SETTINGS ================= -->
         <section id="panel-settings" class="mes-panel">
           <div class="mes-card">
             <div class="mes-card-header">
@@ -655,7 +675,7 @@
               </div>
               <div class="mes-form-group">
                 <label class="mes-label">Standard Authority</label>
-                <input type="text" class="mes-input" value="Central Electricity Authority (CEA) India" readonly />
+                <input type="text" class="mes-input" value="Central Electricity Authority (CEA) India Baseline Database" readonly />
               </div>
             </div>
             <button class="mes-btn mes-btn-primary" onclick="saveSettings()">Save Emission Registry →</button>
