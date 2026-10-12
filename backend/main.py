@@ -142,10 +142,23 @@ frontend_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "fr
 shared_dir = os.path.join(frontend_dir, "shared")
 bank_dir = os.path.join(frontend_dir, "bank")
 investigator_dir = os.path.join(frontend_dir, "investigator")
+grafana_dir = os.path.join(frontend_dir, "grafana")
 
 @app.get("/", include_in_schema=False)
 def serve_index():
     return FileResponse(os.path.join(frontend_dir, "index.html"))
+
+@app.get("/grafana", include_in_schema=False)
+@app.get("/grafana/", include_in_schema=False)
+def serve_grafana():
+    return FileResponse(os.path.join(grafana_dir, "index.html"))
+
+@app.get("/grafana/{file_path:path}", include_in_schema=False)
+def serve_grafana_file(file_path: str):
+    fpath = os.path.join(grafana_dir, file_path)
+    if os.path.isfile(fpath):
+        return FileResponse(fpath)
+    return FileResponse(os.path.join(grafana_dir, "index.html"))
 
 @app.get("/bank", include_in_schema=False)
 @app.get("/bank/", include_in_schema=False)
