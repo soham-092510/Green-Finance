@@ -455,8 +455,8 @@
       <span class="hub-pill green">
         <span class="hub-dot"></span> Backend: Connected (:8000)
       </span>
-      <span class="hub-pill amber">
-        <span class="hub-dot"></span> Telemetry: <strong>SIMULATED</strong>
+      <span class="hub-pill amber" id="hub-telemetry-pill">
+        <span class="hub-dot"></span> Telemetry: <strong id="hub-telemetry-mode">SIMULATED</strong>
       </span>
       <span class="hub-pill">
         <span class="hub-dot" style="background:#059669;"></span> Grid: <strong>713 g/kWh (CEA India)</strong>
@@ -665,6 +665,24 @@
       } catch (e) {
         console.warn('Hub telemetry fetch:', e);
       }
+
+      try {
+        const modeRes = await fetch('/telemetry/mode');
+        if (modeRes.ok) {
+          const m = await modeRes.json();
+          const pill = document.getElementById('hub-telemetry-pill');
+          const txt = document.getElementById('hub-telemetry-mode');
+          if (pill && txt) {
+            if (m.telemetry_mode === 'OBSERVED' || m.kepler_available) {
+              pill.className = 'hub-pill green';
+              txt.textContent = 'OBSERVED (rapl-sysfs)';
+            } else {
+              pill.className = 'hub-pill amber';
+              txt.textContent = 'SIMULATED';
+            }
+          }
+        }
+      } catch (e) {}
     }
 
     async function stimulate10Users() {

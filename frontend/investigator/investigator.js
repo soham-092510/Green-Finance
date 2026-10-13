@@ -22,7 +22,36 @@ document.addEventListener('DOMContentLoaded', () => {
   initCharts();
   loadBackendKPIs();
   loadBackendLedger();
+  updateTelemetryBadge();
+  setInterval(updateTelemetryBadge, 10000);
 });
+
+async function updateTelemetryBadge() {
+  try {
+    const res = await fetch('/telemetry/mode');
+    if (res.ok) {
+      const data = await res.json();
+      const badge = document.getElementById('gf-inv-telemetry-badge');
+      if (badge) {
+        if (data.telemetry_mode === 'OBSERVED' || data.kepler_available) {
+          badge.className = 'gf-inv-badge observed';
+          badge.style.background = '#059669';
+          badge.style.color = '#ffffff';
+          badge.style.fontWeight = '700';
+          badge.style.border = '1px solid #10b981';
+          badge.innerHTML = '⚡ OBSERVED (rapl-sysfs)';
+        } else {
+          badge.className = 'gf-inv-badge simulated';
+          badge.style.background = '#d97706';
+          badge.style.color = '#ffffff';
+          badge.innerHTML = 'SIMULATED';
+        }
+      }
+    }
+  } catch (err) {
+    console.warn('Telemetry mode badge fetch err:', err);
+  }
+}
 
 /* ---------------------------------------------------------------------
    1. CHART INITIALIZATIONS (Green Finance Parameters)
