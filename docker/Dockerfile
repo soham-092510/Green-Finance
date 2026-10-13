@@ -26,11 +26,9 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 
-# Copy backend source code into container
-# WHY:
-# - Moves your application code into the container
-# - Now container can run your FastAPI app
+# Copy backend and frontend source code into container
 COPY backend/ ./backend/
+COPY frontend/ ./frontend/
 
 
 # Expose port 8000

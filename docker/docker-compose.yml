@@ -1,241 +1,88 @@
-
-# GREEN-FINANCE DOCKER COMPOSE
-# A single "docker compose up" command should start:
-#
-#   1. Auth Service
-#   2. Payment Service
-#   3. Kepler
-#   4. Prometheus
-#   5. Grafana
-
-
+# =====================================================================
+# GREEN-FINANCE — DOCKER COMPOSE ORCHESTRATION (LINUX BARE-METAL & OBSERVABILITY)
+# Services:
+#   1. green-finance-app (Unified FastAPI Core Banking & Telemetry Platform)
+#   2. kepler (CNCF eBPF Energy Telemetry reading physical Intel/AMD RAPL)
+#   3. prometheus (Time-series TSDB scraping /metrics and Kepler on :9103)
+#   4. grafana (Pre-provisioned dashboards on :3000)
+# =====================================================================
 
 services:
 
-  # Simulated Banking Layer
-  # Authentication Service
-
-  auth-service:
-
-    # Build the Auth Service image using its own Dockerfile.
+  # 1. Unified Green-Finance Core Banking Platform
+  app:
     build:
-      context: ../backend/auth-service
-      dockerfile: Dockerfile
-
-    # Easy-to-recognize container name.
-    container_name: auth-service
-
-    # Load environment variables from project .env.
-    env_file:
-      - ../.env
-
-    # Host port 8001 → container port 8000.
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: green-finance-app
     ports:
-      - "${AUTH_SERVICE_PORT:-8001}:8000"
-
-    # Connect this service to our project network.
-    networks:
-      - green-finance-net
-
-    # Restart automatically if the container stops.
-    restart: unless-stopped
-
-    # Check whether FastAPI is actually responding.
-    healthcheck:
-      test:
-        [
-          "CMD",
-          "python",
-          "-c",
-          "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"
-        ]
-      interval: 15s
-      timeout: 5s
-      retries: 3
-
-
-
-  #Simulated Banking Layer
-  # Payment Service
-
-
-  payment-service:
-
-    # Build Payment Service using its own Dockerfile.
-    build:
-      context: ../backend/payment-service
-      dockerfile: Dockerfile
-
-    container_name: payment-service
-
-    env_file:
-      - ../.env
-
-    # Auth Service is reachable internally using the
-    # Docker Compose service name.
+      - "8000:8000"
     environment:
-      AUTH_SERVICE_URL: http://auth-service:8000
-
-    # Host port 8002 → container port 8000.
-    ports:
-      - "${PAYMENT_SERVICE_PORT:-8002}:8000"
-
+      - DATABASE_URL=sqlite:///test.db
+      - USE_SQLITE=true
+      - PROMETHEUS_URL=http://prometheus:9090
+      - APP_NAME=green-finance
+      - ENVIRONMENT=production
     networks:
       - green-finance-net
-
-    # Start payment service only after Auth Service
-    # passes its health check.
-    depends_on:
-      auth-service:
-        condition: service_healthy
-
     restart: unless-stopped
 
-    healthcheck:
-      test:
-        [
-          "CMD",
-          "python",
-          "-c",
-          "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"
-        ]
-      interval: 15s
-      timeout: 5s
-      retries: 3
-
-
- 
-  # Energy Telemetry Layer
-  # Kepler
- 
-
+  # 2. Energy Telemetry Layer (CNCF Kepler eBPF)
   kepler:
-
-    # Kepler image.
     image: quay.io/sustainable_computing_io/kepler:release-0.7.11
-
     container_name: kepler
-
-    # Kepler needs elevated privileges for energy telemetry.
     privileged: true
-
-    # Allows Kepler to see host processes.
     pid: host
-
-    # Kepler Prometheus endpoint.
     ports:
-      - "${KEPLER_PORT:-9103}:9103"
-
-    # Host kernel/filesystem information needed by Kepler.
+      - "9103:9103"
     volumes:
       - /proc:/proc
       - /sys:/sys
       - /usr/src:/usr/src:ro
       - /lib/modules:/lib/modules:ro
-
-    # Make Kepler listen on port 9103.
     command:
       - "-address=0.0.0.0:9103"
-
     networks:
       - green-finance-net
-
     restart: unless-stopped
 
-
-
-  # Metrics Aggregation Layer
-  # Prometheus
-
-
+  # 3. Metrics Aggregation Layer (Prometheus)
   prometheus:
-
-    # Official Prometheus image.
     image: prom/prometheus:v2.53.0
-
     container_name: prometheus
-
-    # Give Prometheus its scrape configuration.
     volumes:
-
-      # Read-only Prometheus configuration.
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
-
-      # Persistent Prometheus time-series data.
       - prometheus-data:/prometheus
-
-    # Host port 9090 → Prometheus port 9090.
     ports:
-      - "${PROMETHEUS_PORT:-9090}:9090"
-
+      - "9090:9090"
     networks:
       - green-finance-net
-
-    # Prometheus starts after the monitored services exist.
     depends_on:
-      auth-service:
-        condition: service_healthy
-
-      payment-service:
-        condition: service_healthy
-
-      kepler:
-        condition: service_started
-
+      - kepler
     restart: unless-stopped
 
-  #Visualization Layer
-  # Grafana
- 
-
+  # 4. Visualization Layer (Grafana)
   grafana:
-
-    # Official Grafana image.
     image: grafana/grafana:11.1.0
-
     container_name: grafana
-
     environment:
-
-      # Grafana login username.
       GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN_USER:-admin}
-
-      # Grafana login password.
       GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:-admin}
-
     volumes:
-
-      # Grafana provisioning configuration.
       - ./grafana/provisioning:/etc/grafana/provisioning
-
-      # Persistent Grafana configuration/data.
       - grafana-data:/var/lib/grafana
-
-    # Host port 3000 → Grafana port 3000.
     ports:
-      - "${GRAFANA_PORT:-3000}:3000"
-
+      - "3000:3000"
     networks:
       - green-finance-net
-
     depends_on:
-      prometheus:
-        condition: service_started
-
+      - prometheus
     restart: unless-stopped
 
-# NETWORK
-# All five services communicate through this network.
 networks:
-
   green-finance-net:
     driver: bridge
 
-# PERSISTENT STORAGE
 volumes:
-
-  # Prometheus time-series data survives container restart.
   prometheus-data:
-
-  # Grafana data survives container restart.
   grafana-data:

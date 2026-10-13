@@ -1,8 +1,6 @@
 global:
-  # Scrape every 10 seconds (SRS requirement: <= 15s)
   scrape_interval: 10s
 
-# SCRAPE TARGETS
 scrape_configs:
   # -------------------------------------------------------
   # Green Finance Core API Metrics
@@ -10,9 +8,9 @@ scrape_configs:
     metrics_path: "/metrics"
     static_configs:
       - targets:
+          - "app:8000"
           - "host.docker.internal:8000"
-          - "payment-service:8000"
-          - "auth-service:8000"
+          - "127.0.0.1:8000"
 
   # -------------------------------------------------------
   # Kepler Energy Telemetry Metrics
@@ -21,3 +19,4 @@ scrape_configs:
       - targets:
           - "kepler:9103"
           - "host.docker.internal:9103"
+          - "127.0.0.1:9103"
