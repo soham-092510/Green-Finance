@@ -60,27 +60,6 @@
           </button>
         </li>
         <li class="gf-bank-nav-item">
-          <button class="gf-bank-nav-link" onclick="openAnalyticsModal()">
-            <svg class="gf-bank-nav-icon" viewBox="0 0 24 24">
-              <line x1="18" y1="20" x2="18" y2="10"/>
-              <line x1="12" y1="20" x2="12" y2="4"/>
-              <line x1="6" y1="20" x2="6" y2="14"/>
-            </svg>
-            <span>Carbon Footprint</span>
-          </button>
-        </li>
-        <li class="gf-bank-nav-item">
-          <button class="gf-bank-nav-link" onclick="openAllTransactionsModal()">
-            <svg class="gf-bank-nav-icon" viewBox="0 0 24 24">
-              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-              <polyline points="14 2 14 8 20 8"></polyline>
-              <line x1="16" y1="13" x2="8" y2="13"></line>
-              <line x1="16" y1="17" x2="8" y2="17"></line>
-            </svg>
-            <span>Audit Receipts</span>
-          </button>
-        </li>
-        <li class="gf-bank-nav-item">
           <button class="gf-bank-nav-link" onclick="openPayBillsModal()">
             <svg class="gf-bank-nav-icon" viewBox="0 0 24 24">
               <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
@@ -98,47 +77,20 @@
             <span>Help & ESG Desk</span>
           </button>
         </li>
-        <li style="margin: 12px 10px 4px; border-top: 1px solid #e9edf2; padding-top: 10px; list-style: none;">
-          <span style="font-size: 10px; font-weight: 700; color: #94a3b8; letter-spacing: 0.08em; text-transform: uppercase;">Operations &amp; Portals</span>
-        </li>
-        <li class="gf-bank-nav-item">
-          <a class="gf-bank-nav-link" href="/operations">
-            <svg class="gf-bank-nav-icon" viewBox="0 0 24 24">
-              <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
-            </svg>
-            <span>Ops &amp; Security Center</span>
-          </a>
-        </li>
-        <li class="gf-bank-nav-item">
-          <a class="gf-bank-nav-link" href="/admin">
-            <svg class="gf-bank-nav-icon" viewBox="0 0 24 24">
-              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-            </svg>
-            <span>Admin Control</span>
-          </a>
-        </li>
-        <li class="gf-bank-nav-item">
-          <a class="gf-bank-nav-link" href="/">
-            <svg class="gf-bank-nav-icon" viewBox="0 0 24 24">
-              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-              <polyline points="9 22 9 12 15 12 15 22"/>
-            </svg>
-            <span>Home Hub</span>
-          </a>
-        </li>
+
       </ul>
 
-      <!-- User Card Footer: Soham Gaikwad / Lead User -->
+      <!-- User Card Footer: Authenticated User Profile -->
       <div class="gf-bank-user-footer">
-        <div class="gf-bank-user-card" onclick="openUserModal()" title="Switch Account or View Credentials">
-          <div class="gf-bank-avatar-circle" id="sidebar-avatar">SG</div>
+        <div class="gf-bank-user-card" onclick="openUserModal()" title="View Verified Account Details">
+          <div class="gf-bank-avatar-circle" id="sidebar-avatar">CU</div>
           <div class="gf-bank-user-info">
-            <span class="gf-bank-user-name" id="sidebar-user-name">Soham Gaikwad</span>
-            <span class="gf-bank-user-tier" id="sidebar-user-tier">Green Premier • Admin</span>
+            <span class="gf-bank-user-name" id="sidebar-user-name">Loading...</span>
+            <span class="gf-bank-user-tier" id="sidebar-user-tier">Verified Customer</span>
           </div>
         </div>
-        <button class="gf-bank-logout-btn" onclick="openUserModal()">
-          Switch Account ▾
+        <button class="gf-bank-logout-btn" onclick="handleLogout()" title="Sign Out of Customer Banking">
+          Sign Out 🚪
         </button>
       </div>
     </aside>
@@ -172,20 +124,21 @@
             <span class="gf-bank-bell-dot"></span>
           </button>
 
-          <!-- Quick Portal Switcher to Operations and Investigator -->
-          <a href="/operations" class="btn-investigator-pill" style="background:#f0fdf4; border-color:#86efac; color:#15803d;" title="Open Operations &amp; Security Center">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-              <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
-            </svg>
-            <span>Ops Center</span>
-          </a>
-          <a href="/investigator" class="btn-investigator-pill" title="Open Sustainability Investigator Dashboard">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-              <path d="M12 2a10 10 0 0 1 10 10c0 5.52-4.48 10-10 10S2 17.52 2 12 6.48 2 12 2z"></path>
-              <path d="M12 6v6l4 2"></path>
-            </svg>
-            <span>Investigator</span>
-          </a>
+          <!-- Verified Customer Status Badge & Sign Out Button -->
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span style="display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:600; color:#15803d; background:#f0fdf4; border:1px solid #bbf7d0; padding:6px 12px; border-radius:9999px;">
+              <span style="width:6px; height:6px; border-radius:50%; background:#22c55e;"></span>
+              <span id="header-user-badge">Customer Portal</span>
+            </span>
+            <button onclick="handleLogout()" class="btn-investigator-pill" style="background:#fff1f2; border-color:#fecdd3; color:#be123c; cursor:pointer;" title="Sign Out">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                <polyline points="16 17 21 12 16 7"></polyline>
+                <line x1="21" y1="12" x2="9" y2="12"></line>
+              </svg>
+              <span>Sign Out</span>
+            </button>
+          </div>
         </div>
       </header>
 
@@ -556,51 +509,28 @@
     </div>
   </div>
 
-  <!-- MODAL 3: SWITCH USER / PROFILE -->
+  <!-- MODAL 3: AUTHENTICATED USER PROFILE -->
   <div class="gf-bank-modal-overlay hidden" id="modal-user">
     <div class="gf-bank-modal-card">
       <div class="gf-bank-modal-header">
-        <h3 class="gf-bank-modal-title">Select Green Finance Account</h3>
+        <h3 class="gf-bank-modal-title">Verified Customer Profile</h3>
         <button class="gf-bank-modal-close" onclick="closeModal('modal-user')">&times;</button>
       </div>
       <div class="gf-bank-modal-body">
-        <p style="font-size:13px; color:#64748b; margin-bottom:16px;">Switch active demo account to test customer transfers, balances, and multi-user telemetry:</p>
-        <div class="user-switch-list">
-          <div class="user-switch-item" onclick="switchUser('soham_gaikwad')">
-            <div class="gf-bank-avatar-circle" style="background:#52bd89;">SG</div>
-            <div style="flex:1;">
-              <strong>Soham Gaikwad (Admin & Project Lead)</strong>
-              <div style="font-size:12px; color:#64748b;">HDFC9999 • ₹26,289.38</div>
-            </div>
-            <span class="user-tier-badge">Admin</span>
-          </div>
-
-          <div class="user-switch-item" onclick="switchUser('demo_user')">
-            <div class="gf-bank-avatar-circle" style="background:#f7b944; color:#12161c;">DU</div>
-            <div style="flex:1;">
-              <strong>Demo Investor Account</strong>
-              <div style="font-size:12px; color:#64748b;">DEMO0001 • ₹45,000.00</div>
-            </div>
-            <span class="user-tier-badge">Investor</span>
-          </div>
-
-          <div class="user-switch-item" onclick="switchUser('alice_smith')">
-            <div class="gf-bank-avatar-circle" style="background:#f05d5e;">AS</div>
-            <div style="flex:1;">
-              <strong>Alice Smith (Retail Client)</strong>
-              <div style="font-size:12px; color:#64748b;">ALICE101 • ₹18,200.00</div>
-            </div>
-            <span class="user-tier-badge">Client</span>
-          </div>
-
-          <div class="user-switch-item" onclick="switchUser('bob_kumar')">
-            <div class="gf-bank-avatar-circle" style="background:#3b82f6;">BK</div>
-            <div style="flex:1;">
-              <strong>Bob Kumar (Corporate Client)</strong>
-              <div style="font-size:12px; color:#64748b;">BOB202 • ₹12,400.00</div>
-            </div>
-            <span class="user-tier-badge">Client</span>
-          </div>
+        <div style="text-align:center; padding:16px 0 20px;">
+          <div class="gf-bank-avatar-circle" id="modal-profile-avatar" style="width:64px; height:64px; font-size:24px; margin:0 auto 12px; background:#10b981; color:#fff;">CU</div>
+          <h4 id="modal-profile-name" style="font-size:18px; font-weight:700; color:#0f172a; margin-bottom:4px;">Customer Name</h4>
+          <span id="modal-profile-role" style="display:inline-block; font-size:12px; font-weight:700; color:#059669; background:#ecfdf5; border:1px solid #a7f3d0; padding:2px 10px; border-radius:9999px;">CUSTOMER</span>
+        </div>
+        <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:16px; margin-bottom:20px; font-size:13px; display:flex; flex-direction:column; gap:10px;">
+          <div style="display:flex; justify-content:space-between;"><span style="color:#64748b;">Username:</span><strong id="modal-profile-username" style="color:#0f172a;">user</strong></div>
+          <div style="display:flex; justify-content:space-between;"><span style="color:#64748b;">Email:</span><strong id="modal-profile-email" style="color:#0f172a;">user@greenfinance.internal</strong></div>
+          <div style="display:flex; justify-content:space-between;"><span style="color:#64748b;">Bank ID:</span><strong id="modal-profile-bankid" style="color:#0f172a;">CUST101</strong></div>
+          <div style="display:flex; justify-content:space-between;"><span style="color:#64748b;">Account Tier:</span><strong id="modal-profile-tier" style="color:#059669;">Green Premier</strong></div>
+        </div>
+        <div style="display:flex; gap:10px;">
+          <button class="gf-bank-transfer-submit" style="background:#f1f5f9; color:#475569;" onclick="closeModal('modal-user')">Close</button>
+          <button class="gf-bank-transfer-submit" style="background:#be123c; color:#fff;" onclick="handleLogout()">Sign Out 🚪</button>
         </div>
       </div>
     </div>

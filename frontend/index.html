@@ -459,11 +459,11 @@
         <span class="hub-dot"></span> Telemetry: <strong id="hub-telemetry-mode">SIMULATED</strong>
       </span>
       <span class="hub-pill">
-        <span class="hub-dot" style="background:#059669;"></span> Grid: <strong>713 g/kWh (CEA India)</strong>
+        <span class="hub-dot" style="background:#059669;"></span> Grid: <strong>713 g/kWh</strong>
       </span>
-      <span class="hub-pill green">
-        <span class="hub-dot"></span> Scraper: Prometheus (:9090)
-      </span>
+      <a href="/login" style="display:inline-flex; align-items:center; gap:6px; background:#059669; color:#fff; font-weight:700; font-size:12px; padding:7px 16px; border-radius:8px; text-decoration:none; box-shadow: 0 2px 4px rgba(5,150,105,0.2);">
+        Sign In / Auth Gateway 🔐
+      </a>
     </div>
   </header>
 
@@ -612,6 +612,11 @@
       <div class="bench-desc">Inspect Prometheus time-series metrics, Grafana dashboards, and FastAPI OpenAPI Swagger documentation.</div>
 
       <div class="dev-links-grid" style="grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));">
+        <a href="/login" class="dev-card" style="border-top: 4px solid #2563eb;">
+          <strong>🔐 Unified Authentication Gateway (/login)</strong>
+          <span style="color:#2563eb; font-weight:600;">WHITE THEME &bull; RBAC SEPARATED</span>
+          <span>Role-isolated sign in & registration for Customers, Investigators, Admins, and Boss Admin</span>
+        </a>
         <a href="/operations" class="dev-card" style="border-top: 4px solid #10b981;">
           <strong>🛡️ Operations &amp; Security Center (/operations)</strong>
           <span style="color:#10b981; font-weight:600;">ACTIVE (Live Rate Monitoring)</span>

@@ -1,0 +1,31 @@
+REFERENCES
+
+1. Assessing the carbon footprint of language models: Towards sustainability in AI
+https://www.sciencedirect.com/science/article/pii/S0921344925005476
+
+2. Developing open innovation competency in Gen Z entrepreneurship students: Roles of absorptive capacity, AI literacy and algorithmic thinking skills
+https://www.sciencedirect.com/science/article/pii/S147281172500196X
+
+3. Driving sustainable development in BRICS through green finance and economic growth: A quantile regression perspective
+https://www.sciencedirect.com/science/article/pii/S2444569X25002240
+
+4. How have investors changed the face of a firm's financial performance?
+https://www.researchgate.net/publication/399563971_How_have_investors_changed_the_face_of_a_firm%27s_financial_performance
+
+5. Mapping AI learning readiness self-efficacy worldwide: Scale validation and cross-continental patterns
+https://www.sciencedirect.com/science/article/pii/S2949882126000022
+
+6. World Investment Report 2025: International investment in the digital economy (matches s42214-025-00234-6.pdf)
+https://link.springer.com/article/10.1057/s42214-025-00234-6
+
+7. Sovereignty in the digital age: Indigenous perspectives on health data and emerging technologies
+https://www.sciencedirect.com/science/article/pii/S2667321525001775
+
+8. Statblithz Game Media Development to Train Students' Mathematical Problem-Solving Skills
+https://journal.ummat.ac.id/index.php/jtam/article/download/35179/pdf
+
+9. System dynamics modeling of social sustainability in circular construction transitions: Causal loop analysis of stakeholder engagement mechanisms from selected developing countries' perspective
+https://www.sciencedirect.com/science/article/pii/S0195925525003944
+
+10. The impact of generative AI on architectural design education: insights from hands-on experience with architecture students
+https://www.sciencedirect.com/science/article/pii/S2090447925006203

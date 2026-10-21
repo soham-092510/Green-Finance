@@ -108,14 +108,6 @@
             <span>Grafana Dashboard</span>
           </a>
         </li>
-        <li class="gf-inv-nav-item">
-          <a href="/bank" class="gf-inv-nav-link" style="color:#059669;">
-            <svg class="gf-inv-nav-icon" viewBox="0 0 24 24" style="stroke:#059669;">
-              <path d="M3 10.5L12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1v-9.5z"/>
-            </svg>
-            <span>Bank Portal</span>
-          </a>
-        </li>
         <li style="margin: 12px 10px 4px; border-top: 1px solid #eef2f6; padding-top: 10px; list-style: none;">
           <span style="font-size: 9.5px; font-weight: 700; color: #94a3b8; letter-spacing: 0.08em; text-transform: uppercase;">Operations &amp; Security</span>
         </li>
@@ -189,16 +181,13 @@
             </div>
           </div>
 
-          <!-- Switch to Grafana, Bank, and Ops Portals -->
-          <a href="/operations" class="btn-switch-bank" style="background:#0284c7; border-color:#0284c7; color:#fff;" title="Operational Control Center">
-            ⚡ Ops Center
-          </a>
+          <!-- Quick Status & Sign Out -->
           <a href="/grafana" target="_blank" class="btn-switch-bank" style="background:#f46800; border-color:#f46800; color:#fff;" title="Switch to Live Grafana Dashboard">
             📊 Grafana
           </a>
-          <a href="/bank" class="btn-switch-bank" title="Switch to Customer Banking Portal">
-            🏛️ Bank Portal
-          </a>
+          <button onclick="handleInvestigatorLogout()" class="btn-switch-bank" style="background:#fff1f2; border-color:#fecdd3; color:#be123c; cursor:pointer;" title="Sign Out">
+            Sign Out 🚪
+          </button>
         </div>
       </header>
 

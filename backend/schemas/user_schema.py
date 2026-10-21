@@ -15,14 +15,13 @@ from typing import Optional
 
 class UserResponse(BaseModel):
     # User profile response schema
-    # WHY:
-    # - Serializes and filters user data before sending it to the client (excludes password hashes)
-    
     id: str = Field(..., description="Universally unique identifier (UUID) for user")
     username: str = Field(..., description="Unique username identifier")
     email: EmailStr = Field(..., description="Validated email address")
     name: Optional[str] = Field(None, description="Full name of the user")
-    role: str = Field(..., description="Role-based tag (INVESTOR, AUDITOR, ADMIN)")
+    bank_id: Optional[str] = Field(None, description="Bank account number / identifier")
+    role: str = Field(..., description="Role-based tag (CUSTOMER, ADMIN, INVESTOR, SUPER_ADMIN)")
+    is_boss_admin: Optional[bool] = Field(False, description="Whether user is root Super Admin")
     created_at: datetime = Field(..., description="Datetime when user account was created")
     
     # Configure Pydantic to read ORM objects

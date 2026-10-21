@@ -168,12 +168,11 @@
             <span class="logo-badge">ADMIN CONTROL</span>
         </div>
         <nav class="nav-links">
-            <a href="/" class="nav-link">Main Portal</a>
-            <a href="/bank" class="nav-link">Bank Terminal</a>
-            <a href="/investigator" class="nav-link">Investigator</a>
             <a href="/admin" class="nav-link active">Admin</a>
             <a href="/admin/super" class="nav-link">Boss Admin</a>
+            <a href="/investigator" class="nav-link">Investigator</a>
             <a href="/operations" class="nav-link">Operations</a>
+            <button onclick="handleAdminLogout()" style="background:#dc2626; color:#fff; border:none; padding:0.4rem 0.8rem; border-radius:6px; font-size:0.85rem; font-weight:600; cursor:pointer;">Sign Out 🚪</button>
         </nav>
     </header>
 
@@ -428,7 +427,49 @@
             }
         }
 
-        // Initialize
+        async function verifyAdminSession() {
+            const token = localStorage.getItem("access_token");
+            if (!token) {
+                window.location.href = "/login";
+                return;
+            }
+            try {
+                const resp = await fetch("/user/me", { headers: { "Authorization": `Bearer ${token}` } });
+                if (!resp.ok) {
+                    localStorage.removeItem("access_token");
+                    window.location.href = "/login";
+                    return;
+                }
+                const u = await resp.json();
+                if (u.role === "CUSTOMER") {
+                    alert("Access Denied: Customer accounts are not authorized to view the Admin Control Center.");
+                    window.location.href = "/bank";
+                    return;
+                }
+            } catch(e) {
+                console.warn("Session check error:", e);
+            }
+        }
+
+        async function handleAdminLogout() {
+            const token = localStorage.getItem("access_token");
+            if (token) {
+                try {
+                    await fetch("/auth/logout", {
+                        method: "POST",
+                        headers: { "Authorization": `Bearer ${token}` }
+                    });
+                } catch(e) {}
+            }
+            localStorage.removeItem("access_token");
+            localStorage.removeItem("refresh_token");
+            localStorage.removeItem("user_role");
+            localStorage.removeItem("green_bank_active_user");
+            window.location.href = "/login";
+        }
+
+        // Initialize with authentication verification
+        verifyAdminSession();
         loadUsers();
         loadCases();
     </script>

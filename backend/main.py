@@ -121,6 +121,7 @@ investigator_dir = os.path.join(frontend_dir, "investigator")
 grafana_dir = os.path.join(frontend_dir, "grafana")
 admin_dir = os.path.join(frontend_dir, "admin")
 operations_dir = os.path.join(frontend_dir, "operations")
+login_dir = os.path.join(frontend_dir, "login")
 
 
 def safe_static_serve(base_dir: str, rel_path: str, fallback_file: Optional[str] = None) -> FileResponse:
@@ -205,6 +206,15 @@ def serve_operations():
 @app.get("/operations/{file_path:path}", include_in_schema=False)
 def serve_operations_file(file_path: str):
     return safe_static_serve(operations_dir, file_path, fallback_file="index.html")
+
+@app.get("/login", include_in_schema=False)
+@app.get("/login/", include_in_schema=False)
+def serve_login():
+    return safe_static_serve(login_dir, "index.html")
+
+@app.get("/login/{file_path:path}", include_in_schema=False)
+def serve_login_file(file_path: str):
+    return safe_static_serve(login_dir, file_path, fallback_file="index.html")
 
 @app.get("/shared/{file_path:path}", include_in_schema=False)
 def serve_shared_file(file_path: str):

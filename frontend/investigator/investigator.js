@@ -19,12 +19,64 @@ const GREEN_INVESTIGATOR_STATE = {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
+  initInvestigatorSession();
   initCharts();
   loadBackendKPIs();
   loadBackendLedger();
   updateTelemetryBadge();
   setInterval(updateTelemetryBadge, 10000);
 });
+
+async function initInvestigatorSession() {
+  const token = localStorage.getItem('access_token');
+  if (!token) {
+    window.location.href = '/login';
+    return;
+  }
+  try {
+    const res = await fetch('/user/me', {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    if (!res.ok) {
+      localStorage.removeItem('access_token');
+      window.location.href = '/login';
+      return;
+    }
+    const u = await res.json();
+    if (u.role === 'CUSTOMER') {
+      alert('Access Denied: Customer accounts are not authorized to view the Sustainability Investigator Portal.');
+      window.location.href = '/bank';
+      return;
+    }
+    const nameEl = document.getElementById('gf-inv-name');
+    if (nameEl) nameEl.textContent = u.name || u.username;
+    const roleEl = document.getElementById('gf-inv-role');
+    if (roleEl) roleEl.textContent = `${u.role} Investigator`;
+    const avEl = document.getElementById('gf-inv-avatar');
+    if (avEl) avEl.textContent = (u.name || u.username).slice(0, 2).toUpperCase();
+  } catch (e) {
+    console.warn('Investigator session check warning:', e);
+  }
+}
+
+async function handleInvestigatorLogout() {
+  const token = localStorage.getItem('access_token');
+  if (token) {
+    try {
+      await fetch('/auth/logout', {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+    } catch (e) {
+      console.warn('Logout warning:', e);
+    }
+  }
+  localStorage.removeItem('access_token');
+  localStorage.removeItem('refresh_token');
+  localStorage.removeItem('user_role');
+  localStorage.removeItem('green_bank_active_user');
+  window.location.href = '/login';
+}
 
 async function updateTelemetryBadge() {
   try {

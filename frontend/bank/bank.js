@@ -48,16 +48,67 @@ document.addEventListener('DOMContentLoaded', () => {
 /* ---------------------------------------------------------------------
    1. USER SESSION MANAGEMENT
    --------------------------------------------------------------------- */
-function initUserSession() {
-  const saved = localStorage.getItem('green_bank_active_user');
-  if (saved) {
+async function initUserSession() {
+  const token = localStorage.getItem('access_token');
+  if (!token) {
+    window.location.href = '/login';
+    return;
+  }
+
+  try {
+    const res = await fetch('/user/me', {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    if (!res.ok) {
+      localStorage.removeItem('access_token');
+      localStorage.removeItem('refresh_token');
+      localStorage.removeItem('user_role');
+      window.location.href = '/login';
+      return;
+    }
+    const u = await res.json();
+    GREEN_BANK_STATE.currentUser = {
+      username: u.username,
+      name: u.name || u.username,
+      firstName: (u.name || u.username).split(' ')[0],
+      bank_id: u.bank_id || 'CUST101',
+      card_mask: `GREEN •••• ${(u.bank_id || '9999').slice(-4)}`,
+      tier: u.role === 'CUSTOMER' ? 'Verified Customer' : (u.role || 'Member'),
+      avatar: (u.name || u.username).slice(0, 2).toUpperCase(),
+      email: u.email,
+      role: u.role
+    };
+    localStorage.setItem('green_bank_active_user', JSON.stringify(GREEN_BANK_STATE.currentUser));
+    renderUserInterface();
+    loadBackendAccounts();
+    loadBackendTransactions();
+  } catch (e) {
+    console.warn('Session verification fallback:', e);
+    const saved = localStorage.getItem('green_bank_active_user');
+    if (saved) {
+      try { GREEN_BANK_STATE.currentUser = JSON.parse(saved); } catch (_) {}
+    }
+    renderUserInterface();
+  }
+}
+
+async function handleLogout() {
+  const token = localStorage.getItem('access_token');
+  if (token) {
     try {
-      GREEN_BANK_STATE.currentUser = JSON.parse(saved);
+      await fetch('/auth/logout', {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
     } catch (e) {
-      console.warn('Could not parse saved user', e);
+      console.warn('Logout request warning:', e);
     }
   }
-  renderUserInterface();
+  localStorage.removeItem('access_token');
+  localStorage.removeItem('refresh_token');
+  localStorage.removeItem('user_role');
+  localStorage.removeItem('green_bank_active_user');
+  window.location.href = '/login';
 }
 
 function renderUserInterface() {
@@ -73,18 +124,35 @@ function renderUserInterface() {
   if (sbName) sbName.textContent = u.name;
 
   const sbTier = document.getElementById('sidebar-user-tier');
-  if (sbTier) sbTier.textContent = u.tier || 'Green Premier';
+  if (sbTier) sbTier.textContent = u.tier || 'Verified Customer';
 
   const cardMask = document.getElementById('card-masked-num');
-  if (cardMask) cardMask.textContent = u.card_mask || `•••• ${u.bank_id.slice(-4)}`;
+  if (cardMask) cardMask.textContent = u.card_mask || `•••• ${(u.bank_id || '9999').slice(-4)}`;
+
+  const headerBadge = document.getElementById('header-user-badge');
+  if (headerBadge) headerBadge.textContent = `${u.name} (${u.role || 'CUSTOMER'})`;
+
+  // Update Verified Profile Modal fields
+  const mAvatar = document.getElementById('modal-profile-avatar');
+  if (mAvatar) mAvatar.textContent = u.avatar || u.name.slice(0, 2).toUpperCase();
+  const mName = document.getElementById('modal-profile-name');
+  if (mName) mName.textContent = u.name;
+  const mRole = document.getElementById('modal-profile-role');
+  if (mRole) mRole.textContent = u.role || 'CUSTOMER';
+  const mUser = document.getElementById('modal-profile-username');
+  if (mUser) mUser.textContent = u.username;
+  const mEmail = document.getElementById('modal-profile-email');
+  if (mEmail) mEmail.textContent = u.email || `${u.username}@greenfinance.internal`;
+  const mBankId = document.getElementById('modal-profile-bankid');
+  if (mBankId) mBankId.textContent = u.bank_id;
+  const mTier = document.getElementById('modal-profile-tier');
+  if (mTier) mTier.textContent = u.tier || 'Green Premier';
 
   // Update source dropdown in transfer modal
   const srcSelect = document.getElementById('transfer-source-acc');
   if (srcSelect) {
     srcSelect.innerHTML = `
       <option value="${u.bank_id}" selected>${u.name} • ${u.bank_id} (${formatINR(GREEN_BANK_STATE.mainAccountBalance)})</option>
-      <option value="DEMO0001">Investor Reserve • DEMO0001 (₹45,000.00)</option>
-      <option value="ALICE101">Alice Smith • ALICE101 (₹18,200.00)</option>
     `;
   }
 }
@@ -478,9 +546,18 @@ async function handleTransferSubmit(e) {
   };
 
   try {
+    const token = localStorage.getItem('access_token');
+    const headers = {
+      'Content-Type': 'application/json',
+      'Idempotency-Key': 'idemp-' + Date.now() + '-' + Math.random().toString(36).substring(2, 9)
+    };
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+
     const res = await fetch('/payment/transfer', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: headers,
       body: JSON.stringify(payload)
     });
 
@@ -646,15 +723,15 @@ function openCardsModal() {
 }
 
 function openAnalyticsModal() {
-  window.location.href = '/investigator';
+  showToast('Carbon Footprint: Computed live for every payment using Scope 2 baseline.');
 }
 
 function openSupportModal() {
-  showToast('Green Finance ESG Helpdesk: support@greenfinance.io (S.P.I.T. Mumbai)');
+  showToast('Green Finance Support & ESG Desk: support@greenfinance.io');
 }
 
 function openAllTransactionsModal() {
-  window.location.href = '/investigator#ledger';
+  showToast('All transaction receipts are cryptographically hashed and verified in ledger.');
 }
 
 function switchNav(route, btn) {

@@ -12,33 +12,32 @@
 from pydantic import BaseModel, EmailStr, Field
 
 # Import Optional from typing
-from typing import Optional
+from typing import Optional, Dict, Any
+
+
+class UserSummary(BaseModel):
+    username: str
+    role: str
+    bank_id: Optional[str] = None
+    name: Optional[str] = None
+    is_boss_admin: Optional[bool] = False
 
 
 class UserRegister(BaseModel):
     # Registration Input Validation Schema
-    # WHY:
-    # - Ensures inputs are sanitized and match constraints on registration
-    
     name: Optional[str] = Field(None, max_length=100, description="Full name of the user")
-    
     username: str = Field(..., min_length=3, max_length=50, description="Unique username identifier")
-    
     email: EmailStr = Field(..., description="Valid email address for account notifications")
-    
     password: str = Field(..., min_length=6, description="Plaintext password, minimum 6 characters")
 
 
 class Token(BaseModel):
     # Authentication Token Output Schema
-    # WHY:
-    # - Standardizes the structure returned on successful login or refresh
-    
     access_token: str = Field(..., description="JWT Access Token string")
-    
     token_type: str = Field("bearer", description="Token authentication scheme (usually Bearer)")
-    
     refresh_token: Optional[str] = Field(None, description="Optional long-lived refresh token")
+    jti: Optional[str] = None
+    user: Optional[UserSummary] = None
 
 
 class TokenData(BaseModel):

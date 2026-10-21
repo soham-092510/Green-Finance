@@ -159,12 +159,10 @@
             <span class="logo-badge">ROOT BOSS ADMIN</span>
         </div>
         <nav class="nav-links">
-            <a href="/" class="nav-link">Main Portal</a>
-            <a href="/bank" class="nav-link">Bank Terminal</a>
-            <a href="/investigator" class="nav-link">Investigator</a>
-            <a href="/admin" class="nav-link">Admin</a>
             <a href="/admin/super" class="nav-link active">Boss Admin</a>
+            <a href="/admin" class="nav-link">Admin</a>
             <a href="/operations" class="nav-link">Operations</a>
+            <button onclick="handleAdminLogout()" style="background:#dc2626; color:#fff; border:none; padding:0.4rem 0.8rem; border-radius:6px; font-size:0.85rem; font-weight:600; cursor:pointer;">Sign Out 🚪</button>
         </nav>
     </header>
 
@@ -293,7 +291,49 @@
             `).join("");
         }
 
-        // Initialize
+        async function verifySuperAdminSession() {
+            const token = localStorage.getItem("access_token");
+            if (!token) {
+                window.location.href = "/login";
+                return;
+            }
+            try {
+                const resp = await fetch("/user/me", { headers: { "Authorization": `Bearer ${token}` } });
+                if (!resp.ok) {
+                    localStorage.removeItem("access_token");
+                    window.location.href = "/login";
+                    return;
+                }
+                const u = await resp.json();
+                if (!u.is_boss_admin && u.role !== "SUPER_ADMIN") {
+                    alert("Access Denied: Root Boss Admin authority is required for this console.");
+                    window.location.href = "/admin";
+                    return;
+                }
+            } catch(e) {
+                console.warn("Super admin session check error:", e);
+            }
+        }
+
+        async function handleAdminLogout() {
+            const token = localStorage.getItem("access_token");
+            if (token) {
+                try {
+                    await fetch("/auth/logout", {
+                        method: "POST",
+                        headers: { "Authorization": `Bearer ${token}` }
+                    });
+                } catch(e) {}
+            }
+            localStorage.removeItem("access_token");
+            localStorage.removeItem("refresh_token");
+            localStorage.removeItem("user_role");
+            localStorage.removeItem("green_bank_active_user");
+            window.location.href = "/login";
+        }
+
+        // Initialize with super admin authorization check
+        verifySuperAdminSession();
         loadAuditEvents();
     </script>
 </body>

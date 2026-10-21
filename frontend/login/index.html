@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Green Finance — Unified Authentication Gateway</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-page: #f8fafc;
+      --card-bg: #ffffff;
+      --border-color: #e2e8f0;
+      --border-focus: #059669;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --text-light: #94a3b8;
+      --emerald-primary: #059669;
+      --emerald-hover: #047857;
+      --emerald-light: #ecfdf5;
+      --blue-primary: #2563eb;
+      --blue-light: #eff6ff;
+      --purple-primary: #7c3aed;
+      --purple-light: #faf5ff;
+      --amber-primary: #d97706;
+      --amber-light: #fffbeb;
+      --rose-primary: #e11d48;
+      --rose-light: #fff1f2;
+      --shadow-card: 0 20px 40px -15px rgba(15, 23, 42, 0.08), 0 0 0 1px rgba(226, 232, 240, 0.8);
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-page);
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(209, 250, 229, 0.45) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(224, 231, 255, 0.45) 0px, transparent 50%);
+      font-family: var(--font-sans);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 16px;
+      overflow-x: hidden;
+    }
+
+    .auth-container {
+      width: 100%;
+      max-width: 520px;
+    }
+
+    /* Brand Header */
+    .brand-header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .brand-logo-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 52px;
+      height: 52px;
+      background: var(--emerald-light);
+      border: 1px solid #a7f3d0;
+      border-radius: 16px;
+      font-size: 26px;
+      margin-bottom: 12px;
+      box-shadow: 0 4px 12px rgba(5, 150, 105, 0.12);
+    }
+
+    .brand-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--text-main);
+      letter-spacing: -0.02em;
+    }
+
+    .brand-subtitle {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    /* Main Auth Card */
+    .auth-card {
+      background: var(--card-bg);
+      border-radius: 20px;
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-card);
+      padding: 32px 36px;
+    }
+
+    /* Tabs */
+    .tab-header {
+      display: flex;
+      border-bottom: 1px solid var(--border-color);
+      margin-bottom: 24px;
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 12px 16px;
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      font-family: var(--font-sans);
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .tab-btn:hover {
+      color: var(--text-main);
+    }
+
+    .tab-btn.active {
+      color: var(--emerald-primary);
+      border-bottom-color: var(--emerald-primary);
+    }
+
+    /* Form Fields */
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: #334155;
+      margin-bottom: 6px;
+    }
+
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .input-icon {
+      position: absolute;
+      left: 12px;
+      color: #94a3b8;
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+    }
+
+    .form-input {
+      width: 100%;
+      height: 44px;
+      padding: 10px 14px 10px 40px;
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      font-family: var(--font-sans);
+      font-size: 14px;
+      color: var(--text-main);
+      transition: all 0.2s ease;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--emerald-primary);
+      box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.15);
+    }
+
+    .toggle-pwd {
+      position: absolute;
+      right: 12px;
+      background: none;
+      border: none;
+      color: #94a3b8;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      padding: 4px;
+    }
+
+    .toggle-pwd:hover {
+      color: var(--text-main);
+    }
+
+    /* Submit Button */
+    .btn-submit {
+      width: 100%;
+      height: 46px;
+      background: var(--emerald-primary);
+      color: #ffffff;
+      border: none;
+      border-radius: 10px;
+      font-family: var(--font-sans);
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 4px 12px rgba(5, 150, 105, 0.25);
+      margin-top: 8px;
+    }
+
+    .btn-submit:hover {
+      background: var(--emerald-hover);
+      transform: translateY(-1px);
+    }
+
+    .btn-submit:active {
+      transform: translateY(0);
+    }
+
+    .btn-submit:disabled {
+      background: #94a3b8;
+      cursor: not-allowed;
+      box-shadow: none;
+      transform: none;
+    }
+
+    /* Notice & Alert Box */
+    .alert-box {
+      padding: 12px 14px;
+      border-radius: 10px;
+      font-size: 13px;
+      margin-bottom: 18px;
+      display: none;
+      line-height: 1.4;
+    }
+
+    .alert-box.error {
+      background: var(--rose-light);
+      border: 1px solid #fecdd3;
+      color: var(--rose-primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .alert-box.success {
+      background: var(--emerald-light);
+      border: 1px solid #a7f3d0;
+      color: var(--emerald-primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Demo Quick Switcher Section */
+    .demo-role-section {
+      margin-top: 24px;
+      padding-top: 20px;
+      border-top: 1px dashed var(--border-color);
+    }
+
+    .demo-role-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .demo-chips-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .demo-chip {
+      background: #f8fafc;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 8px 10px;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .demo-chip:hover {
+      border-color: #cbd5e1;
+      background: #f1f5f9;
+      transform: translateY(-1px);
+    }
+
+    .demo-chip-role {
+      font-size: 11px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .demo-chip.customer .demo-chip-role { color: var(--emerald-primary); }
+    .demo-chip.admin .demo-chip-role { color: #0284c7; }
+    .demo-chip.investigator .demo-chip-role { color: var(--purple-primary); }
+    .demo-chip.boss .demo-chip-role { color: var(--amber-primary); }
+
+    .demo-chip-name {
+      font-size: 10.5px;
+      color: var(--text-muted);
+    }
+
+    .demo-chip-dest {
+      font-size: 9.5px;
+      font-family: var(--font-mono);
+      color: #94a3b8;
+    }
+
+    /* Routing Info Banner */
+    .routing-banner {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-top: 16px;
+      font-size: 11.5px;
+      color: #475569;
+      line-height: 1.5;
+    }
+
+    .routing-banner strong {
+      color: var(--text-main);
+    }
+
+    /* Footer */
+    .auth-footer {
+      text-align: center;
+      margin-top: 24px;
+      font-size: 12px;
+      color: var(--text-light);
+    }
+
+    @media (max-width: 480px) {
+      .auth-card {
+        padding: 24px 20px;
+      }
+      .demo-chips-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="auth-container">
+
+    <!-- Brand Header -->
+    <header class="brand-header">
+      <div class="brand-logo-badge">🌱</div>
+      <h1 class="brand-title">Green Finance</h1>
+      <p class="brand-subtitle">Real-Time Energy Observability &amp; Sustainable Digital Banking</p>
+    </header>
+
+    <!-- Main Auth Card -->
+    <div class="auth-card">
+
+      <!-- Tab Switcher -->
+      <div class="tab-header">
+        <button class="tab-btn active" id="tab-login-btn" onclick="switchTab('login')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+            <polyline points="10 17 15 12 10 7"></polyline>
+            <line x1="15" y1="12" x2="3" y2="12"></line>
+          </svg>
+          Sign In
+        </button>
+        <button class="tab-btn" id="tab-register-btn" onclick="switchTab('register')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+            <circle cx="8.5" cy="7" r="4"></circle>
+            <line x1="20" y1="8" x2="20" y2="14"></line>
+            <line x1="23" y1="11" x2="17" y2="11"></line>
+          </svg>
+          Create Customer Account
+        </button>
+      </div>
+
+      <!-- Alert Box -->
+      <div id="alert-box" class="alert-box"></div>
+
+      <!-- TAB 1: LOGIN FORM -->
+      <form id="login-form" onsubmit="handleLogin(event)">
+        <div class="form-group">
+          <label class="form-label" for="login-username">Username or Email</label>
+          <div class="input-wrapper">
+            <span class="input-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+              </svg>
+            </span>
+            <input type="text" id="login-username" class="form-input" placeholder="e.g. alice_smith" required autocomplete="username" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="login-password">Password</label>
+          <div class="input-wrapper">
+            <span class="input-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+              </svg>
+            </span>
+            <input type="password" id="login-password" class="form-input" placeholder="Enter password" required autocomplete="current-password" />
+            <button type="button" class="toggle-pwd" onclick="togglePasswordVisibility('login-password')">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <button type="submit" id="login-submit-btn" class="btn-submit">
+          <span>Sign In to Workspace</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </button>
+
+        <!-- Role Demonstration Quick Selector -->
+        <div class="demo-role-section">
+          <div class="demo-role-title">
+            <span>Instant Role Demonstrator</span>
+            <span style="font-weight:400; text-transform:none; font-size:10px; color:#94a3b8;">Click to auto-fill</span>
+          </div>
+
+          <div class="demo-chips-grid">
+            <!-- Customer -->
+            <button type="button" class="demo-chip customer" onclick="fillCredentials('alice_smith', 'password123', 'CUSTOMER')">
+              <span class="demo-chip-role">🏛️ Customer User</span>
+              <span class="demo-chip-name">Alice Smith</span>
+              <span class="demo-chip-dest">Routes to: /bank</span>
+            </button>
+
+            <!-- Admin -->
+            <button type="button" class="demo-chip admin" onclick="fillCredentials('admin_priya', 'password123', 'ADMIN')">
+              <span class="demo-chip-role">⚙️ Delegated Admin</span>
+              <span class="demo-chip-name">Priya Sharma</span>
+              <span class="demo-chip-dest">Routes to: /admin</span>
+            </button>
+
+            <!-- Investigator -->
+            <button type="button" class="demo-chip investigator" onclick="fillCredentials('investigator_rahul', 'password123', 'INVESTIGATOR')">
+              <span class="demo-chip-role">🔬 Investigator</span>
+              <span class="demo-chip-name">Rahul Deshmukh</span>
+              <span class="demo-chip-dest">Routes to: /investigator</span>
+            </button>
+
+            <!-- Boss Admin -->
+            <button type="button" class="demo-chip boss" onclick="fillCredentials('soham_gaikwad', 'password123', 'SUPER_ADMIN')">
+              <span class="demo-chip-role">👑 Boss Admin</span>
+              <span class="demo-chip-name">Soham Gaikwad</span>
+              <span class="demo-chip-dest">Routes to: /admin/super</span>
+            </button>
+          </div>
+        </div>
+      </form>
+
+      <!-- TAB 2: REGISTER FORM (CUSTOMER) -->
+      <form id="register-form" style="display: none;" onsubmit="handleRegister(event)">
+        <div class="form-group">
+          <label class="form-label" for="reg-name">Full Legal Name</label>
+          <div class="input-wrapper">
+            <span class="input-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+              </svg>
+            </span>
+            <input type="text" id="reg-name" class="form-input" placeholder="e.g. John Doe" required />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="reg-username">Choose Username</label>
+          <div class="input-wrapper">
+            <span class="input-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="4"></circle>
+                <path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-3.92 7.94"></path>
+              </svg>
+            </span>
+            <input type="text" id="reg-username" class="form-input" placeholder="e.g. john_doe" required autocomplete="username" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="reg-email">Email Address</label>
+          <div class="input-wrapper">
+            <span class="input-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                <polyline points="22,6 12,13 2,6"></polyline>
+              </svg>
+            </span>
+            <input type="email" id="reg-email" class="form-input" placeholder="e.g. john@example.com" required autocomplete="email" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="reg-password">Create Strong Password</label>
+          <div class="input-wrapper">
+            <span class="input-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+              </svg>
+            </span>
+            <input type="password" id="reg-password" class="form-input" placeholder="Minimum 6 characters" required autocomplete="new-password" minlength="6" />
+            <button type="button" class="toggle-pwd" onclick="togglePasswordVisibility('reg-password')">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <button type="submit" id="reg-submit-btn" class="btn-submit">
+          <span>Open Green Account &amp; Launch</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </button>
+      </form>
+
+      <!-- Routing Info Banner -->
+      <div class="routing-banner">
+        <strong>🛡️ Role-Isolated Redirection:</strong>
+        Each user is directed exclusively to their authorized interface. Regular customers access the Sustainable Banking Portal (<code>/bank</code>); administrative and auditing consoles are strictly restricted.
+      </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer class="auth-footer">
+      <div>Green Finance — Software Engineering Project • S.P.I.T. Mumbai</div>
+      <div style="margin-top: 4px;">Group 13 (Soham Gaikwad, Atharva Hule, Laukik Deshpande)</div>
+    </footer>
+
+  </div>
+
+  <script>
+    function switchTab(mode) {
+      const loginBtn = document.getElementById('tab-login-btn');
+      const regBtn = document.getElementById('tab-register-btn');
+      const loginForm = document.getElementById('login-form');
+      const regForm = document.getElementById('register-form');
+      const alertBox = document.getElementById('alert-box');
+      alertBox.style.display = 'none';
+
+      if (mode === 'login') {
+        loginBtn.classList.add('active');
+        regBtn.classList.remove('active');
+        loginForm.style.display = 'block';
+        regForm.style.display = 'none';
+      } else {
+        regBtn.classList.add('active');
+        loginBtn.classList.remove('active');
+        regForm.style.display = 'block';
+        loginForm.style.display = 'none';
+      }
+    }
+
+    function togglePasswordVisibility(inputId) {
+      const el = document.getElementById(inputId);
+      if (el) {
+        el.type = el.type === 'password' ? 'text' : 'password';
+      }
+    }
+
+    function fillCredentials(username, password, role) {
+      switchTab('login');
+      document.getElementById('login-username').value = username;
+      document.getElementById('login-password').value = password;
+      showAlert(`Selected ${role} credentials for: ${username}`, 'success');
+    }
+
+    function showAlert(msg, type = 'error') {
+      const box = document.getElementById('alert-box');
+      box.className = `alert-box ${type}`;
+      box.textContent = msg;
+      box.style.display = 'block';
+    }
+
+    // Role-based redirector
+    function routeUserByRole(role, isBossAdmin) {
+      if (isBossAdmin) {
+        window.location.href = '/admin/super';
+      } else if (role === 'SUPER_ADMIN') {
+        window.location.href = '/admin/super';
+      } else if (role === 'ADMIN') {
+        window.location.href = '/admin';
+      } else if (role === 'INVESTIGATOR') {
+        window.location.href = '/investigator';
+      } else {
+        // Customer, Bank, or generic user
+        window.location.href = '/bank';
+      }
+    }
+
+    async function handleLogin(e) {
+      e.preventDefault();
+      const btn = document.getElementById('login-submit-btn');
+      const username = document.getElementById('login-username').value.trim();
+      const password = document.getElementById('login-password').value;
+
+      btn.disabled = true;
+      btn.innerHTML = 'Signing in...';
+
+      try {
+        const res = await fetch('/auth/login-json', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password })
+        });
+
+        const data = await res.json();
+        if (!res.ok) {
+          throw new Error(data.error || data.detail || 'Authentication failed. Please verify credentials.');
+        }
+
+        // Save token & user context
+        localStorage.setItem('access_token', data.access_token);
+        localStorage.setItem('token_type', data.token_type || 'bearer');
+        
+        // If user summary included, save it
+        if (data.user) {
+          localStorage.setItem('gf_user', JSON.stringify(data.user));
+          showAlert(`Welcome, ${data.user.name || data.user.username}! Redirecting to your workspace...`, 'success');
+          setTimeout(() => {
+            routeUserByRole(data.user.role, data.user.is_boss_admin);
+          }, 600);
+        } else {
+          // Query /user/me
+          const meRes = await fetch('/user/me', {
+            headers: { 'Authorization': `Bearer ${data.access_token}` }
+          });
+          if (meRes.ok) {
+            const meData = await meRes.json();
+            localStorage.setItem('gf_user', JSON.stringify(meData));
+            showAlert(`Welcome, ${meData.name || meData.username}! Redirecting...`, 'success');
+            setTimeout(() => {
+              routeUserByRole(meData.role, meData.is_boss_admin);
+            }, 600);
+          } else {
+            window.location.href = '/bank';
+          }
+        }
+      } catch (err) {
+        showAlert(err.message, 'error');
+        btn.disabled = false;
+        btn.innerHTML = '<span>Sign In to Workspace</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>';
+      }
+    }
+
+    async function handleRegister(e) {
+      e.preventDefault();
+      const btn = document.getElementById('reg-submit-btn');
+      const name = document.getElementById('reg-name').value.trim();
+      const username = document.getElementById('reg-username').value.trim();
+      const email = document.getElementById('reg-email').value.trim();
+      const password = document.getElementById('reg-password').value;
+
+      btn.disabled = true;
+      btn.innerHTML = 'Creating account...';
+
+      try {
+        const res = await fetch('/auth/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, username, email, password })
+        });
+
+        const data = await res.json();
+        if (!res.ok) {
+          throw new Error(data.error || data.detail || 'Registration failed. Please try a different username/email.');
+        }
+
+        localStorage.setItem('access_token', data.access_token);
+        localStorage.setItem('token_type', data.token_type || 'bearer');
+        showAlert('Green Banking Account created successfully! Launching your digital bank...', 'success');
+        
+        setTimeout(() => {
+          window.location.href = '/bank';
+        }, 800);
+      } catch (err) {
+        showAlert(err.message, 'error');
+        btn.disabled = false;
+        btn.innerHTML = '<span>Open Green Account &amp; Launch</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>';
+      }
+    }
+  </script>
+</body>
+</html>
