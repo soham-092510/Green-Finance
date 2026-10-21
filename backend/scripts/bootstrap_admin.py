@@ -5,7 +5,12 @@
 # =====================================================================
 
 import argparse
+import os
 import sys
+
+# Ensure project root is on sys.path regardless of how script is invoked
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
+
 from backend.db.session import SessionLocal
 from backend.services.rbac_service import bootstrap_boss_admin
 from backend.models.user import User
