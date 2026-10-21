@@ -1,91 +1,62 @@
 # =====================================================================
-# ECO MONITOR — MAIN.PY (APPLICATION ENTRY POINT)
-# =====================================================================
-# Purpose/Existence of this file:
-# This file is the "Main Switchboard" and starter engine of our entire project.
-# Think of it like a train station manager. It initializes the FastAPI server,
-# hooks up security layers (CORS), configures error reporting sheets, loads all 
-# route path controllers (like /auth, /credits, /telemetry), and handles the 
-# database table initialization on system startup.
+# GREEN-FINANCE — MAIN.PY (APPLICATION ENTRY POINT)
+# Purpose: Core FastAPI Switchboard:
+#          - Security Headers & Restrictive CORS Allowlist
+#          - Performance Logging & Exception Interceptors
+#          - Router Mounts: Auth, Banking, Ledger, Telemetry, Sustainability
+#          - Safe Static File Serving (No Path Traversal)
+#          - Prometheus TSDB Instrumentation
 # =====================================================================
 
-# 🔹 Import FastAPI
-# FastAPI is the core framework library used to construct modern Python APIs.
-# It acts like the building foundation structure for our web servers.
-from fastapi import FastAPI
-
-# 🔹 Import StarletteHTTPException
-# Starlette is the lightweight engine under the hood of FastAPI. We import its 
-# exception class to intercept standard web navigation errors (like 404 Not Found).
+import os
+from typing import Optional
+from fastapi import FastAPI, HTTPException as FastAPIHTTPException
 from starlette.exceptions import HTTPException as StarletteHTTPException
-
-# 🔹 Import RequestValidationError
-# Triggered automatically when incoming request forms or JSON variables are missing 
-# or formatted incorrectly (e.g. text entered where a number was required).
 from fastapi.exceptions import RequestValidationError
-
-# 🔹 Import Instrumentator
-# Exposes request metrics to Prometheus so we can monitor server performance, 
-# query latency, and traffic in Grafana.
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse, JSONResponse
 from prometheus_fastapi_instrumentator import Instrumentator
 
-# 🔹 Import settings
-# The global configuration settings loaded from config.py.
 from backend.core.config import settings
-
-# 🔹 Import LoggingMiddleware
-# An interceptor that records the timestamp, visitor IP, and response time of every request.
 from backend.middleware.logging_middleware import LoggingMiddleware
-
-# 🔹 Import custom error handlers
-# Error handlers intercept crashes and translate them into friendly JSON error statements
-# instead of crashing the visitor's screen.
+from backend.middleware.security_headers import SecurityHeadersMiddleware
 from backend.middleware.error_handler import (
     http_exception_handler,
     validation_exception_handler,
     unhandled_exception_handler,
 )
-
-# 🔹 Import init_db
-# The function that builds SQL database tables based on our ORM models.
 from backend.db.database import init_db
+from backend.api import (
+    health, auth, user, carbon, credits, ledger,
+    portfolio, telemetry, baseline, accuracy, payment, sustainability
+)
 
-# 🔹 Import API routers
-# Registers the different pages/sections of our application.
-from backend.api import health, auth, user, carbon, credits, ledger, portfolio, telemetry, baseline, accuracy, payment, sustainability
-
-# 🔹 Import CORSMiddleware
-# CORS (Cross-Origin Resource Sharing) is a browser security mechanism.
-# We import this to control which websites are allowed to dial our backend (e.g. allowing
-# our HTML/JS frontend to fetch carbon statistics).
-from fastapi.middleware.cors import CORSMiddleware
-
-
-# 🔹 Create FastAPI application instance
-# We configure title from Settings class and set version to 1.0.0.
-# This variable "app" is what uvicorn runs.
+# 🔹 Create FastAPI Application Instance
 app = FastAPI(
     title=settings.app_name,
-    version="1.0.0"
+    version="2.0.0",
+    docs_url="/docs" if settings.environment != "production" else None,
+    redoc_url="/redoc" if settings.environment != "production" else None
 )
 
 
 # =====================================================================
-# 🛡️ MIDDLEWARE INSTALLATION
+# 🛡️ MIDDLEWARE INSTALLATION (ORDER MATTERS)
 # =====================================================================
 
-# 1. CORS Guard Middleware
-# We configure it to allow any domain client ("*") to access endpoints during development.
+# 1. Defense-in-Depth Security Headers (CSP, Anti-Clickjacking, No-Sniff)
+app.add_middleware(SecurityHeadersMiddleware)
+
+# 2. Strict CORS Configuration (Explicit origins; no wildcard with credentials)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=settings.cors_origins,
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allow_headers=["Authorization", "Content-Type", "Idempotency-Key", "X-Requested-With"],
 )
 
-# 2. Performance & Access Logger Middleware
-# Tracks duration of every request.
+# 3. Performance & Access Logger Middleware
 app.add_middleware(LoggingMiddleware)
 
 
@@ -93,13 +64,10 @@ app.add_middleware(LoggingMiddleware)
 # 🚨 ERROR EXCEPTION INTERCEPTORS
 # =====================================================================
 
-# Catch HTTP exceptions (like 404, 401)
+# Catch HTTP exceptions (FastAPI & Starlette)
+app.add_exception_handler(FastAPIHTTPException, http_exception_handler)
 app.add_exception_handler(StarletteHTTPException, http_exception_handler)
-
-# Catch field validation errors (422)
 app.add_exception_handler(RequestValidationError, validation_exception_handler)
-
-# Catch unexpected internal crashes (500)
 app.add_exception_handler(Exception, unhandled_exception_handler)
 
 
@@ -107,7 +75,6 @@ app.add_exception_handler(Exception, unhandled_exception_handler)
 # 🚪 PATHWAY ROUTE REGISTRATIONS
 # =====================================================================
 
-# Hook up sub-controllers onto our central app switchboard
 app.include_router(health.router)
 app.include_router(auth.router)
 app.include_router(user.router)
@@ -115,11 +82,12 @@ app.include_router(carbon.router)
 app.include_router(credits.router)
 app.include_router(ledger.router)
 app.include_router(portfolio.router)
-app.include_router(telemetry.router) # Registers the Kepler PromQL telemetry pathways
-app.include_router(baseline.router)  # Registers Idle Baseline Calibration endpoints
-app.include_router(accuracy.router)  # Registers Attribution Fidelity & Accuracy endpoints
-app.include_router(payment.router)   # Registers Simulated Banking Microservices endpoints
-app.include_router(sustainability.router)  # Registers Enterprise Sustainability Analytics endpoints
+app.include_router(telemetry.router)
+app.include_router(baseline.router)
+app.include_router(accuracy.router)
+app.include_router(payment.router)
+app.include_router(sustainability.router)
+
 
 @app.post("/connection/ingest-trace", status_code=201, tags=["Connection"])
 async def ingest_trace(payload: dict):
@@ -131,12 +99,12 @@ async def ingest_trace(payload: dict):
 # 📊 PROMETHEUS INSTRUMENTATION
 # =====================================================================
 
-# Exposes Prometheus tracking metrics under "/metrics" endpoint
 Instrumentator().instrument(app).expose(app)
 
-import os
-from fastapi.responses import FileResponse
-from fastapi.staticfiles import StaticFiles
+
+# =====================================================================
+# 🌐 HARDENED STATIC ASSET ROUTING (ZERO PATH TRAVERSAL)
+# =====================================================================
 
 frontend_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "frontend"))
 shared_dir = os.path.join(frontend_dir, "shared")
@@ -144,111 +112,108 @@ bank_dir = os.path.join(frontend_dir, "bank")
 investigator_dir = os.path.join(frontend_dir, "investigator")
 grafana_dir = os.path.join(frontend_dir, "grafana")
 
+
+def safe_static_serve(base_dir: str, rel_path: str, fallback_file: Optional[str] = None) -> FileResponse:
+    """
+    Safely resolves and serves files, strictly preventing directory traversal attacks.
+    Guarantees that the resolved target is confined to base_dir.
+    """
+    base_dir = os.path.abspath(base_dir)
+    if not rel_path or rel_path.strip() == "":
+        if fallback_file:
+            return FileResponse(os.path.join(base_dir, fallback_file))
+        raise StarletteHTTPException(status_code=404, detail="Resource not found")
+
+    # Canonicalize target path
+    clean_rel = rel_path.lstrip("/\\")
+    target_path = os.path.abspath(os.path.join(base_dir, clean_rel))
+
+    try:
+        common = os.path.commonpath([base_dir, target_path])
+    except ValueError:
+        raise StarletteHTTPException(status_code=404, detail="Resource not found")
+
+    if common != base_dir:
+        raise StarletteHTTPException(status_code=404, detail="Resource not found")
+
+    if not os.path.isfile(target_path):
+        if fallback_file:
+            fallback_target = os.path.abspath(os.path.join(base_dir, fallback_file))
+            if os.path.isfile(fallback_target):
+                return FileResponse(fallback_target)
+        raise StarletteHTTPException(status_code=404, detail="Resource not found")
+
+    return FileResponse(target_path)
+
+
 @app.get("/", include_in_schema=False)
 def serve_index():
-    return FileResponse(os.path.join(frontend_dir, "index.html"))
+    return safe_static_serve(frontend_dir, "index.html")
 
 @app.get("/grafana", include_in_schema=False)
 @app.get("/grafana/", include_in_schema=False)
 def serve_grafana():
-    return FileResponse(os.path.join(grafana_dir, "index.html"))
+    return safe_static_serve(grafana_dir, "index.html")
 
 @app.get("/grafana/{file_path:path}", include_in_schema=False)
 def serve_grafana_file(file_path: str):
-    fpath = os.path.join(grafana_dir, file_path)
-    if os.path.isfile(fpath):
-        return FileResponse(fpath)
-    return FileResponse(os.path.join(grafana_dir, "index.html"))
+    return safe_static_serve(grafana_dir, file_path, fallback_file="index.html")
 
 @app.get("/bank", include_in_schema=False)
 @app.get("/bank/", include_in_schema=False)
 def serve_bank():
-    return FileResponse(os.path.join(bank_dir, "index.html"))
+    return safe_static_serve(bank_dir, "index.html")
 
 @app.get("/bank/{file_path:path}", include_in_schema=False)
 def serve_bank_file(file_path: str):
-    fpath = os.path.join(bank_dir, file_path)
-    if os.path.isfile(fpath):
-        return FileResponse(fpath)
-    return FileResponse(os.path.join(bank_dir, "index.html"))
+    return safe_static_serve(bank_dir, file_path, fallback_file="index.html")
 
 @app.get("/investigator", include_in_schema=False)
 @app.get("/investigator/", include_in_schema=False)
 def serve_investigator():
-    return FileResponse(os.path.join(investigator_dir, "index.html"))
+    return safe_static_serve(investigator_dir, "index.html")
 
 @app.get("/investigator/{file_path:path}", include_in_schema=False)
 def serve_investigator_file(file_path: str):
-    fpath = os.path.join(investigator_dir, file_path)
-    if os.path.isfile(fpath):
-        return FileResponse(fpath)
-    return FileResponse(os.path.join(investigator_dir, "index.html"))
+    return safe_static_serve(investigator_dir, file_path, fallback_file="index.html")
 
 @app.get("/shared/{file_path:path}", include_in_schema=False)
 def serve_shared_file(file_path: str):
-    fpath = os.path.join(shared_dir, file_path)
-    if os.path.isfile(fpath):
-        return FileResponse(fpath)
-    fpath_root = os.path.join(frontend_dir, file_path)
-    if os.path.isfile(fpath_root):
-        return FileResponse(fpath_root)
-    return FileResponse(os.path.join(shared_dir, "styles.css"))
+    try:
+        return safe_static_serve(shared_dir, file_path)
+    except StarletteHTTPException:
+        pass
+    return safe_static_serve(frontend_dir, file_path, fallback_file="shared/styles.css")
 
 @app.get("/styles.css", include_in_schema=False)
 def serve_css():
-    return FileResponse(os.path.join(frontend_dir, "styles.css"))
+    return safe_static_serve(frontend_dir, "styles.css")
 
 @app.get("/app.js", include_in_schema=False)
 def serve_js():
-    return FileResponse(os.path.join(frontend_dir, "app.js"))
+    return safe_static_serve(frontend_dir, "app.js")
 
 @app.get("/bank.css", include_in_schema=False)
 def serve_bank_css():
-    return FileResponse(os.path.join(bank_dir, "bank.css"))
+    return safe_static_serve(bank_dir, "bank.css")
 
 @app.get("/bank.js", include_in_schema=False)
 def serve_bank_js():
-    return FileResponse(os.path.join(bank_dir, "bank.js"))
+    return safe_static_serve(bank_dir, "bank.js")
 
 @app.get("/investigator.css", include_in_schema=False)
 def serve_inv_css():
-    return FileResponse(os.path.join(investigator_dir, "investigator.css"))
+    return safe_static_serve(investigator_dir, "investigator.css")
 
 @app.get("/investigator.js", include_in_schema=False)
 def serve_inv_js():
-    return FileResponse(os.path.join(investigator_dir, "investigator.js"))
+    return safe_static_serve(investigator_dir, "investigator.js")
 
 
 # =====================================================================
 # ⚙️ STARTUP EVENT LOGIC
 # =====================================================================
 
-# Runs automatically when the server is powered up.
 @app.on_event("startup")
 def on_startup():
-    # Automatically creates all database tables (User, Accounts, CarbonCredit, Ledger)
-    # and populates them with seed demo data on local development SQLite database.
     init_db()
-
-
-# =====================================================================
-# 🕸️ CONNECTIONS & WORKFLOW (How this file communicates with others):
-# =====================================================================
-# 1. BOOTED BY:
-#    - Uvicorn server launcher: Run via `uvicorn backend.main:app` or Docker.
-#
-# 2. LOADS CONFIGURATION:
-#    - [config.py](file:///c:/Users/HP/Downloads/Projects/eco-monitor/backend/core/config.py):
-#      Reads `settings.app_name` to define application metadata.
-#
-# 3. CONTEXTS ERROR HANDLERS:
-#    - [error_handler.py](file:///c:/Users/HP/Downloads/Projects/eco-monitor/backend/middleware/error_handler.py)
-#
-# 4. INITIALIZES STORAGE DATABASE:
-#    - [database.py](file:///c:/Users/HP/Downloads/Projects/eco-monitor/backend/db/database.py):
-#      Calls `init_db()` to run schemas check on SQLite database engine.
-#
-# 5. EXPANDS ACCESS ROUTERS:
-#    - Registers [telemetry.py](file:///c:/Users/HP/Downloads/Projects/eco-monitor/backend/api/telemetry.py)
-#      and other APIs, mapping them to the server web paths.
-# =====================================================================

@@ -10,7 +10,7 @@ services:
       - key: USE_SQLITE
         value: "true"
       - key: JWT_SECRET_KEY
-        value: green-finance-super-secret-key-2026
+        generateValue: true
       - key: PYTHON_VERSION
         value: 3.11.9
       - key: APP_NAME

@@ -137,13 +137,18 @@ def calculate_transaction_carbon(
 
 @router.get(
     "/promql",
-    summary="Execute raw PromQL query against Prometheus"
+    summary="Execute raw PromQL query against Prometheus (Restricted to Admin/Ops)"
 )
 def execute_promql(
     query: str,
     current_user: User = Depends(get_current_user)
 ):
-    """Execute a raw PromQL query and return results."""
+    """Execute a raw PromQL query and return results. Restricted to Admins and Operations engineers."""
+    if current_user.role not in ("ADMIN", "SUPER_ADMIN", "BOSS_ADMIN", "OPERATIONS"):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Access denied: PromQL execution requires administrative or operations privileges."
+        )
     result = telemetry_service.query_prometheus(query)
     if result:
         return result

@@ -1,71 +1,72 @@
 # =====================================================================
-# ECO MONITOR — CONFIG.PY (CONFIGURATION SETTINGS)
-# =====================================================================
-# Purpose/Existence of this file:
-# This file acts as the "Brain of Settings" for the entire project.
-# Imagine a physical device where you have knobs, sliders, and dials. This file
-# is where we name and validate all those knobs (like the database URL, secrets, etc.)
-# so that the rest of the application can simply read them from here instead of 
-# searching all over the place. It loads variables from a hidden file called ".env".
+# GREEN-FINANCE — CONFIG.PY (CENTRALIZED CONFIGURATION SETTINGS)
+# Purpose: Validates environment variables, secrets, database URLs,
+#          CORS origins, and session policies.
 # =====================================================================
 
-# 🔹 Import BaseSettings
-# BaseSettings is a pre-built tool from the "pydantic-settings" library.
-# It acts like a smart template that automatically looks at your computer's 
-# environment variables (or a secret text file called ".env") and fills in the values for us.
+import os
+import sys
+from typing import List, Optional
 from pydantic_settings import BaseSettings
-
-# 🔹 Import model_validator
-# model_validator is a validation tool from the "pydantic" library.
-# It acts like a security guard that double-checks the final values of our settings
-# after they are loaded, making sure everything is correct and making adjustments if needed.
 from pydantic import model_validator
 
 
-# 🔹 Define the Settings class
-# A "class" is like a blueprints sketch. Here, we outline the name and type of every single 
-# configuration parameter our app needs to run.
 class Settings(BaseSettings):
-
-    # app_name (Text/String type)
-    # The name of our application. If not set, it defaults to "green-finance".
     app_name: str = "green-finance"
-
-    # environment (Text/String type)
-    # Tells the code if it is running in "development" mode (like on a programmer's laptop)
-    # or "production" mode (active for real users). Defaults to "development".
     environment: str = "development"
 
-    # database_url (Text/String type)
+    # Database
     database_url: str = "sqlite:///test.db"
 
-    # prometheus_url (Text/String type)
+    # External & Service Targets
     prometheus_url: str = "http://prometheus:9090"
-
-    # redis_url (Text/String type)
     redis_url: str = "redis://localhost:6379/0"
+    green_finance_2_url: str = "http://localhost:8000"
+    port: int = 8000
 
-    # jwt_secret_key (Text/String type)
-    jwt_secret_key: str = "green-finance-super-secret-key-2026"
-
-    # jwt_algorithm (Text/String type)
-    # The encryption math formula used to secure tokens. Defaults to "HS256".
+    # Cryptographic & Session Configuration
+    jwt_secret_key: str = "change_this_to_a_long_random_string_in_production_min32chars"
     jwt_algorithm: str = "HS256"
-
-    # access_token_expire_minutes (Integer/Whole Number type)
-    # How long a login session token remains valid (in minutes) before expiring. Defaults to 30.
     access_token_expire_minutes: int = 30
-
-    # refresh_token_expire_days (Integer/Whole Number type)
-    # How long a refresh session token remains valid (in days). Defaults to 7.
     refresh_token_expire_days: int = 7
 
-    green_finance_2_url: str = "http://localhost:8000"
-    port: int = 8001
+    # CORS Allowlist
+    cors_origins: List[str] = [
+        "http://localhost:8000",
+        "http://127.0.0.1:8000",
+        "http://localhost:8001",
+        "http://127.0.0.1:8001",
+        "https://green-finance.onrender.com"
+    ]
+
+    # Operator / Bootstrap Configuration
+    bootstrap_admin_token: Optional[str] = None
+
+    # Rate Limiting Defaults
+    rate_limit_auth_per_minute: int = 15
+    rate_limit_transfers_per_minute: int = 30
+    rate_limit_general_per_minute: int = 120
 
     @model_validator(mode="after")
-    def resolve_database_url(self) -> "Settings":
-        import os
+    def validate_production_security(self) -> "Settings":
+        # In production, enforce non-default cryptographic secret key
+        is_prod = self.environment.lower() in ("production", "prod")
+        default_insecure_keys = {
+            "green-finance-super-secret-key-2026",
+            "change_this_to_a_long_random_string",
+            "change_this_to_a_long_random_string_in_production_min32chars",
+            "secret",
+            "admin"
+        }
+
+        if is_prod:
+            if self.jwt_secret_key in default_insecure_keys or len(self.jwt_secret_key) < 32:
+                raise ValueError(
+                    "CRITICAL SECURITY CONFIGURATION ERROR: "
+                    "JWT_SECRET_KEY must be configured with at least 32 high-entropy characters in production!"
+                )
+
+        # Database URL resolution
         if os.environ.get("USE_SQLITE", "").lower() in ("true", "1") or self.database_url.startswith("sqlite"):
             self.database_url = "sqlite:///test.db"
             return self
@@ -81,44 +82,20 @@ class Settings(BaseSettings):
                     password=url.password,
                     host=url.hostname or "localhost",
                     port=url.port or 5432,
-                    connect_timeout=1
+                    connect_timeout=2
                 )
                 conn.close()
             except Exception:
-                self.database_url = "sqlite:///test.db"
+                # In development fallback to sqlite if postgres is unreachable
+                if not is_prod:
+                    self.database_url = "sqlite:///test.db"
+                else:
+                    raise ConnectionError("Cannot connect to production PostgreSQL database specified in DATABASE_URL!")
         return self
 
-
-    # 🔹 Config class
-    # This is a special internal configuration block that tells Pydantic how to load variables.
     class Config:
-
-        # Specifies that Pydantic should search for a file named ".env" to read configuration values from.
         env_file = ".env"
-
-        # Makes configuration variable names case-insensitive (e.g. DATABASE_URL and database_url are treated the same).
         case_sensitive = False
 
 
-# 🔹 Create the Settings Instance
-# Here, we actually build the settings object based on our blueprint above.
-# This variable "settings" is what other files will import to read the configuration.
 settings = Settings()
-
-
-# =====================================================================
-# 🕸️ CONNECTIONS & WORKFLOW (How this file communicates with others):
-# =====================================================================
-# 1. READS FROM:
-#    - ".env" file (located in the project root): Loads raw configuration values.
-#
-# 2. READ BY (CONNECTIONS):
-#    - [connection.py](file:///c:/Users/HP/Downloads/Projects/eco-monitor/backend/db/connection.py):
-#      Reads `settings.database_url` to establish the connection to the database.
-#    - [telemetry_service.py](file:///c:/Users/HP/Downloads/Projects/eco-monitor/backend/services/telemetry_service.py):
-#      Reads `settings.prometheus_url` to know where to execute PromQL telemetry queries.
-#    - [security.py](file:///c:/Users/HP/Downloads/Projects/eco-monitor/backend/core/security.py):
-#      Reads keys and algorithm settings to issue and decode JWT login tokens.
-#    - [main.py](file:///c:/Users/HP/Downloads/Projects/eco-monitor/backend/main.py):
-#      Reads `settings.app_name` to customize the FastAPI app title.
-# =====================================================================
