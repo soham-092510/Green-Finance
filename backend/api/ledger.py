@@ -69,6 +69,14 @@ def audit_transaction(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Transaction not found for auditing."
         )
+
+    # Resource ownership check for customers
+    if current_user.role == "CUSTOMER" and not getattr(current_user, "is_boss_admin", False):
+        if txn.sender_bank_id != current_user.bank_id and txn.recipient_bank_id != current_user.bank_id:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Access Denied: You cannot audit transactions belonging to another customer."
+            )
         
     # 2. Fetch all matching ledger entries
     entries = db.query(LedgerEntry).filter(LedgerEntry.transaction_id == transaction_id).all()

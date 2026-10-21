@@ -23,6 +23,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import func
 
 from backend.db.session import get_db
+from backend.core.dependencies import get_current_user, require_permission
 from backend.models.transaction import Transaction
 from backend.models.user import User
 from backend.models.sustainability import (
@@ -30,6 +31,14 @@ from backend.models.sustainability import (
 )
 
 router = APIRouter(prefix="/sustainability", tags=["Enterprise Sustainability Analytics"])
+
+
+def sanitize_csv_cell(value: Any) -> Any:
+    """Sanitizes CSV cell to prevent formula injection / CSV injection vulnerabilities."""
+    if isinstance(value, str):
+        if value and value[0] in ("=", "+", "-", "@", "\t", "\r"):
+            return f"'{value}"
+    return value
 
 
 # --- Pydantic Request Schemas ---
@@ -321,7 +330,11 @@ def list_sustainability_goals(db: Session = Depends(get_db)) -> List[Dict[str, A
 
 
 @router.post("/goals", summary="Create or Update Sustainability Goal")
-def create_or_update_goal(payload: GoalCreateUpdateRequest, db: Session = Depends(get_db)) -> Dict[str, Any]:
+def create_or_update_goal(
+    payload: GoalCreateUpdateRequest,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(require_permission("telemetry.manage"))
+) -> Dict[str, Any]:
     """Adds or updates a sustainability target."""
     existing = db.query(SustainabilityGoal).filter(SustainabilityGoal.goal_type == payload.goal_type).first()
     if existing:
@@ -455,7 +468,11 @@ def list_carbon_factors(db: Session = Depends(get_db)) -> List[Dict[str, Any]]:
 
 
 @router.post("/carbon-factors", summary="Add New Carbon Factor")
-def add_carbon_factor(payload: CarbonFactorCreateRequest, db: Session = Depends(get_db)) -> Dict[str, Any]:
+def add_carbon_factor(
+    payload: CarbonFactorCreateRequest,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(require_permission("telemetry.manage"))
+) -> Dict[str, Any]:
     """Adds a new regional carbon factor."""
     if payload.is_active:
         db.query(CarbonFactor).update({CarbonFactor.is_active: False})
@@ -476,7 +493,11 @@ def add_carbon_factor(payload: CarbonFactorCreateRequest, db: Session = Depends(
 
 
 @router.post("/carbon-factors/{factor_id}/activate", summary="Set Active Carbon Factor")
-def activate_carbon_factor(factor_id: str, db: Session = Depends(get_db)) -> Dict[str, Any]:
+def activate_carbon_factor(
+    factor_id: str,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(require_permission("telemetry.manage"))
+) -> Dict[str, Any]:
     """Activates a specific grid carbon factor."""
     target = db.query(CarbonFactor).filter(CarbonFactor.id == factor_id).first()
     if not target:
@@ -488,8 +509,11 @@ def activate_carbon_factor(factor_id: str, db: Session = Depends(get_db)) -> Dic
 
 
 @router.get("/report/csv", summary="Export Audited Carbon Ledger as CSV")
-def export_carbon_report_csv(db: Session = Depends(get_db)):
-    """Generates and downloads a clean audited CSV report of transactions and carbon."""
+def export_carbon_report_csv(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    """Generates and downloads a clean audited CSV report with formula-injection defenses."""
     txns = db.query(Transaction).order_by(Transaction.created_at.desc()).all()
     output = io.StringIO()
     writer = csv.writer(output)
@@ -502,9 +526,9 @@ def export_carbon_report_csv(db: Session = Depends(get_db)):
 
     for t in txns:
         energy_kwh = (t.energy_joules or 0.0) / 3600000.0
-        writer.writerow([
+        row = [
             t.id,
-            t.created_at.strftime("%Y-%m-%d %H:%M:%S"),
+            t.created_at.strftime("%Y-%m-%d %H:%M:%S") if t.created_at else "",
             t.sender_bank_id or "",
             t.recipient_bank_id or "",
             t.amount or 0.0,
@@ -518,7 +542,8 @@ def export_carbon_report_csv(db: Session = Depends(get_db)):
             t.fidelity_percent or 96.0,
             t.audit_hash or "",
             "SIMULATED"
-        ])
+        ]
+        writer.writerow([sanitize_csv_cell(cell) for cell in row])
 
     csv_content = output.getvalue()
     return Response(
@@ -529,7 +554,10 @@ def export_carbon_report_csv(db: Session = Depends(get_db)):
 
 
 @router.get("/report/pdf", summary="Export Audited Carbon Ledger as PDF")
-def export_carbon_report_pdf(db: Session = Depends(get_db)):
+def export_carbon_report_pdf(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
     """Generates and downloads a professional PDF sustainability report."""
     from fpdf import FPDF
     

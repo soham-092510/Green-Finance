@@ -11,13 +11,18 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from typing import Dict, Optional
 from backend.db.session import get_db
+from backend.core.dependencies import get_current_user, require_permission
+from backend.models.user import User
 from backend.services import accuracy_service, baseline_service, telemetry_service
 
 router = APIRouter(prefix="/accuracy", tags=["Attribution Fidelity & Accuracy"])
 
 
 @router.get("/current", summary="Get live attribution fidelity and energy conservation metrics")
-def get_current_accuracy(db: Session = Depends(get_db)) -> Dict:
+def get_current_accuracy(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+) -> Dict:
     """
     Returns real-time energy conservation breakdown:
     Host Energy - (Container Energy + Idle Energy) = Residual Loss
@@ -51,7 +56,8 @@ def run_validation(
     tx_count: int = 500,
     host_joules: float = 1000.0,
     container_joules: float = 800.0,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(require_permission("telemetry.manage"))
 ) -> Dict:
     """
     Runs the complete validation experiment:
@@ -59,6 +65,7 @@ def run_validation(
     2. Collects container and host energy
     3. Calculates residual loss and attribution fidelity
     4. Records immutable ValidationRun in DB
+    Restricted to authorized operators.
     """
     run = accuracy_service.run_full_validation_cycle(
         db=db,
@@ -82,7 +89,11 @@ def run_validation(
 
 
 @router.get("/report", summary="Generate the formal Energy Validation Report")
-def get_validation_report(run_id: Optional[str] = None, db: Session = Depends(get_db)) -> Dict:
+def get_validation_report(
+    run_id: Optional[str] = None,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+) -> Dict:
     """
     Generates an official, auditable energy attribution report with SHA-256 digital signature.
     """

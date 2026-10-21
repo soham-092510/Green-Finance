@@ -24,7 +24,7 @@ KEPLER_AVAILABLE = False  # Set to True when Kepler RAPL counters are accessible
 
 def query_prometheus(query: str) -> Optional[Dict]:
     """Query Prometheus across configured and localhost targets."""
-    targets = [settings.prometheus_url, "http://localhost:9090", "http://127.0.0.1:9090", "http://prometheus:9090"]
+    targets = [settings.prometheus_url.replace("localhost", "127.0.0.1"), "http://127.0.0.1:9090"]
     # De-duplicate while preserving order
     seen = set()
     unique_targets = [t for t in targets if not (t in seen or seen.add(t))]
@@ -34,7 +34,7 @@ def query_prometheus(query: str) -> Optional[Dict]:
             encoded_query = urllib.parse.urlencode({"query": query})
             url = f"{base_url.rstrip('/')}/api/v1/query?{encoded_query}"
             req = urllib.request.Request(url, headers={"Accept": "application/json"})
-            with urllib.request.urlopen(req, timeout=1.5) as response:
+            with urllib.request.urlopen(req, timeout=0.25) as response:
                 if response.status == 200:
                     return json.loads(response.read().decode())
         except Exception:
@@ -47,11 +47,11 @@ def probe_kepler_directly() -> Optional[Dict]:
     Directly queries Kepler exporter on port 9103 for raw hardware RAPL energy.
     Works independently of whether Prometheus has scraped it yet.
     """
-    targets = ["http://localhost:9103/metrics", "http://127.0.0.1:9103/metrics", "http://kepler:9103/metrics"]
+    targets = ["http://127.0.0.1:9103/metrics"]
     for url in targets:
         try:
             req = urllib.request.Request(url, headers={"Accept": "text/plain"})
-            with urllib.request.urlopen(req, timeout=1.5) as resp:
+            with urllib.request.urlopen(req, timeout=0.25) as resp:
                 if resp.status == 200:
                     raw_text = resp.read().decode("utf-8")
                     dynamic_j = 0.0
@@ -167,14 +167,14 @@ def get_realtime_metrics() -> Dict:
     kepler_probe = probe_kepler_directly()
     
     # If Prometheus rate hasn't populated yet but Kepler probe has direct RAPL data
-    if kepler_probe and (platform_power <= 0.0 or container_power <= 0.0):
+    if kepler_probe and kepler_probe.get("total_joules", 0.0) > 0.0:
         telemetry_mode = "OBSERVED"
         KEPLER_AVAILABLE = True
-        platform_power = round(24.8 + random.uniform(-0.6, 0.6), 2)
-        container_power = round(6.1 + random.uniform(-0.3, 0.3), 2)
-        idle_power = 18.7
+        platform_power = round(kepler_probe.get("dynamic_joules", 0.0) + kepler_probe.get("idle_joules", 18.7), 2)
+        container_power = round(kepler_probe.get("dynamic_joules", 6.1), 2)
+        idle_power = round(kepler_probe.get("idle_joules", 18.7), 2)
         residual_power = max(0.0, platform_power - (container_power + idle_power))
-        fidelity_pct = round((1.0 - (residual_power / platform_power)) * 100.0, 1)
+        fidelity_pct = round((1.0 - (residual_power / max(platform_power, 1.0))) * 100.0, 1)
         container_breakdown = [
             {"name": "payment-service", "value": round(container_power * 0.68, 2)},
             {"name": "auth-service", "value": round(container_power * 0.22, 2)},

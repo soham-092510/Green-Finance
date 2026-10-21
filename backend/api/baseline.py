@@ -12,22 +12,28 @@ from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
 from typing import Dict
 from backend.db.session import get_db
+from backend.core.dependencies import get_current_user, require_permission
+from backend.models.user import User
 from backend.services import baseline_service
 
 router = APIRouter(prefix="/baseline", tags=["Idle Baseline Calibration"])
 
 
 @router.post("/start", summary="Start zero-workload baseline calibration")
-def start_baseline(duration_seconds: int = 30) -> Dict:
+def start_baseline(
+    duration_seconds: int = 30,
+    current_user: User = Depends(require_permission("telemetry.manage"))
+) -> Dict:
     """
     Initiates idle baseline calibration when NO transaction workload is running.
     Samples background host electricity over fixed intervals.
+    Restricted to authorized operators.
     """
     return baseline_service.start_calibration(duration_seconds=duration_seconds)
 
 
 @router.get("/status", summary="Get live baseline calibration status and metrics")
-def get_status() -> Dict:
+def get_status(current_user: User = Depends(get_current_user)) -> Dict:
     """
     Returns progress %, current idle Watts, mean, standard deviation, and CV_idle.
     """
@@ -35,9 +41,13 @@ def get_status() -> Dict:
 
 
 @router.post("/lock", summary="Lock calibrated baseline profile")
-def lock_baseline(db: Session = Depends(get_db)) -> Dict:
+def lock_baseline(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(require_permission("telemetry.manage"))
+) -> Dict:
     """
     Applies Calibration Lock. Prevents modification during transaction validation tests.
+    Restricted to authorized operators.
     """
     profile = baseline_service.lock_baseline_profile(db=db)
     return {
@@ -52,7 +62,10 @@ def lock_baseline(db: Session = Depends(get_db)) -> Dict:
 
 
 @router.get("/current", summary="Get currently locked baseline profile")
-def get_current(db: Session = Depends(get_db)) -> Dict:
+def get_current(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+) -> Dict:
     profile = baseline_service.get_current_locked_baseline(db=db)
     return {
         "baseline_id": profile.id,
@@ -66,7 +79,11 @@ def get_current(db: Session = Depends(get_db)) -> Dict:
 
 
 @router.get("/drift", summary="Check for baseline drift against locked profile")
-def check_drift(current_watts: float = 18.7, db: Session = Depends(get_db)) -> Dict:
+def check_drift(
+    current_watts: float = 18.7,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+) -> Dict:
     profile = baseline_service.get_current_locked_baseline(db=db)
     return baseline_service.check_baseline_drift(
         current_idle_watts=current_watts,
