@@ -1,0 +1,95 @@
+<mxfile host="Electron" modified="2026-10-21T18:00:00.000Z" agent="Mozilla/5.0" version="21.6.8" type="device">
+  <diagram id="gf_system_arch" name="Green-Finance System Architecture">
+    <mxGraphModel dx="1422" dy="840" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" background="#ffffff" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        
+        <!-- CLIENT TIER -->
+        <mxCell id="client_box" value="Client &amp; Presentation Tier" style="swimlane;startSize=26;fillColor=#f8fafc;strokeColor=#cbd5e1;fontStyle=1;fontSize=13;fontColor=#0f172a;" vertex="1" parent="1">
+          <mxGeometry x="40" y="40" width="1080" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="c1" value="Sustainable Banking UI&#xa;(Customer Portal)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ecfdf5;strokeColor=#10b981;fontColor=#065f46;fontStyle=1;fontSize=11;" vertex="1" parent="client_box">
+          <mxGeometry x="30" y="40" width="180" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="c2" value="Sustainability Investigator&#xa;(ESG Audit Suite)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#eff6ff;strokeColor=#3b82f6;fontColor=#1e40af;fontStyle=1;fontSize=11;" vertex="1" parent="client_box">
+          <mxGeometry x="250" y="40" width="190" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="c3" value="Operations &amp; Security Center&#xa;(Live Health &amp; Rate Telemetry)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fdf4ff;strokeColor=#d946ef;fontColor=#86198f;fontStyle=1;fontSize=11;" vertex="1" parent="client_box">
+          <mxGeometry x="480" y="40" width="200" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="c4" value="Delegated &amp; Boss Admin&#xa;(Hierarchical RBAC Control)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef3c7;strokeColor=#f59e0b;fontColor=#92400e;fontStyle=1;fontSize=11;" vertex="1" parent="client_box">
+          <mxGeometry x="720" y="40" width="190" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="c5" value="Grafana Dashboard&#xa;(:8000/grafana &amp; :3000)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff7ed;strokeColor=#f97316;fontColor=#9a3412;fontStyle=1;fontSize=11;" vertex="1" parent="client_box">
+          <mxGeometry x="940" y="40" width="120" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- SECURITY & API GATEWAY TIER -->
+        <mxCell id="gw_box" value="Security Gateway &amp; Cross-Cutting Middleware" style="swimlane;startSize=26;fillColor=#f1f5f9;strokeColor=#94a3b8;fontStyle=1;fontSize=13;fontColor=#0f172a;" vertex="1" parent="1">
+          <mxGeometry x="40" y="180" width="1080" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="g1" value="Strict CORS &amp; CSP&#xa;(Content Security Policy)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#64748b;fontColor=#334155;fontSize=10;" vertex="1" parent="gw_box">
+          <mxGeometry x="30" y="40" width="150" height="44" as="geometry" />
+        </mxCell>
+        <mxCell id="g2" value="Rate Limiter &amp; DoS Defense&#xa;(Sliding Window Bucket)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#64748b;fontColor=#334155;fontSize=10;" vertex="1" parent="gw_box">
+          <mxGeometry x="220" y="40" width="170" height="44" as="geometry" />
+        </mxCell>
+        <mxCell id="g3" value="Argon2id Auth &amp; Session Store&#xa;(Server-Side Revocation)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#64748b;fontColor=#334155;fontSize=10;" vertex="1" parent="gw_box">
+          <mxGeometry x="430" y="40" width="190" height="44" as="geometry" />
+        </mxCell>
+        <mxCell id="g4" value="Idempotency Deduplication&#xa;(UUID Token Store)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#64748b;fontColor=#334155;fontSize=10;" vertex="1" parent="gw_box">
+          <mxGeometry x="660" y="40" width="180" height="44" as="geometry" />
+        </mxCell>
+        <mxCell id="g5" value="Prometheus Instrumentor&#xa;(FastAPI Middleware /metrics)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#64748b;fontColor=#334155;fontSize=10;" vertex="1" parent="gw_box">
+          <mxGeometry x="880" y="40" width="180" height="44" as="geometry" />
+        </mxCell>
+
+        <!-- FINANCIAL MICROSERVICE & LEDGER TIER -->
+        <mxCell id="core_box" value="Financial Workload &amp; Double-Entry Accounting Core" style="swimlane;startSize=26;fillColor=#f8fafc;strokeColor=#cbd5e1;fontStyle=1;fontSize=13;fontColor=#0f172a;" vertex="1" parent="1">
+          <mxGeometry x="40" y="310" width="620" height="240" as="geometry" />
+        </mxCell>
+        <mxCell id="s1" value="Payment Service&#xa;(/payment/transfer)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#eff6ff;strokeColor=#2563eb;fontColor=#1d4ed8;fontStyle=1;fontSize=11;" vertex="1" parent="core_box">
+          <mxGeometry x="30" y="45" width="160" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="s2" value="Atomic Double-Entry Engine&#xa;(Debit DR = Credit CR Invariant)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ecfdf5;strokeColor=#059669;fontColor=#047857;fontStyle=1;fontSize=11;" vertex="1" parent="core_box">
+          <mxGeometry x="220" y="45" width="200" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="s3" value="Carbon Accounting Engine&#xa;(Scope 2 Liability Attribution)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ecfdf5;strokeColor=#059669;fontColor=#047857;fontStyle=1;fontSize=11;" vertex="1" parent="core_box">
+          <mxGeometry x="440" y="45" width="160" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="db" value="SQLite (WAL Mode &amp; FK Enabled) / PostgreSQL Database&#xa;[Accounts | Ledger Entries | Audit Hash Chains | RBAC Policies]" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#f1f5f9;strokeColor=#475569;fontColor=#0f172a;fontStyle=1;fontSize=11;" vertex="1" parent="core_box">
+          <mxGeometry x="30" y="125" width="570" height="95" as="geometry" />
+        </mxCell>
+
+        <!-- KERNEL TELEMETRY & ATTRIBUTION TIER -->
+        <mxCell id="telem_box" value="Kernel-Level Energy Telemetry &amp; Carbon Attribution" style="swimlane;startSize=26;fillColor=#f8fafc;strokeColor=#cbd5e1;fontStyle=1;fontSize=13;fontColor=#0f172a;" vertex="1" parent="1">
+          <mxGeometry x="690" y="310" width="430" height="240" as="geometry" />
+        </mxCell>
+        <mxCell id="k1" value="Kepler Container Sensor&#xa;(eBPF / RAPL / MSR Counters)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef2f2;strokeColor=#ef4444;fontColor=#b91c1c;fontStyle=1;fontSize=11;" vertex="1" parent="telem_box">
+          <mxGeometry x="30" y="45" width="180" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="k2" value="Linux Powercap Sysfs&#xa;(Direct RAPL Energy Probes)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef2f2;strokeColor=#ef4444;fontColor=#b91c1c;fontStyle=1;fontSize=11;" vertex="1" parent="telem_box">
+          <mxGeometry x="230" y="45" width="170" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="p1" value="Prometheus TSDB (:9090)&#xa;[kepler_container_joules_total | http_requests_total]" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff7ed;strokeColor=#f97316;fontColor=#c2410c;fontStyle=1;fontSize=11;" vertex="1" parent="telem_box">
+          <mxGeometry x="30" y="115" width="370" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="c_calc" value="Dynamic Carbon-per-Tx Derivation&#xa;Formula: SCI_tx = (ΔE_service × I_grid) / N_tx (CEA India 713 g/kWh)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ecfdf5;strokeColor=#10b981;fontColor=#065f46;fontStyle=1;fontSize=10;" vertex="1" parent="telem_box">
+          <mxGeometry x="30" y="175" width="370" height="45" as="geometry" />
+        </mxCell>
+
+        <!-- CONNECTORS -->
+        <mxCell id="edge1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#64748b;" edge="1" parent="1" source="client_box" target="gw_box">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#2563eb;" edge="1" parent="1" source="gw_box" target="core_box">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#ef4444;" edge="1" parent="1" source="core_box" target="telem_box">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

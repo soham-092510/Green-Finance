@@ -1,0 +1,32 @@
+<mxfile host="Electron" modified="2026-10-21T18:00:00.000Z" agent="Mozilla/5.0" version="21.6.8" type="device">
+  <diagram id="gf_rbac_model" name="Hierarchical RBAC &amp; Delegation Model">
+    <mxGraphModel dx="1200" dy="700" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" background="#ffffff">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        
+        <mxCell id="boss" value="👑 Boss Admin (Root Authority)&#xa;Role: SUPER_ADMIN | is_boss_admin = True&#xa;• Appoints &amp; revokes Delegated Admins&#xa;• Full system audit trail review&#xa;• Invariant: Immutable root; subordinates cannot suspend" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#faf5ff;strokeColor=#a855f7;fontStyle=1;fontSize=12;fontColor=#6b21a8;" vertex="1" parent="1">
+          <mxGeometry x="360" y="40" width="380" height="80" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="admin" value="⚙️ Delegated Admin&#xa;Role: ADMIN | is_boss_admin = False&#xa;• User account directory &amp; suspension&#xa;• Case triage &amp; investigator assignment&#xa;• Invariant: Ceiling enforcement (Cannot grant Super Admin)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ecfeff;strokeColor=#06b6d4;fontStyle=1;fontSize=12;fontColor=#0e7490;" vertex="1" parent="1">
+          <mxGeometry x="140" y="180" width="360" height="80" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="inv" value="🔬 Investigator&#xa;Role: INVESTIGATOR&#xa;• Access restricted strictly to assigned cases&#xa;• Scope 2 computational carbon anomaly review&#xa;• Invariant: Unassigned cases return 403 Forbidden" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fdf4ff;strokeColor=#d946ef;fontStyle=1;fontSize=12;fontColor=#86198f;" vertex="1" parent="1">
+          <mxGeometry x="580" y="180" width="360" height="80" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="cust" value="🏛️ Customer&#xa;Role: CUSTOMER&#xa;• Self-service money transfers &amp; balance checks&#xa;• Download cryptographic eco receipts&#xa;• Invariant: Ownership validation prevents spoofing" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ecfdf5;strokeColor=#10b981;fontStyle=1;fontSize=12;fontColor=#065f46;" vertex="1" parent="1">
+          <mxGeometry x="360" y="320" width="380" height="80" as="geometry" />
+        </mxCell>
+        
+        <!-- Connectors -->
+        <mxCell id="e1" edge="1" parent="1" source="boss" target="admin" style="strokeWidth=2;strokeColor=#a855f7;labelBackgroundColor=#ffffff;" value="Audited Delegation" />
+        <mxCell id="e2" edge="1" parent="1" source="boss" target="inv" style="strokeWidth=2;strokeColor=#a855f7;labelBackgroundColor=#ffffff;" value="Investigator Oversight" />
+        <mxCell id="e3" edge="1" parent="1" source="admin" target="cust" style="strokeWidth=2;strokeColor=#06b6d4;labelBackgroundColor=#ffffff;" value="User Suspension / Tier" />
+        <mxCell id="e4" edge="1" parent="1" source="inv" target="cust" style="strokeWidth=2;strokeColor=#d946ef;dashed=1;labelBackgroundColor=#ffffff;" value="Transaction Anomaly Audit" />
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
