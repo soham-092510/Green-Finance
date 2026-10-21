@@ -1191,3 +1191,75 @@ body {
   box-shadow: 0 10px 25px rgba(0,0,0,0.25);
   animation: gfBankPop 0.2s ease-out;
 }
+
+/* Responsive Mobile & Tablet Rules */
+@media (max-width: 1024px) {
+  body {
+    padding: 12px;
+    align-items: flex-start;
+  }
+  .gf-bank-window {
+    flex-direction: column;
+    min-height: auto;
+    border-radius: 18px;
+  }
+  .gf-bank-sidebar {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid var(--bank-border);
+    padding: 16px;
+  }
+  .gf-bank-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .gf-bank-nav-item {
+    margin-bottom: 0;
+  }
+  .gf-bank-nav-link {
+    padding: 8px 14px;
+    font-size: 13px;
+  }
+  .gf-bank-hero-grid {
+    grid-template-columns: 1fr;
+  }
+  .gf-bank-action-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .gf-bank-split-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  body {
+    padding: 6px;
+  }
+  .gf-bank-window {
+    border-radius: 12px;
+  }
+  .gf-bank-main {
+    padding: 14px;
+  }
+  .gf-bank-top-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .gf-bank-header-actions {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+  .gf-bank-search-box {
+    width: 100%;
+  }
+  .gf-bank-action-row {
+    grid-template-columns: 1fr;
+  }
+  .gf-bank-table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}

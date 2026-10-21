@@ -101,6 +101,8 @@ html {
   font-size: 14px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  max-width: 100vw;
 }
 
 body {
@@ -109,6 +111,8 @@ body {
   color: var(--text-main);
   line-height: 1.6;
   min-height: 100vh;
+  overflow-x: hidden;
+  max-width: 100vw;
 }
 
 /* Typography Helpers */
