@@ -14,7 +14,7 @@ def init_db() -> None:
     from backend.models import (
         user, account, transaction, ledger_entry, 
         carbon_record, carbon_credit, credit, accuracy, 
-        sustainability, session
+        sustainability, session, rbac
     )
 
     Base.metadata.create_all(bind=engine)
@@ -54,8 +54,10 @@ def init_db() -> None:
     # Automatically seed the database on startup
     from backend.db.session import SessionLocal
     from backend.db.seed import seed_database
+    from backend.services.rbac_service import init_rbac_system
     db = SessionLocal()
     try:
+        init_rbac_system(db)
         seed_database(db)
     except Exception as e:
         logger.error(f"Database seeding notice: {str(e)}")

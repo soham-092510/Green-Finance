@@ -1,14 +1,13 @@
 # =====================================================================
 # GREEN-FINANCE — DEPENDENCIES.PY (REUSABLE FASTAPI DEPENDENCIES)
-# Purpose: Enforces server-side authentication, extracts JWT tokens from
-#          Bearer headers or secure cookies, verifies session revocation
-#          state in auth_sessions, and validates account status.
+# Purpose: Server-side authentication, session revocation validation,
+#          and declarative hierarchical RBAC permission enforcement.
 # =====================================================================
 
 from fastapi import Depends, HTTPException, status, Request
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
-from typing import Optional
+from typing import Optional, List
 
 from backend.db.session import get_db
 from backend.core.security import decode_access_token
@@ -22,7 +21,6 @@ def extract_token(request: Request, bearer_token: Optional[str] = Depends(oauth2
     """Extracts JWT token from Authorization header or HttpOnly cookie."""
     if bearer_token:
         return bearer_token
-    # Fallback to cookie
     cookie_token = request.cookies.get("access_token")
     if cookie_token:
         if cookie_token.startswith("Bearer "):
@@ -72,13 +70,43 @@ def get_current_user(
     if user is None:
         raise credentials_exception
 
-    # Check account status
     if user.status in ("SUSPENDED", "DISABLED"):
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail=f"Account is {user.status.lower()}. Access denied."
         )
 
-    # Attach token JTI to request state for optional logout handling
     request.state.token_jti = jti
     return user
+
+
+def require_permission(permission_code: str):
+    """Declarative FastAPI dependency enforcing granular server-side permissions."""
+    def permission_checker(
+        current_user: User = Depends(get_current_user),
+        db: Session = Depends(get_db)
+    ) -> User:
+        from backend.services.rbac_service import has_permission
+        if not has_permission(db, current_user, permission_code):
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail=f"Access denied: Missing required permission '{permission_code}'"
+            )
+        return current_user
+    return permission_checker
+
+
+def require_role(allowed_roles: List[str]):
+    """Declarative FastAPI dependency enforcing allowed role names."""
+    def role_checker(
+        current_user: User = Depends(get_current_user)
+    ) -> User:
+        if getattr(current_user, "is_boss_admin", False) or current_user.role == "SUPER_ADMIN":
+            return current_user
+        if current_user.role not in allowed_roles:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail=f"Access denied: User role '{current_user.role}' lacks sufficient privileges."
+            )
+        return current_user
+    return role_checker

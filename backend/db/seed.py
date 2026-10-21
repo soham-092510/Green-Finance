@@ -115,7 +115,28 @@ def seed_database(db: Session) -> None:
             "email": "soham@greenfinance.dev",
             "bank_id": "HDFC9999",
             "balance": 50000.0,
+            "role": "SUPER_ADMIN",
+            "is_boss_admin": True,
+            "password": "password123"
+        },
+        {
+            "username": "admin_priya",
+            "name": "Priya Sharma",
+            "email": "priya@greenfinance.dev",
+            "bank_id": "ADM4001",
+            "balance": 35000.0,
             "role": "ADMIN",
+            "is_boss_admin": False,
+            "password": "password123"
+        },
+        {
+            "username": "investigator_rahul",
+            "name": "Rahul Verma",
+            "email": "rahul@greenfinance.dev",
+            "bank_id": "INV9001",
+            "balance": 20000.0,
+            "role": "INVESTIGATOR",
+            "is_boss_admin": False,
             "password": "password123"
         },
         {
@@ -124,7 +145,8 @@ def seed_database(db: Session) -> None:
             "email": "demo@greenfinance.dev",
             "bank_id": "DEMO0001",
             "balance": 25000.0,
-            "role": "INVESTOR",
+            "role": "CUSTOMER",
+            "is_boss_admin": False,
             "password": "password123"
         },
         {
@@ -133,7 +155,8 @@ def seed_database(db: Session) -> None:
             "email": "alice@greenfinance.dev",
             "bank_id": "ALICE101",
             "balance": 30000.0,
-            "role": "USER",
+            "role": "CUSTOMER",
+            "is_boss_admin": False,
             "password": "password123"
         },
         {
@@ -142,7 +165,8 @@ def seed_database(db: Session) -> None:
             "email": "bob@greenfinance.dev",
             "bank_id": "BOB202",
             "balance": 15000.0,
-            "role": "USER",
+            "role": "CUSTOMER",
+            "is_boss_admin": False,
             "password": "password123"
         }
     ]
@@ -157,7 +181,9 @@ def seed_database(db: Session) -> None:
                 email=u["email"],
                 bank_id=u["bank_id"],
                 hashed_password=hash_password(u["password"]),
-                role=u["role"]
+                role=u["role"],
+                is_boss_admin=u.get("is_boss_admin", False),
+                status="ACTIVE"
             )
             db.add(db_user)
             db.flush()
@@ -174,6 +200,22 @@ def seed_database(db: Session) -> None:
             db.add(Account(user_id=db_user.id, name="carbon_asset", type="asset", balance=250.0))
             db.add(Account(user_id=db_user.id, name="carbon_liability", type="liability", balance=50.0))
             logger.info(f"Seeded User: {u['username']} ({u['bank_id']}) with ₹{u['balance']:,}")
+        else:
+            # Synchronize roles and admin status
+            db_user.role = u["role"]
+            db_user.is_boss_admin = u.get("is_boss_admin", False)
+            db_user.status = "ACTIVE"
+            db.commit()
+
+        # Ensure default double-entry accounts exist for user
+        existing_accts = {a.name for a in db.query(Account).filter(Account.user_id == db_user.id).all()}
+        if "cash_wallet" not in existing_accts:
+            db.add(Account(user_id=db_user.id, name="cash_wallet", type="asset", balance=u.get("balance", 10000.0)))
+        if "carbon_asset" not in existing_accts:
+            db.add(Account(user_id=db_user.id, name="carbon_asset", type="asset", balance=250.0))
+        if "carbon_liability" not in existing_accts:
+            db.add(Account(user_id=db_user.id, name="carbon_liability", type="liability", balance=50.0))
+        db.commit()
         user_map[u["bank_id"]] = db_user
 
     # ------------------ 4. Seed Recipient Institutional Banks ------------------

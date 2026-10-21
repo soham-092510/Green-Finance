@@ -21,7 +21,7 @@ from sqlalchemy.orm import Session
 from backend.db.session import get_db
 # get_db → gives database connection automatically
 
-from backend.core.dependencies import get_current_user
+from backend.core.dependencies import get_current_user, require_permission
 # get_current_user → gives logged-in user using token (JWT)
 
 
@@ -115,7 +115,7 @@ def list_credits(
 def mint_credit(
     schema: CarbonCreditCreate,
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user)
+    current_user: User = Depends(require_permission("credits.mint"))
 ):
     # schema → input data from user (JSON body)
     # db → database

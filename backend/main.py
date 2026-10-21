@@ -29,7 +29,8 @@ from backend.middleware.error_handler import (
 from backend.db.database import init_db
 from backend.api import (
     health, auth, user, carbon, credits, ledger,
-    portfolio, telemetry, baseline, accuracy, payment, sustainability
+    portfolio, telemetry, baseline, accuracy, payment, sustainability,
+    admin, cases
 )
 
 # 🔹 Create FastAPI Application Instance
@@ -91,6 +92,8 @@ app.include_router(baseline.router)
 app.include_router(accuracy.router)
 app.include_router(payment.router)
 app.include_router(sustainability.router)
+app.include_router(admin.router)
+app.include_router(cases.router)
 
 
 @app.post("/connection/ingest-trace", status_code=201, tags=["Connection"])
