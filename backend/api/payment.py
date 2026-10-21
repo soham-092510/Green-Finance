@@ -9,10 +9,12 @@
 #          - GET /payment/transactions/{transaction_id}: Detailed transaction lookup
 # =====================================================================
 
-from fastapi import APIRouter, Depends, status, HTTPException
+from fastapi import APIRouter, Depends, status, HTTPException, Header, Request
 from sqlalchemy.orm import Session
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional
 from backend.db.session import get_db
+from backend.core.dependencies import get_current_user, require_permission
+from backend.models.user import User
 from backend.schemas.payment_schema import (
     BankTransferRequest,
     BankTransferResponse,
@@ -35,12 +37,14 @@ router = APIRouter(prefix="/payment", tags=["Simulated Banking Services"])
 )
 def transfer_funds(
     payload: BankTransferRequest,
-    db: Session = Depends(get_db)
+    idempotency_key: Optional[str] = Header(None, alias="Idempotency-Key"),
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
 ):
     """
     Executes an atomic bank transfer with double-entry ledger bookkeeping.
-    Captures container energy, attributes carbon, records SHA-256 audit hash,
-    and streams telemetry trace to Green-Finance-2 in real time.
+    Guarantees authorization, idempotency, SHA-256 hash chaining, and single-commit rollback.
+    Captures container energy, attributes carbon, and streams telemetry trace in real time.
     """
     return payment_service.execute_bank_transfer(
         db=db,
@@ -48,7 +52,9 @@ def transfer_funds(
         dest_bank_id=payload.destination_account,
         amount=payload.amount,
         currency=payload.currency,
-        note=payload.note or "Inter-bank fund settlement"
+        note=payload.note or "Inter-bank fund settlement",
+        actor=current_user,
+        idempotency_key=idempotency_key
     )
 
 
@@ -60,12 +66,12 @@ def transfer_funds(
 )
 def stimulate_traffic(
     payload: StimulateRequest,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(require_permission("telemetry.manage"))
 ):
     """
     Simulates concurrent transactions originating from up to 10 active banking users.
-    Generates real backend workload, commits double-entry transactions, and streams
-    live telemetry traces to the Green-Finance-2 Enterprise Platform.
+    Restricted to authorized operators/administrators.
     """
     return payment_service.simulate_concurrent_workload(
         db=db,
@@ -84,10 +90,12 @@ def stimulate_traffic(
 )
 def run_benchmark(
     payload: BenchmarkRequest,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(require_permission("telemetry.manage"))
 ):
     """
     Executes a batch of N identical transactions to profile measurement repeatability (target CV <= 5%).
+    Restricted to authorized operators/administrators.
     """
     return payment_service.run_benchmark_batch(
         db=db,
@@ -103,31 +111,42 @@ def run_benchmark(
     response_model=List[BankAccountResponse],
     summary="List registered bank accounts and balances"
 )
-def get_accounts(db: Session = Depends(get_db)):
+def get_accounts(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
     """
-    Returns registered bank accounts (HDFC9999, MAH123, IDF892, SBIN456) with current balances.
+    Returns accessible bank accounts with current balances.
     """
-    return payment_service.list_bank_accounts(db=db)
+    return payment_service.list_bank_accounts(db=db, actor=current_user)
 
 
 @router.get(
     "/transactions",
     summary="Get recent audited bank transactions"
 )
-def get_recent_transactions(limit: int = 25, db: Session = Depends(get_db)):
+def get_recent_transactions(
+    limit: int = 25,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
     """
     Returns recent audited transactions with telemetry annotations.
     """
-    return payment_service.list_recent_transactions(db=db, limit=limit)
+    return payment_service.list_recent_transactions(db=db, limit=limit, actor=current_user)
 
 
 @router.get(
     "/transactions/{transaction_id}",
     summary="Get full audited transaction detail with telemetry"
 )
-def get_transaction_detail(transaction_id: str, db: Session = Depends(get_db)):
+def get_transaction_detail(
+    transaction_id: str,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
     """
     Returns detailed audit log for an individual transaction, including microservice call path,
     duration latency, energy breakdown, and cryptographic SHA-256 digest.
     """
-    return payment_service.get_transaction_by_id(db=db, transaction_id=transaction_id)
+    return payment_service.get_transaction_by_id(db=db, transaction_id=transaction_id, actor=current_user)

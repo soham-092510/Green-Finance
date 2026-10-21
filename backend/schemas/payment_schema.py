@@ -25,6 +25,7 @@ class BankTransferResponse(BaseModel):
     energy_joules: float
     carbon_grams: float
     fidelity_percent: float
+    prev_audit_hash: Optional[str] = None
     audit_hash: str
     timestamp: datetime
     status: str

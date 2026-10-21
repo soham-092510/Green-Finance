@@ -201,16 +201,22 @@ def seed_database(db: Session) -> None:
             db.add(Account(user_id=db_user.id, name="carbon_liability", type="liability", balance=50.0))
             logger.info(f"Seeded User: {u['username']} ({u['bank_id']}) with ₹{u['balance']:,}")
         else:
-            # Synchronize roles and admin status
+            # Synchronize roles, bank ID, and admin status
             db_user.role = u["role"]
+            if u.get("bank_id"):
+                db_user.bank_id = u["bank_id"]
             db_user.is_boss_admin = u.get("is_boss_admin", False)
             db_user.status = "ACTIVE"
             db.commit()
 
         # Ensure default double-entry accounts exist for user
-        existing_accts = {a.name for a in db.query(Account).filter(Account.user_id == db_user.id).all()}
+        existing_accts = {a.name: a for a in db.query(Account).filter(Account.user_id == db_user.id).all()}
         if "cash_wallet" not in existing_accts:
             db.add(Account(user_id=db_user.id, name="cash_wallet", type="asset", balance=u.get("balance", 10000.0)))
+        else:
+            cw = existing_accts["cash_wallet"]
+            if cw.balance < 5000.0:
+                cw.balance = u.get("balance", 50000.0)
         if "carbon_asset" not in existing_accts:
             db.add(Account(user_id=db_user.id, name="carbon_asset", type="asset", balance=250.0))
         if "carbon_liability" not in existing_accts:

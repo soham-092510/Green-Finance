@@ -14,7 +14,7 @@ def init_db() -> None:
     from backend.models import (
         user, account, transaction, ledger_entry, 
         carbon_record, carbon_credit, credit, accuracy, 
-        sustainability, session, rbac
+        sustainability, session, rbac, idempotency
     )
 
     Base.metadata.create_all(bind=engine)
@@ -29,6 +29,7 @@ def init_db() -> None:
             ("energy_joules", "FLOAT DEFAULT 0.69"),
             ("carbon_grams", "FLOAT DEFAULT 0.00014"),
             ("fidelity_percent", "FLOAT DEFAULT 96.0"),
+            ("prev_audit_hash", "VARCHAR(64) DEFAULT '0000000000000000000000000000000000000000000000000000000000000000'"),
             ("audit_hash", "VARCHAR(64) DEFAULT 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'"),
         ]:
             try:

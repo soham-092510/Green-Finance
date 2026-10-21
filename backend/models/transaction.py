@@ -41,6 +41,7 @@ class Transaction(Base):
     fidelity_percent = Column(Float, nullable=False, default=95.0)
 
     # Cryptographic Audit Hash (SHA-256)
+    prev_audit_hash = Column(String(64), nullable=True, default="0"*64)
     audit_hash = Column(String(64), nullable=True)
 
     # Timestamp of the transaction
