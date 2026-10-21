@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Green Finance — Boss Admin Super Control Center</title>
+    <link rel="stylesheet" href="/shared/styles.css">
+    <style>
+        :root {
+            --bg-dark: #0b0f17;
+            --card-bg: #111827;
+            --card-border: #1f2937;
+            --emerald: #10b981;
+            --cyan: #06b6d4;
+            --amber: #f59e0b;
+            --rose: #f43f5e;
+            --slate: #94a3b8;
+            --purple: #a855f7;
+            --text-light: #f8fafc;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+        .header {
+            background: linear-gradient(180deg, #181124 0%, rgba(17, 24, 39, 0.8) 100%);
+            border-bottom: 1px solid rgba(168, 85, 247, 0.3);
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .logo-group {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .logo-badge {
+            background: rgba(168, 85, 247, 0.2);
+            color: var(--purple);
+            padding: 0.25rem 0.6rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            border: 1px solid rgba(168, 85, 247, 0.4);
+        }
+        .nav-links {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+        .nav-link {
+            color: var(--slate);
+            text-decoration: none;
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: #fff;
+            background: #1f2937;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1.5rem;
+        }
+        .panel {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 10px;
+            padding: 1.25rem;
+            margin-bottom: 1.5rem;
+        }
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid var(--card-border);
+            padding-bottom: 0.75rem;
+        }
+        .panel-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #fff;
+        }
+        .badge {
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .badge-active { background: rgba(16, 185, 129, 0.2); color: var(--emerald); }
+        .badge-danger { background: rgba(244, 63, 94, 0.2); color: var(--rose); }
+        .badge-purple { background: rgba(168, 85, 247, 0.2); color: var(--purple); }
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid var(--card-border);
+        }
+        th {
+            color: var(--slate);
+            font-weight: 600;
+            background: rgba(255, 255, 255, 0.02);
+        }
+        tr:hover { background: rgba(255, 255, 255, 0.02); }
+        .btn-action {
+            background: #1f2937;
+            color: #fff;
+            border: 1px solid var(--card-border);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-action:hover { background: #374151; }
+        .btn-purple { background: #6b21a8; color: #f3e8ff; border-color: rgba(168, 85, 247, 0.5); }
+        .btn-purple:hover { background: #7e22ce; }
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        .input-dark {
+            background: #1a2234;
+            border: 1px solid var(--card-border);
+            color: #fff;
+            padding: 0.5rem 0.8rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo-group">
+            <h2>Green Finance</h2>
+            <span class="logo-badge">ROOT BOSS ADMIN</span>
+        </div>
+        <nav class="nav-links">
+            <a href="/" class="nav-link">Main Portal</a>
+            <a href="/bank" class="nav-link">Bank Terminal</a>
+            <a href="/investigator" class="nav-link">Investigator</a>
+            <a href="/admin" class="nav-link">Admin</a>
+            <a href="/admin/super" class="nav-link active">Boss Admin</a>
+            <a href="/operations" class="nav-link">Operations</a>
+        </nav>
+    </header>
+
+    <main class="container">
+        <!-- Root Permission Delegation Engine -->
+        <section class="panel">
+            <div class="panel-header">
+                <div class="panel-title">Delegate Explicit Permissions & Ceilings</div>
+                <span class="badge badge-purple">ROOT AUTHORITY</span>
+            </div>
+            <div class="form-grid">
+                <div>
+                    <label style="font-size: 0.75rem; color: var(--slate); display: block; margin-bottom: 0.25rem;">Administrator User ID</label>
+                    <input type="text" id="delegation-user-id" class="input-dark" placeholder="Target user UUID...">
+                </div>
+                <div>
+                    <label style="font-size: 0.75rem; color: var(--slate); display: block; margin-bottom: 0.25rem;">Permission Code</label>
+                    <select id="delegation-perm-code" class="input-dark">
+                        <option value="credits.mint">credits.mint (Mint Carbon Credits)</option>
+                        <option value="telemetry.manage">telemetry.manage (Run Calibration / Lock)</option>
+                        <option value="cases.assign">cases.assign (Create and Assign Cases)</option>
+                        <option value="admins.manage_scoped">admins.manage_scoped (Manage Sub-Admins)</option>
+                        <option value="users.suspend_scoped">users.suspend_scoped (Suspend Users)</option>
+                        <option value="security_audit.read">security_audit.read (Read Audit Logs)</option>
+                    </select>
+                </div>
+                <div style="display: flex; align-items: flex-end;">
+                    <button class="btn-action btn-purple" style="width: 100%;" onclick="executeDelegation()">Grant Delegation</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Immutable Audit Trail Explorer -->
+        <section class="panel">
+            <div class="panel-header">
+                <div class="panel-title">Full Security Audit Trail Explorer</div>
+                <button class="btn-action" onclick="loadAuditEvents()">Refresh Audit Trail</button>
+            </div>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Timestamp</th>
+                            <th>Actor</th>
+                            <th>Action</th>
+                            <th>Target</th>
+                            <th>Outcome</th>
+                            <th>IP Address</th>
+                            <th>Event Details</th>
+                        </tr>
+                    </thead>
+                    <tbody id="super-audit-body">
+                        <tr>
+                            <td colspan="7" style="text-align: center; color: var(--slate); padding: 2rem;">Loading security audit events...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        function getAuthHeaders() {
+            const token = localStorage.getItem("access_token");
+            return token ? { "Authorization": `Bearer ${token}`, "Content-Type": "application/json" } : { "Content-Type": "application/json" };
+        }
+
+        async function executeDelegation() {
+            const userId = document.getElementById("delegation-user-id").value.trim();
+            const permCode = document.getElementById("delegation-perm-code").value;
+            if (!userId) { alert("Please provide target user UUID."); return; }
+
+            const resp = await fetch("/admin/delegate", {
+                method: "POST",
+                headers: getAuthHeaders(),
+                body: JSON.stringify({
+                    delegatee_id: userId,
+                    permission_code: permCode,
+                    can_subdelegate: true
+                })
+            });
+
+            if (resp.ok) {
+                alert(`Successfully delegated permission '${permCode}'!`);
+                document.getElementById("delegation-user-id").value = "";
+                loadAuditEvents();
+            } else {
+                const err = await resp.json();
+                alert(err.error || err.detail || "Delegation failed");
+            }
+        }
+
+        async function loadAuditEvents() {
+            try {
+                const resp = await fetch("/admin/audit-events?limit=50", { headers: getAuthHeaders() });
+                if (!resp.ok) {
+                    document.getElementById("super-audit-body").innerHTML = 
+                        '<tr><td colspan="7" style="text-align:center; color: var(--rose); padding: 1.5rem;">Access Denied: Only Super Admins and Auditors can review this audit trail.</td></tr>';
+                    return;
+                }
+                const data = await resp.json();
+                renderAuditEvents(data.events || []);
+            } catch(e) {
+                console.error("Audit load error:", e);
+            }
+        }
+
+        function renderAuditEvents(events) {
+            const tbody = document.getElementById("super-audit-body");
+            if (!events || events.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; color: var(--slate); padding: 1.5rem;">No audit events found.</td></tr>';
+                return;
+            }
+            tbody.innerHTML = events.map(e => `
+                <tr>
+                    <td>${e.timestamp ? e.timestamp.replace('T', ' ').split('.')[0] : 'N/A'}</td>
+                    <td><strong>${e.actor_username || "SYSTEM"}</strong></td>
+                    <td><code>${e.action}</code></td>
+                    <td>${e.target_type || ""}:${e.target_id || ""}</td>
+                    <td><span class="badge ${e.outcome === 'SUCCESS' ? 'badge-active' : 'badge-danger'}">${e.outcome}</span></td>
+                    <td>${e.ip_address || "127.0.0.1"}</td>
+                    <td style="max-width: 250px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 0.75rem; color: var(--slate);">
+                        ${e.details || ""}
+                    </td>
+                </tr>
+            `).join("");
+        }
+
+        // Initialize
+        loadAuditEvents();
+    </script>
+</body>
+</html>

@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Green Finance — Operations & Security Control Center</title>
+    <link rel="stylesheet" href="/shared/styles.css">
+    <style>
+        :root {
+            --bg-dark: #0b0f17;
+            --card-bg: #111827;
+            --card-border: #1f2937;
+            --emerald: #10b981;
+            --cyan: #06b6d4;
+            --amber: #f59e0b;
+            --rose: #f43f5e;
+            --slate: #94a3b8;
+            --text-light: #f8fafc;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+        .header {
+            background: linear-gradient(180deg, #111827 0%, rgba(17, 24, 39, 0.8) 100%);
+            border-bottom: 1px solid var(--card-border);
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .logo-group {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .logo-badge {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--emerald);
+            padding: 0.25rem 0.6rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            border: 1px solid rgba(16, 185, 129, 0.4);
+        }
+        .nav-links {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+        .nav-link {
+            color: var(--slate);
+            text-decoration: none;
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: #fff;
+            background: #1f2937;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1.5rem;
+        }
+        .grid-kpis {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .kpi-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 10px;
+            padding: 1.25rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .kpi-card::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: var(--emerald);
+        }
+        .kpi-card.cyan::before { background: var(--cyan); }
+        .kpi-card.amber::before { background: var(--amber); }
+        .kpi-card.rose::before { background: var(--rose); }
+        .kpi-title {
+            color: var(--slate);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+        .kpi-val {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #fff;
+        }
+        .kpi-sub {
+            font-size: 0.75rem;
+            color: var(--slate);
+            margin-top: 0.25rem;
+        }
+        .layout-cols {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 1.5rem;
+        }
+        @media (max-width: 1024px) {
+            .layout-cols { grid-template-columns: 1fr; }
+        }
+        .panel {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 10px;
+            padding: 1.25rem;
+            margin-bottom: 1.5rem;
+        }
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid var(--card-border);
+            padding-bottom: 0.75rem;
+        }
+        .panel-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #fff;
+        }
+        .badge {
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .badge-success { background: rgba(16, 185, 129, 0.2); color: var(--emerald); }
+        .badge-danger { background: rgba(244, 63, 94, 0.2); color: var(--rose); }
+        .badge-warning { background: rgba(245, 158, 11, 0.2); color: var(--amber); }
+        .health-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 0.75rem;
+        }
+        .health-item {
+            background: #1a2234;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid var(--card-border);
+        }
+        th {
+            color: var(--slate);
+            font-weight: 600;
+            background: rgba(255, 255, 255, 0.02);
+        }
+        tr:hover { background: rgba(255, 255, 255, 0.02); }
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--emerald);
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 6px;
+            box-shadow: 0 0 8px var(--emerald);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(1.1); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo-group">
+            <span class="live-dot"></span>
+            <h2>Green Finance</h2>
+            <span class="logo-badge">OPERATIONS CENTER</span>
+        </div>
+        <nav class="nav-links">
+            <a href="/" class="nav-link">Main Portal</a>
+            <a href="/bank" class="nav-link">Bank Terminal</a>
+            <a href="/investigator" class="nav-link">Investigator</a>
+            <a href="/admin" class="nav-link">Admin</a>
+            <a href="/admin/super" class="nav-link">Boss Admin</a>
+            <a href="/operations" class="nav-link active">Operations</a>
+        </nav>
+    </header>
+
+    <main class="container">
+        <!-- Live Throughput KPI Cards -->
+        <section class="grid-kpis">
+            <div class="kpi-card">
+                <div class="kpi-title">Transactions / sec</div>
+                <div class="kpi-val" id="val-tx-rate">0.00</div>
+                <div class="kpi-sub"><span id="val-tx-1m">0</span> tx in last 60s</div>
+            </div>
+            <div class="kpi-card cyan">
+                <div class="kpi-title">Login Attempts / sec</div>
+                <div class="kpi-val" id="val-login-rate">0.00</div>
+                <div class="kpi-sub">Sliding rate window</div>
+            </div>
+            <div class="kpi-card amber">
+                <div class="kpi-title">Active Anomalies</div>
+                <div class="kpi-val" id="val-anomalies">0</div>
+                <div class="kpi-sub">High/Critical open cases</div>
+            </div>
+            <div class="kpi-card rose">
+                <div class="kpi-title">Error Rate (4xx / 5xx)</div>
+                <div class="kpi-val" id="val-error-rate">0.00</div>
+                <div class="kpi-sub"><span id="val-err-1m">0</span> failed requests</div>
+            </div>
+        </section>
+
+        <!-- Main Dashboard Columns -->
+        <div class="layout-cols">
+            <!-- Left Column: Security Audit Trail -->
+            <div>
+                <section class="panel">
+                    <div class="panel-header">
+                        <div class="panel-title">Real-Time Security & Administrative Audit Events</div>
+                        <span class="badge badge-success">IMMUTABLE LOG</span>
+                    </div>
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Timestamp</th>
+                                    <th>Actor</th>
+                                    <th>Action</th>
+                                    <th>Target</th>
+                                    <th>Outcome</th>
+                                    <th>IP Address</th>
+                                </tr>
+                            </thead>
+                            <tbody id="audit-table-body">
+                                <tr>
+                                    <td colspan="6" style="text-align:center; color: var(--slate); padding: 2rem;">Loading live security audit stream...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Right Column: Subsystem Health & Governance Status -->
+            <div>
+                <section class="panel">
+                    <div class="panel-header">
+                        <div class="panel-title">Subsystem Health</div>
+                        <span class="badge badge-success" id="overall-status">ALL SYSTEMS OPERATIONAL</span>
+                    </div>
+                    <div class="health-grid" style="grid-template-columns: 1fr;">
+                        <div class="health-item">
+                            <span>Backend API (FastAPI)</span>
+                            <span class="badge badge-success" id="health-api">HEALTHY</span>
+                        </div>
+                        <div class="health-item">
+                            <span>Ledger DB (SQLite WAL)</span>
+                            <span class="badge badge-success" id="health-db">ACTIVE</span>
+                        </div>
+                        <div class="health-item">
+                            <span>Sliding Rate Limiter</span>
+                            <span class="badge badge-success">PROTECTING</span>
+                        </div>
+                        <div class="health-item">
+                            <span>Prometheus Metrics</span>
+                            <span class="badge badge-success">ONLINE</span>
+                        </div>
+                        <div class="health-item">
+                            <span>Kepler Energy Attribution</span>
+                            <span class="badge badge-warning" id="health-kepler">SIMULATED PROVENANCE</span>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="panel">
+                    <div class="panel-header">
+                        <div class="panel-title">Operational Controls</div>
+                    </div>
+                    <p style="color: var(--slate); font-size: 0.85rem; margin-bottom: 1rem;">
+                        Trigger real-time benchmark batches or launch the interactive case investigation workbench.
+                    </p>
+                    <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                        <a href="/investigator" style="display: block; text-align: center; background: #1f2937; color: #fff; text-decoration: none; padding: 0.6rem; border-radius: 6px; font-size: 0.85rem; font-weight: 600;">Open Investigator Workbench</a>
+                        <a href="/admin" style="display: block; text-align: center; background: #064e3b; color: #a7f3d0; text-decoration: none; padding: 0.6rem; border-radius: 6px; font-size: 0.85rem; font-weight: 600;">Access Admin Management</a>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        async function fetchMetrics() {
+            try {
+                // Attach JWT from localStorage if present
+                const token = localStorage.getItem("access_token");
+                const headers = token ? { "Authorization": `Bearer ${token}` } : {};
+                const resp = await fetch("/operations/metrics", { headers });
+                
+                if (resp.status === 401 || resp.status === 403) {
+                    // Try to log in with session or show placeholder
+                    renderPublicFallback();
+                    return;
+                }
+
+                const data = await resp.json();
+                updateDashboard(data);
+            } catch (e) {
+                console.warn("Operations poll notice:", e);
+            }
+        }
+
+        function updateDashboard(data) {
+            if (!data) return;
+            const rates = data.rates || {};
+            document.getElementById("val-tx-rate").textContent = (rates.transactions_per_sec || 0).toFixed(2);
+            document.getElementById("val-tx-1m").textContent = rates.transactions_last_minute || 0;
+            document.getElementById("val-login-rate").textContent = (rates.logins_per_sec || 0).toFixed(2);
+            document.getElementById("val-anomalies").textContent = data.overview?.active_carbon_anomalies || 0;
+            
+            const errRate = (rates.errors_4xx_per_sec || 0) + (rates.errors_5xx_per_sec || 0);
+            document.getElementById("val-error-rate").textContent = errRate.toFixed(2);
+            document.getElementById("val-err-1m").textContent = rates.failed_requests_last_minute || 0;
+
+            // Render Audit Events
+            const tbody = document.getElementById("audit-table-body");
+            if (data.recent_audit_events && data.recent_audit_events.length > 0) {
+                tbody.innerHTML = data.recent_audit_events.map(e => `
+                    <tr>
+                        <td>${e.timestamp}</td>
+                        <td style="font-weight: 600;">${e.actor}</td>
+                        <td><code>${e.action}</code></td>
+                        <td>${e.target}</td>
+                        <td><span class="badge ${e.outcome === 'SUCCESS' ? 'badge-success' : 'badge-danger'}">${e.outcome}</span></td>
+                        <td>${e.ip_address}</td>
+                    </tr>
+                `).join("");
+            } else {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color: var(--slate); padding: 1.5rem;">No security audit events recorded yet.</td></tr>';
+            }
+        }
+
+        async function renderPublicFallback() {
+            try {
+                const resp = await fetch("/operations/health-status");
+                const health = await resp.json();
+                document.getElementById("val-tx-rate").textContent = "0.00";
+                document.getElementById("val-login-rate").textContent = "0.00";
+                document.getElementById("audit-table-body").innerHTML = 
+                    '<tr><td colspan="6" style="text-align:center; color: var(--slate); padding: 1.5rem;">🔒 Operations authorization required for audit log view. Please log in as an Admin, Auditor, or Boss Admin.</td></tr>';
+            } catch(e) {}
+        }
+
+        // Poll every 3 seconds
+        fetchMetrics();
+        setInterval(fetchMetrics, 3000);
+    </script>
+</body>
+</html>

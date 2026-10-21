@@ -30,7 +30,7 @@ from backend.db.database import init_db
 from backend.api import (
     health, auth, user, carbon, credits, ledger,
     portfolio, telemetry, baseline, accuracy, payment, sustainability,
-    admin, cases
+    admin, cases, operations
 )
 
 # 🔹 Create FastAPI Application Instance
@@ -94,6 +94,7 @@ app.include_router(payment.router)
 app.include_router(sustainability.router)
 app.include_router(admin.router)
 app.include_router(cases.router)
+app.include_router(operations.router)
 
 
 @app.post("/connection/ingest-trace", status_code=201, tags=["Connection"])
@@ -118,6 +119,8 @@ shared_dir = os.path.join(frontend_dir, "shared")
 bank_dir = os.path.join(frontend_dir, "bank")
 investigator_dir = os.path.join(frontend_dir, "investigator")
 grafana_dir = os.path.join(frontend_dir, "grafana")
+admin_dir = os.path.join(frontend_dir, "admin")
+operations_dir = os.path.join(frontend_dir, "operations")
 
 
 def safe_static_serve(base_dir: str, rel_path: str, fallback_file: Optional[str] = None) -> FileResponse:
@@ -183,6 +186,25 @@ def serve_investigator():
 @app.get("/investigator/{file_path:path}", include_in_schema=False)
 def serve_investigator_file(file_path: str):
     return safe_static_serve(investigator_dir, file_path, fallback_file="index.html")
+
+@app.get("/admin", include_in_schema=False)
+@app.get("/admin/", include_in_schema=False)
+def serve_admin():
+    return safe_static_serve(admin_dir, "index.html")
+
+@app.get("/admin/super", include_in_schema=False)
+@app.get("/admin/super/", include_in_schema=False)
+def serve_admin_super():
+    return safe_static_serve(admin_dir, "super.html")
+
+@app.get("/operations", include_in_schema=False)
+@app.get("/operations/", include_in_schema=False)
+def serve_operations():
+    return safe_static_serve(operations_dir, "index.html")
+
+@app.get("/operations/{file_path:path}", include_in_schema=False)
+def serve_operations_file(file_path: str):
+    return safe_static_serve(operations_dir, file_path, fallback_file="index.html")
 
 @app.get("/shared/{file_path:path}", include_in_schema=False)
 def serve_shared_file(file_path: str):
