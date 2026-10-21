@@ -1,91 +1,84 @@
 # =====================================================================
-# ECO MONITOR — DEPENDENCIES.PY
-# Purpose: Defines reusable dependencies for FastAPI routes, such as retrieving
-#          database sessions and authenticating/authorizing users via JWT tokens.
+# GREEN-FINANCE — DEPENDENCIES.PY (REUSABLE FASTAPI DEPENDENCIES)
+# Purpose: Enforces server-side authentication, extracts JWT tokens from
+#          Bearer headers or secure cookies, verifies session revocation
+#          state in auth_sessions, and validates account status.
 # =====================================================================
 
-# Import HTTPException and status from fastapi
-# WHY:
-# - Used to raise standard HTTP errors (like 401 Unauthorized or 403 Forbidden)
-from fastapi import Depends, HTTPException, status
-
-# Import OAuth2PasswordBearer from fastapi.security
-# WHY:
-# - It specifies that the client must provide a Bearer token in the Authorization header
-# - tokenUrl specifies the endpoint where clients can obtain the token (auth/login)
+from fastapi import Depends, HTTPException, status, Request
 from fastapi.security import OAuth2PasswordBearer
-
-# Import Session from sqlalchemy.orm
-# WHY:
-# - For type hinting the database session parameter
 from sqlalchemy.orm import Session
+from typing import Optional
 
-# Import get_db function from backend/db/session
-# WHY:
-# - Used to retrieve a database session per HTTP request
 from backend.db.session import get_db
-
-# Import decode_access_token from security utilities
-# WHY:
-# - To decrypt and validate the JWT token sent by the client
 from backend.core.security import decode_access_token
-
-# Import User model from backend/models/user
-# WHY:
-# - To fetch the user from the database once the token is decoded
 from backend.models.user import User
+from backend.models.session import AuthSession
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/login", auto_error=False)
 
 
-# Define the OAuth2 security scheme
-# WHY:
-# - Tells FastAPI that our app uses OAuth2 Bearer tokens for authorization
-# - Automatically adds authorization details and security UI elements to Swagger docs
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/login")
+def extract_token(request: Request, bearer_token: Optional[str] = Depends(oauth2_scheme)) -> Optional[str]:
+    """Extracts JWT token from Authorization header or HttpOnly cookie."""
+    if bearer_token:
+        return bearer_token
+    # Fallback to cookie
+    cookie_token = request.cookies.get("access_token")
+    if cookie_token:
+        if cookie_token.startswith("Bearer "):
+            return cookie_token.split(" ")[1]
+        return cookie_token
+    return None
 
 
 def get_current_user(
+    request: Request,
     db: Session = Depends(get_db),
-    token: str = Depends(oauth2_scheme)
+    token: Optional[str] = Depends(extract_token)
 ) -> User:
-    # FastAPI dependency to get the currently authenticated user
-    # WHY:
-    # - Protects routes by requiring a valid JWT token
-    # - Extracts the token, decodes it, verifies the user, and injects the user object into routes
-    
-    # 1. Define standard credentials exception
-    # WHY:
-    # - This is reuseable and returned if token decoding fails or user doesn't exist
+    """
+    Validates token signature, expiration, active session status (not revoked),
+    and user account status (not suspended/disabled).
+    """
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
         headers={"WWW-Authenticate": "Bearer"},
     )
-    
-    # 2. Decode the JWT token
-    # WHY:
-    # - Extracts the claims (payload) inside the token
+
+    if not token:
+        raise credentials_exception
+
     payload = decode_access_token(token)
     if payload is None:
-        # Raise exception if token signature is invalid or expired
         raise credentials_exception
-        
-    # 3. Extract the username from payload
-    # WHY:
-    # - "sub" is a standard JWT claim representing the subject (the username in our case)
+
     username: str = payload.get("sub")
     if username is None:
-        # Raise exception if username is missing from payload
         raise credentials_exception
-        
-    # 4. Query the user from the database
-    # WHY:
-    # - Verifies that the user actually exists in our PostgreSQL/SQLite instance
+
+    # Check session revocation if JTI is present
+    jti: Optional[str] = payload.get("jti")
+    if jti:
+        session_rec = db.query(AuthSession).filter(AuthSession.token_jti == jti).first()
+        if session_rec and session_rec.is_revoked:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Session has been revoked. Please log in again.",
+                headers={"WWW-Authenticate": "Bearer"}
+            )
+
     user = db.query(User).filter(User.username == username).first()
     if user is None:
-        # Raise exception if user in token does not exist in DB
         raise credentials_exception
-        
-    # 5. Return the user object
-    # WHY:
-    # - FastAPI routes can now access this user object directly (e.g. current_user: User = Depends(get_current_user))
+
+    # Check account status
+    if user.status in ("SUSPENDED", "DISABLED"):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail=f"Account is {user.status.lower()}. Access denied."
+        )
+
+    # Attach token JTI to request state for optional logout handling
+    request.state.token_jti = jti
     return user

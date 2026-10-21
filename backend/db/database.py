@@ -14,7 +14,7 @@ def init_db() -> None:
     from backend.models import (
         user, account, transaction, ledger_entry, 
         carbon_record, carbon_credit, credit, accuracy, 
-        sustainability
+        sustainability, session
     )
 
     Base.metadata.create_all(bind=engine)
@@ -33,6 +33,20 @@ def init_db() -> None:
         ]:
             try:
                 conn.execute(text(f"ALTER TABLE transactions ADD COLUMN {col} {col_type}"))
+                conn.commit()
+            except Exception:
+                pass
+
+        for col, col_type in [
+            ("status", "VARCHAR(20) DEFAULT 'ACTIVE'"),
+            ("is_boss_admin", "BOOLEAN DEFAULT 0"),
+            ("failed_login_attempts", "INTEGER DEFAULT 0"),
+            ("locked_until", "DATETIME"),
+            ("mfa_secret", "VARCHAR(64)"),
+            ("mfa_enabled", "BOOLEAN DEFAULT 0"),
+        ]:
+            try:
+                conn.execute(text(f"ALTER TABLE users ADD COLUMN {col} {col_type}"))
                 conn.commit()
             except Exception:
                 pass

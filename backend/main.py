@@ -20,6 +20,7 @@ from prometheus_fastapi_instrumentator import Instrumentator
 from backend.core.config import settings
 from backend.middleware.logging_middleware import LoggingMiddleware
 from backend.middleware.security_headers import SecurityHeadersMiddleware
+from backend.middleware.rate_limit import RateLimitMiddleware
 from backend.middleware.error_handler import (
     http_exception_handler,
     validation_exception_handler,
@@ -44,7 +45,10 @@ app = FastAPI(
 # 🛡️ MIDDLEWARE INSTALLATION (ORDER MATTERS)
 # =====================================================================
 
-# 1. Defense-in-Depth Security Headers (CSP, Anti-Clickjacking, No-Sniff)
+# 1. Rate Limiting & Abuse Defense
+app.add_middleware(RateLimitMiddleware)
+
+# 2. Defense-in-Depth Security Headers (CSP, Anti-Clickjacking, No-Sniff)
 app.add_middleware(SecurityHeadersMiddleware)
 
 # 2. Strict CORS Configuration (Explicit origins; no wildcard with credentials)

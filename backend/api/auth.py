@@ -1,59 +1,51 @@
 # =====================================================================
-# ECO MONITOR — AUTH.PY (ROUTER)
-# Purpose: Handles API endpoints for user registration and authentication.
+# GREEN-FINANCE — AUTH.PY (AUTHENTICATION API ROUTER)
+# Purpose: Handles registration, login (form or JSON), logout/revocation,
+#          and session verification.
 # =====================================================================
 
-# Import APIRouter, Depends, and status from FastAPI
-from fastapi import APIRouter, Depends, status
-
-# Import OAuth2PasswordRequestForm from fastapi.security
-# WHY:
-# - Standard FastAPI tool to handle form-based login inputs (username/password)
-# - Direct match with the FormData request structure built in frontend app.js
+from typing import Optional
+from fastapi import APIRouter, Depends, status, Request
 from fastapi.security import OAuth2PasswordRequestForm
-
-# Import Session type hint
 from sqlalchemy.orm import Session
+from pydantic import BaseModel, Field
 
-# Import DB session dependency
 from backend.db.session import get_db
-
-# Import schemas
+from backend.core.dependencies import get_current_user
+from backend.models.user import User
 from backend.schemas.auth_schema import UserRegister, Token
-from backend.schemas.user_schema import UserResponse
-
-# Import auth services logic
 from backend.services import auth_service
 
-# Create APIRouter instance
-# WHY:
-# - Modulates endpoints under the "/auth" prefix and tags them for Swagger documentation
 router = APIRouter(prefix="/auth", tags=["Authentication"])
+
+
+class LoginJsonRequest(BaseModel):
+    username: str
+    password: str
 
 
 @router.post(
     "/register",
     response_model=Token,
     status_code=status.HTTP_201_CREATED,
-    summary="Register a new user"
+    summary="Register a new customer account"
 )
 def register(
     schema: UserRegister,
+    request: Request,
     db: Session = Depends(get_db)
 ):
-    # Handles user registration requests
-    # WHY:
-    # - Passes registration inputs to the business service layer
-    # - Auto-logs the user in after registration by returning JWT tokens
-    
-    # Register user and initialize double-entry ledger accounts
+    """
+    Registers a new Customer account with default double-entry ledger accounts.
+    Role is strictly defaulted to CUSTOMER on server.
+    """
     user = auth_service.register_user(db=db, schema=schema)
-    
-    # Generate and return active JWT credentials
     tokens = auth_service.authenticate_user(
         db=db,
         username=schema.username,
-        password=schema.password
+        password=schema.password,
+        ip_address=request.client.host if request.client else None,
+        user_agent=request.headers.get("user-agent")
     )
     return tokens
 
@@ -61,19 +53,56 @@ def register(
 @router.post(
     "/login",
     response_model=Token,
-    summary="Authenticate user and issue JWT credentials"
+    summary="Authenticate with OAuth2 form credentials"
 )
 def login(
+    request: Request,
     form_data: OAuth2PasswordRequestForm = Depends(),
     db: Session = Depends(get_db)
 ):
-    # Handles user login form credentials check
-    # WHY:
-    # - Standard OAuth2 OAuth2PasswordRequestForm reads username and password from form bodies
-    # - Returns JWT Access Token and Refresh Token on valid login
+    """Handles OAuth2 form-data login."""
     tokens = auth_service.authenticate_user(
         db=db,
         username=form_data.username,
-        password=form_data.password
+        password=form_data.password,
+        ip_address=request.client.host if request.client else None,
+        user_agent=request.headers.get("user-agent")
     )
     return tokens
+
+
+@router.post(
+    "/login-json",
+    response_model=Token,
+    summary="Authenticate with JSON credentials"
+)
+def login_json(
+    payload: LoginJsonRequest,
+    request: Request,
+    db: Session = Depends(get_db)
+):
+    """Handles JSON login from modern web frontends."""
+    tokens = auth_service.authenticate_user(
+        db=db,
+        username=payload.username,
+        password=payload.password,
+        ip_address=request.client.host if request.client else None,
+        user_agent=request.headers.get("user-agent")
+    )
+    return tokens
+
+
+@router.post(
+    "/logout",
+    summary="Revoke current session"
+)
+def logout(
+    request: Request,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """Revokes the current JWT session token immediately."""
+    jti = getattr(request.state, "token_jti", None)
+    if jti:
+        auth_service.logout_user(db=db, token_jti=jti)
+    return {"status": "success", "message": "Session successfully revoked"}
