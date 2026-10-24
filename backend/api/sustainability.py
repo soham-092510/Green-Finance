@@ -23,7 +23,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import func
 
 from backend.db.session import get_db
-from backend.core.dependencies import get_current_user, require_permission
+from backend.core.dependencies import get_current_user, require_permission, get_optional_user
 from backend.models.transaction import Transaction
 from backend.models.user import User
 from backend.models.sustainability import (
@@ -511,7 +511,7 @@ def activate_carbon_factor(
 @router.get("/report/csv", summary="Export Audited Carbon Ledger as CSV")
 def export_carbon_report_csv(
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user)
+    current_user: Optional[User] = Depends(get_optional_user)
 ):
     """Generates and downloads a clean audited CSV report with formula-injection defenses."""
     txns = db.query(Transaction).order_by(Transaction.created_at.desc()).all()
@@ -556,7 +556,7 @@ def export_carbon_report_csv(
 @router.get("/report/pdf", summary="Export Audited Carbon Ledger as PDF")
 def export_carbon_report_pdf(
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user)
+    current_user: Optional[User] = Depends(get_optional_user)
 ):
     """Generates and downloads a professional PDF sustainability report."""
     from fpdf import FPDF

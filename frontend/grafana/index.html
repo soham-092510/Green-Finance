@@ -1061,15 +1061,26 @@
 
     async function stimulateLiveTraffic() {
       const btn = document.getElementById('btn-g-stimulate');
+      const token = localStorage.getItem('access_token');
+      if (!token) {
+        showToast('🔒 Operator session required: Please sign in via /login to stimulate traffic.');
+        return;
+      }
       btn.disabled = true;
       btn.textContent = 'Stimulating Load...';
       try {
         const res = await fetch('/payment/stimulate', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
           body: JSON.stringify({ user_count: 5, tx_count: 5, min_amount: 500, max_amount: 2500 })
         });
         const d = await res.json();
+        if (!res.ok) {
+          throw new Error(d.detail || d.error || 'Stimulation rejected');
+        }
         showToast(`⚡ Stimulated ${d.executed_count} banking transactions! Energy: ${d.total_energy_joules.toFixed(2)} J`);
         await fetchLiveTelemetry();
       } catch (err) {

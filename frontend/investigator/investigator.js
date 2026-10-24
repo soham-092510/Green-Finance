@@ -326,12 +326,18 @@ async function loadBackendKPIs() {
 
     if (data.total_transactions !== undefined) {
       const unitsEl = document.getElementById('kpi-total-tx');
-      if (unitsEl) unitsEl.textContent = '1,429';
+      if (unitsEl) unitsEl.textContent = data.total_transactions.toLocaleString();
     }
 
-    if (data.avg_carbon_mg_per_tx !== undefined) {
+    if (data.avg_co2_per_tx_grams !== undefined) {
       const defEl = document.getElementById('kpi-carbon-intensity');
-      if (defEl) defEl.textContent = '0.138';
+      if (defEl) defEl.textContent = (data.avg_co2_per_tx_grams * 1000).toFixed(3);
+    }
+
+    if (data.total_transactions > 0 && data.total_energy_joules !== undefined) {
+      const avgEnergy = (data.total_energy_joules / Math.max(data.total_transactions, 1)).toFixed(3);
+      const energyEl = document.getElementById('kpi-energy-per-tx');
+      if (energyEl) energyEl.textContent = avgEnergy;
     }
   } catch (e) {
     console.warn('Fallback KPIs in use:', e);
@@ -356,7 +362,7 @@ async function loadBackendLedger() {
  * Appends live financial transaction audit tasks to the Sustainability Investigation Tasks table
  */
 function renderTaskTableWithLedger(records) {
-  const tbody = document.getElementById('gf-task-table-body');
+  const tbody = document.getElementById('gf-inv-task-table-body') || document.getElementById('gf-task-table-body');
   if (!tbody || !records || records.length === 0) return;
 
   const staticRows = `
@@ -563,7 +569,7 @@ function openAddTaskModal() {
 
 function handleInvestigatorSearch(query) {
   const q = query.toLowerCase().trim();
-  const rows = document.querySelectorAll('#gf-task-table-body tr');
+  const rows = document.querySelectorAll('#gf-inv-task-table-body tr, #gf-task-table-body tr');
   rows.forEach(r => {
     if (!q || r.textContent.toLowerCase().includes(q)) {
       r.style.display = '';
@@ -584,7 +590,7 @@ function saveSettings() {
 }
 
 function showInvestigatorToast(msg) {
-  const container = document.getElementById('gf-toast-container');
+  const container = document.getElementById('gf-toast-container') || document.getElementById('gf-inv-toast-container');
   if (!container) return;
 
   const toast = document.createElement('div');

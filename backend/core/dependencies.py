@@ -18,7 +18,7 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/login", auto_error=False)
 
 
 def extract_token(request: Request, bearer_token: Optional[str] = Depends(oauth2_scheme)) -> Optional[str]:
-    """Extracts JWT token from Authorization header or HttpOnly cookie."""
+    """Extracts JWT token from Authorization header, HttpOnly cookie, or query param."""
     if bearer_token:
         return bearer_token
     cookie_token = request.cookies.get("access_token")
@@ -26,6 +26,9 @@ def extract_token(request: Request, bearer_token: Optional[str] = Depends(oauth2
         if cookie_token.startswith("Bearer "):
             return cookie_token.split(" ")[1]
         return cookie_token
+    token_param = request.query_params.get("token")
+    if token_param:
+        return token_param
     return None
 
 
@@ -78,6 +81,20 @@ def get_current_user(
 
     request.state.token_jti = jti
     return user
+
+
+def get_optional_user(
+    request: Request,
+    db: Session = Depends(get_db),
+    token: Optional[str] = Depends(extract_token)
+) -> Optional[User]:
+    """Extracts authenticated user if credentials are provided; returns None otherwise."""
+    if not token:
+        return None
+    try:
+        return get_current_user(request=request, db=db, token=token)
+    except HTTPException:
+        return None
 
 
 def require_permission(permission_code: str):

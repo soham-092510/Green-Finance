@@ -697,12 +697,19 @@
 
     async function stimulate10Users() {
       const btn = document.getElementById('btn-stimulate');
+      const token = localStorage.getItem('access_token');
+      if (!token) {
+        if (confirm('Authentication Required: Operator privileges are required to stimulate synthetic multi-user workloads.\n\nWould you like to open the Unified Gateway (/login) now?')) {
+          window.location.href = '/login';
+        }
+        return;
+      }
       btn.disabled = true;
       btn.textContent = 'Stimulating 10 users...';
       try {
         const res = await fetch('/payment/stimulate', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}`, 'Idempotency-Key': 'hub-quick-' + Date.now() },
           body: JSON.stringify({ user_count: 10, tx_count: 10, min_amount: 500, max_amount: 5000 })
         });
         const data = await res.json();
@@ -718,12 +725,19 @@
 
     async function sendQuickTransfer() {
       const btn = document.getElementById('btn-quick-tx');
+      const token = localStorage.getItem('access_token');
+      if (!token) {
+        if (confirm('Authentication Required: Active customer session required to authorize inter-bank transfers.\n\nWould you like to sign in via the Unified Gateway (/login) now?')) {
+          window.location.href = '/login';
+        }
+        return;
+      }
       btn.disabled = true;
       btn.textContent = 'Processing transfer...';
       try {
         const res = await fetch('/payment/transfer', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}`, 'Idempotency-Key': 'hub-quick-' + Date.now() },
           body: JSON.stringify({
             source_account: 'HDFC9999',
             destination_account: 'MAH123',
