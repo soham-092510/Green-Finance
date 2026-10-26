@@ -32,12 +32,10 @@ const GREEN_BANK_STATE = {
   spendingPeriods: ['This month', 'Last month', 'This year']
 };
 
-document.addEventListener('DOMContentLoaded', () => {
-  initUserSession();
+document.addEventListener('DOMContentLoaded', async () => {
   drawNeonSparkline();
-  loadBackendAccounts();
-  loadBackendTransactions();
   updateCarbonPreview();
+  await initUserSession();
 
   // Resize listener to keep sparkline responsive
   window.addEventListener('resize', () => {
@@ -56,18 +54,29 @@ function getCsrfToken() {
   return getCookie('csrf_token') || '';
 }
 
+function getAuthHeaders() {
+  const token = localStorage.getItem('access_token');
+  const csrf = getCsrfToken();
+  const headers = { 'Accept': 'application/json' };
+  if (token) headers['Authorization'] = `Bearer ${token}`;
+  if (csrf) headers['X-CSRF-Token'] = csrf;
+  return headers;
+}
+
 /* ---------------------------------------------------------------------
    1. USER SESSION MANAGEMENT (SERVER-SOURCE-OF-TRUTH)
    --------------------------------------------------------------------- */
 async function initUserSession() {
   try {
-    const token = localStorage.getItem('access_token');
-    const headers = { 'Accept': 'application/json' };
-    if (token) {
-      headers['Authorization'] = `Bearer ${token}`;
+    let headers = getAuthHeaders();
+    let res = await fetch('/user/me', { headers, credentials: 'same-origin' });
+
+    // If bearer token was stale/rejected, retry with cookie credentials alone
+    if (!res.ok && localStorage.getItem('access_token')) {
+      localStorage.removeItem('access_token');
+      res = await fetch('/user/me', { headers: { 'Accept': 'application/json' }, credentials: 'same-origin' });
     }
 
-    const res = await fetch('/user/me', { headers });
     if (!res.ok) {
       localStorage.removeItem('access_token');
       localStorage.removeItem('refresh_token');
@@ -90,8 +99,8 @@ async function initUserSession() {
     };
     localStorage.setItem('green_bank_active_user', JSON.stringify(GREEN_BANK_STATE.currentUser));
     renderUserInterface();
-    loadBackendAccounts();
-    loadBackendTransactions();
+    await loadBackendAccounts();
+    await loadBackendTransactions();
   } catch (e) {
     console.warn('Session verification fallback:', e);
     window.location.href = '/login';
@@ -312,7 +321,7 @@ function drawNeonSparkline() {
    --------------------------------------------------------------------- */
 async function loadBackendAccounts() {
   try {
-    const res = await fetch('/payment/accounts');
+    const res = await fetch('/payment/accounts', { headers: getAuthHeaders(), credentials: 'same-origin' });
     if (!res.ok) return;
     const data = await res.json();
     GREEN_BANK_STATE.accounts = data;
@@ -331,7 +340,7 @@ async function loadBackendAccounts() {
 
 async function loadBackendTransactions() {
   try {
-    const res = await fetch('/payment/transactions');
+    const res = await fetch('/payment/transactions', { headers: getAuthHeaders(), credentials: 'same-origin' });
     if (!res.ok) return;
     const data = await res.json();
     GREEN_BANK_STATE.transactions = data;

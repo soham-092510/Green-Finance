@@ -151,10 +151,20 @@ def safe_static_serve(base_dir: str, rel_path: str, fallback_file: Optional[str]
         if fallback_file:
             fallback_target = os.path.abspath(os.path.join(base_dir, fallback_file))
             if os.path.isfile(fallback_target):
-                return FileResponse(fallback_target)
+                resp = FileResponse(fallback_target)
+                if fallback_target.endswith((".html", ".js", ".css")):
+                    resp.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+                    resp.headers["Pragma"] = "no-cache"
+                    resp.headers["Expires"] = "0"
+                return resp
         raise StarletteHTTPException(status_code=404, detail="Resource not found")
 
-    return FileResponse(target_path)
+    resp = FileResponse(target_path)
+    if target_path.endswith((".html", ".js", ".css")):
+        resp.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+        resp.headers["Pragma"] = "no-cache"
+        resp.headers["Expires"] = "0"
+    return resp
 
 
 @app.get("/", include_in_schema=False)

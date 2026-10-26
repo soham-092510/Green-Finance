@@ -609,19 +609,32 @@
           throw new Error('Invalid username/email or password.');
         }
 
+        if (data.access_token) {
+          localStorage.setItem('access_token', data.access_token);
+        }
+        if (data.refresh_token) {
+          localStorage.setItem('refresh_token', data.refresh_token);
+        }
+        if (data.user) {
+          localStorage.setItem('user_role', data.user.role);
+          localStorage.setItem('green_bank_active_user', JSON.stringify(data.user));
+        }
+
         showAlert(`Authentication successful. Redirecting...`, 'success');
 
         if (data.user) {
           setTimeout(() => {
             routeUserByRole(data.user.role, data.user.is_boss_admin);
-          }, 400);
+          }, 300);
         } else {
-          const meRes = await fetch('/user/me');
+          const meRes = await fetch('/user/me', { headers: { 'Authorization': `Bearer ${data.access_token}` } });
           if (meRes.ok) {
             const meData = await meRes.json();
+            localStorage.setItem('user_role', meData.role);
+            localStorage.setItem('green_bank_active_user', JSON.stringify(meData));
             setTimeout(() => {
               routeUserByRole(meData.role, meData.is_boss_admin);
-            }, 400);
+            }, 300);
           } else {
             window.location.href = '/bank';
           }
