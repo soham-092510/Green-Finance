@@ -301,11 +301,13 @@ def execute_bank_transfer(
             detail=f"Atomic bank transfer transaction failed and was rolled back: {str(e)}"
         )
 
-    # Increment Prometheus metrics
+    # Increment Prometheus metrics across microservices
     if BANK_TXN_COUNTER:
         BANK_TXN_COUNTER.labels(status="COMPLETED", service="payment-service", transaction_type=transaction_type).inc()
+        BANK_TXN_COUNTER.labels(status="COMPLETED", service="ledger-service", transaction_type=transaction_type).inc()
     if BANK_ENERGY_COUNTER:
-        BANK_ENERGY_COUNTER.labels(service="payment-service").inc(total_joules)
+        BANK_ENERGY_COUNTER.labels(service="payment-service").inc(payment_joules)
+        BANK_ENERGY_COUNTER.labels(service="ledger-service").inc(ledger_joules)
 
     # 13. Asynchronously Stream Telemetry Trace
     stream_payload = {
@@ -463,13 +465,33 @@ def list_recent_transactions(db: Session, limit: int = 25, actor: Optional[User]
     if actor and actor.role == "CUSTOMER" and not getattr(actor, "is_boss_admin", False):
         q = q.filter((Transaction.sender_bank_id == actor.bank_id) | (Transaction.recipient_bank_id == actor.bank_id))
     txns = q.order_by(Transaction.created_at.desc()).limit(limit).all()
+    
+    # Preload user names for sender and recipient bank IDs
+    bank_ids = set()
+    for t in txns:
+        if t.sender_bank_id:
+            bank_ids.add(t.sender_bank_id)
+        if t.recipient_bank_id:
+            bank_ids.add(t.recipient_bank_id)
+    name_map = {}
+    if bank_ids:
+        users = db.query(User).filter(User.bank_id.in_(list(bank_ids))).all()
+        for u in users:
+            name_map[u.bank_id] = u.name or u.username
+
     results = []
     for t in txns:
+        s_id = t.sender_bank_id or "HDFC9999"
+        r_id = t.recipient_bank_id or "MAH123"
         results.append({
             "id": t.id,
             "timestamp": t.created_at.strftime("%Y-%m-%d %H:%M:%S") if t.created_at else None,
-            "senderBankId": t.sender_bank_id or "HDFC9999",
-            "recipientBankId": t.recipient_bank_id or "MAH123",
+            "senderBankId": s_id,
+            "recipientBankId": r_id,
+            "sender_bank_id": s_id,
+            "recipient_bank_id": r_id,
+            "sender_name": name_map.get(s_id, s_id),
+            "recipient_name": name_map.get(r_id, r_id),
             "amount": t.amount or 0.0,
             "currency": t.currency,
             "service": t.service,

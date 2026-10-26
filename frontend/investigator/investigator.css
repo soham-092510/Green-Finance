@@ -993,3 +993,59 @@ body {
     -webkit-overflow-scrolling: touch;
   }
 }
+
+/* Modal System */
+.gf-inv-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 16px;
+}
+
+.gf-inv-modal-overlay.hidden {
+  display: none !important;
+}
+
+.gf-inv-modal-card {
+  background: #ffffff;
+  border-radius: 18px;
+  width: 100%;
+  max-width: 520px;
+  border: 1px solid var(--gf-inv-border);
+  box-shadow: 0 20px 40px -8px rgba(15, 23, 42, 0.2);
+  padding: 24px;
+}
+
+.gf-inv-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--gf-inv-border);
+}
+
+.gf-inv-modal-title {
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--gf-inv-text-main);
+}
+
+.gf-inv-modal-close {
+  background: none;
+  border: none;
+  font-size: 22px;
+  color: #94a3b8;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.gf-inv-modal-close:hover {
+  color: #0f172a;
+}

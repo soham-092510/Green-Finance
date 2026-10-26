@@ -51,11 +51,11 @@ body {
   padding: 24px;
 }
 
-/* Outer Desktop Frame (Exact match to reference tablet/desktop viewport) */
+/* Outer Desktop Frame: Expanded to 85% of screen width */
 .gf-bank-window {
-  width: 100%;
-  max-width: 1280px;
-  min-height: 820px;
+  width: 85vw;
+  max-width: 1600px;
+  min-height: 840px;
   background: var(--bank-canvas);
   border-radius: 28px;
   box-shadow: 0 25px 60px rgba(0, 0, 0, 0.45);
@@ -354,7 +354,7 @@ body {
    ------------------------------------------------------------------- */
 .gf-bank-hero-grid {
   display: grid;
-  grid-template-columns: 1.15fr 1fr;
+  grid-template-columns: 1fr;
   gap: 20px;
 }
 
@@ -488,7 +488,7 @@ body {
    ------------------------------------------------------------------- */
 .gf-bank-action-bar {
   display: grid;
-  grid-template-columns: 1.15fr 1fr 1fr 1fr;
+  grid-template-columns: repeat(3, 1fr);
   gap: 16px;
 }
 

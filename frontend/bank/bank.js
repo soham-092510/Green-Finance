@@ -166,12 +166,10 @@ function renderUserInterface() {
   const mTier = document.getElementById('modal-profile-tier');
   if (mTier) mTier.textContent = u.tier || 'Green Premier';
 
-  // Update source dropdown in transfer modal
-  const srcSelect = document.getElementById('transfer-source-acc');
-  if (srcSelect) {
-    srcSelect.innerHTML = `
-      <option value="${u.bank_id}" selected>${u.name} • ${u.bank_id} (${formatINR(GREEN_BANK_STATE.mainAccountBalance)})</option>
-    `;
+  // Update source hidden input in transfer modal
+  const srcHidden = document.getElementById('transfer-source-acc');
+  if (srcHidden) {
+    srcHidden.value = u.bank_id;
   }
 }
 
@@ -379,52 +377,64 @@ function renderRecentTransactions(liveList) {
   const list = document.getElementById('recent-transactions-list');
   if (!list) return;
 
-  // Real Green Finance reference items
+  // Clean reference transactions
   const staticItems = [
     {
-      name: 'Green Sovereign Bond 2026',
-      time: '10 Oct, 18:30 • Clean Energy',
-      amount: -5000.00,
-      avatarClass: 'amazon',
-      avatarContent: '🌱',
-      desc: 'Clean Solar Infrastructure Sovereign Bond Investment'
-    },
-    {
-      name: 'Tata Solar Utility',
-      time: '09 Oct, 14:15 • Solar Tariff',
+      name: 'Services: Electricity Bill (ELEC_MAHA)',
+      time: '10 Oct, 18:30 • Utility Pay',
       amount: -1850.00,
       avatarClass: 'spotify',
       avatarContent: '⚡',
-      desc: 'Tata Power Rooftop Solar Net Metering Tariff'
+      desc: 'Maharashtra State Electricity Board Utility Payment'
     },
     {
-      name: 'Corporate ESG Payroll',
-      time: '01 Oct, 09:00 • Salary Credit',
+      name: 'Corporate Salary Credit',
+      time: '01 Oct, 09:00 • Direct Deposit',
       amount: 25000.00,
       avatarClass: 'salary',
       avatarSvg: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>',
-      desc: 'Enterprise Payroll Direct Salary Credit with Scope 2 Attribution'
+      desc: 'Monthly Corporate Salary Direct Bank Deposit'
     },
     {
-      name: 'Bank of Maharashtra (MAH123)',
+      name: 'Transfer to: Bank of Maharashtra (MAH123)',
       time: '28 Sep, 11:20 • Inter-Bank UPI',
       amount: -1250.00,
       avatarClass: 'starbucks',
       avatarContent: '🏛️',
-      desc: 'UPI Double-Entry Transfer (0.695 J, 0.138 mg CO₂)'
+      desc: 'Instant Inter-Bank UPI Transfer'
     }
   ];
 
-  // If live transactions exist, prepend the most recent ones
-  const dynamicItems = (liveList || []).slice(0, 3).map(tx => {
-    const isCredit = tx.recipient_bank_id === GREEN_BANK_STATE.currentUser.bank_id;
+  const myBankId = (GREEN_BANK_STATE.currentUser && GREEN_BANK_STATE.currentUser.bank_id) 
+    ? String(GREEN_BANK_STATE.currentUser.bank_id).toUpperCase() 
+    : '';
+
+  // If live transactions exist, map them with clear counterparty naming
+  const dynamicItems = (liveList || []).slice(0, 5).map(tx => {
+    const recId = String(tx.recipient_bank_id || tx.recipientBankId || '').toUpperCase();
+    const sendId = String(tx.sender_bank_id || tx.senderBankId || '').toUpperCase();
+    const isCredit = recId === myBankId;
+
+    let counterpartyTitle = '';
+    if (isCredit) {
+      const senderDisplay = tx.sender_name 
+        ? `${tx.sender_name} (${tx.sender_bank_id || tx.senderBankId})` 
+        : (tx.sender_bank_id || tx.senderBankId || 'Sender');
+      counterpartyTitle = `Received from: ${senderDisplay}`;
+    } else {
+      const recipDisplay = tx.recipient_name 
+        ? `${tx.recipient_name} (${tx.recipient_bank_id || tx.recipientBankId})` 
+        : (tx.recipient_bank_id || tx.recipientBankId || 'Recipient');
+      counterpartyTitle = `Transfer to: ${recipDisplay}`;
+    }
+
     return {
-      name: isCredit ? `Credit from: ${tx.sender_bank_id}` : `Transfer to: ${tx.recipient_bank_id}`,
+      name: counterpartyTitle,
       time: tx.timestamp ? tx.timestamp.replace('T', ' ').slice(0, 16) : 'Just now',
       amount: isCredit ? tx.amount : -tx.amount,
-      avatarClass: 'bank',
-      avatarContent: '₹',
-      desc: tx.description || 'UPI Inter-Bank Transfer',
+      avatarClass: isCredit ? 'salary' : 'bank',
+      avatarContent: isCredit ? '📥' : '📤',
+      desc: tx.description || tx.note || 'Instant UPI Transfer',
       txRaw: tx
     };
   });
@@ -439,7 +449,7 @@ function renderRecentTransactions(liveList) {
 
     const avatarHtml = item.avatarSvg 
       ? `<div class="tx-avatar ${item.avatarClass}">${item.avatarSvg}</div>`
-      : `<div class="tx-avatar ${item.avatarClass}">${item.avatarContent || '🌱'}</div>`;
+      : `<div class="tx-avatar ${item.avatarClass}">${item.avatarContent || '₹'}</div>`;
 
     return `
       <li class="tx-item" onclick="handleTxItemClick(${idx})">
@@ -495,42 +505,21 @@ function cycleSpendingPeriod() {
 }
 
 /* ---------------------------------------------------------------------
-   6. REAL-TIME CARBON CALCULATION PREVIEW
+   6. TRANSFER HELPERS
    --------------------------------------------------------------------- */
 function updateCarbonPreview() {
-  const amtInput = document.getElementById('transfer-amount-input');
-  const amount = parseFloat(amtInput ? amtInput.value : 1250) || 1250;
-
-  // Workload energy attribution formula: Baseline energy + marginal payload
-  const energyJoules = 0.55 + (amount * 0.000116);
-  // Scope 2 Carbon based on CEA India Baseline Factor (713.0 g CO₂ / kWh)
-  const carbonGrams = (energyJoules / 3600000) * 713.0;
-  const carbonMg = carbonGrams * 1000;
-
-  const energyEl = document.getElementById('prev-energy');
-  if (energyEl) energyEl.textContent = `${energyJoules.toFixed(4)} Joules`;
-
-  const carbonEl = document.getElementById('prev-carbon');
-  if (carbonEl) carbonEl.textContent = `${carbonMg.toFixed(4)} mg CO₂`;
+  // Legacy stub retained for backwards compatibility
 }
 
 function setQuickAmount(amt) {
   const input = document.getElementById('transfer-amount-input');
   if (input) {
     input.value = amt;
-    updateCarbonPreview();
   }
 }
 
 function handleRecipientSelect(val) {
-  const manualGroup = document.getElementById('manual-recipient-group');
-  if (manualGroup) {
-    if (val === 'manual') {
-      manualGroup.classList.remove('hidden');
-    } else {
-      manualGroup.classList.add('hidden');
-    }
-  }
+  // Legacy stub retained for backwards compatibility
 }
 
 /* ---------------------------------------------------------------------
@@ -542,17 +531,15 @@ async function handleTransferSubmit(e) {
   const btn = document.getElementById('btn-submit-transfer');
   if (btn) {
     btn.disabled = true;
-    btn.textContent = 'Processing Transaction & Telemetry...';
+    btn.textContent = 'Processing Transfer...';
   }
 
-  const srcAcc = document.getElementById('transfer-source-acc').value;
-  let destAcc = document.getElementById('transfer-dest-acc').value;
-  if (destAcc === 'manual') {
-    destAcc = document.getElementById('manual-recipient-id').value.trim() || 'MAH123';
-  }
+  const srcAcc = (GREEN_BANK_STATE.currentUser && GREEN_BANK_STATE.currentUser.bank_id) || 'HDFC9999';
+  const destInput = document.getElementById('transfer-dest-acc');
+  const destAcc = destInput ? destInput.value.trim() : 'MAH123';
   const amount = parseFloat(document.getElementById('transfer-amount-input').value) || 1250;
-  const paymentType = document.getElementById('transfer-payment-type').value;
-  const note = document.getElementById('transfer-note').value || 'Green Finance Transfer';
+  const paymentType = 'UPI_TRANSFER';
+  const note = (document.getElementById('transfer-note') && document.getElementById('transfer-note').value) || 'Direct Payment';
 
   const payload = {
     source_account: srcAcc,
@@ -580,6 +567,7 @@ async function handleTransferSubmit(e) {
     const res = await fetch('/payment/transfer', {
       method: 'POST',
       headers: headers,
+      credentials: 'same-origin',
       body: JSON.stringify(payload)
     });
 
@@ -599,7 +587,8 @@ async function handleTransferSubmit(e) {
     showLiveReceipt(txData);
     showToast(`Transfer of ${formatINR(amount)} completed!`);
 
-    loadBackendTransactions();
+    await loadBackendAccounts();
+    await loadBackendTransactions();
   } catch (error) {
     console.error('Transfer failed:', error);
     showToast(`Transfer Failed: ${error.message}`);
@@ -615,19 +604,37 @@ async function handleTransferSubmit(e) {
    8. DIGITAL RECEIPT MODALS
    --------------------------------------------------------------------- */
 function showLiveReceipt(tx) {
-  document.getElementById('rcpt-amount').textContent = formatINR(tx.amount);
-  document.getElementById('rcpt-txid').textContent = tx.transaction_id || '9a81d666-dbb4-4770-987a';
-  document.getElementById('rcpt-time').textContent = `${tx.timestamp || new Date().toISOString().replace('T', ' ').slice(0, 19)} IST`;
-  document.getElementById('rcpt-sender').textContent = `${tx.sender_bank_id || 'HDFC9999'} (${GREEN_BANK_STATE.currentUser.name})`;
-  document.getElementById('rcpt-recipient').textContent = `${tx.recipient_bank_id || 'MAH123'} (Verified Beneficiary)`;
-  
-  const energyJ = tx.energy_joules || 0.6952;
-  document.getElementById('rcpt-energy').textContent = `${energyJ.toFixed(4)} Joules (${(energyJ / 3600000).toExponential(2)} kWh)`;
-  
-  const carbonG = tx.carbon_grams || 0.000138;
-  document.getElementById('rcpt-carbon').textContent = `${(carbonG * 1000).toFixed(4)} mg CO₂ (${carbonG.toFixed(6)} g)`;
-  
-  document.getElementById('rcpt-hash').textContent = tx.audit_hash || 'd3e87443725e8f8e9348140a88e8a58ec63ab14be3014a71249d5848c3d5d6e2';
+  const rcptAmt = document.getElementById('rcpt-amount');
+  if (rcptAmt) rcptAmt.textContent = formatINR(tx.amount);
+
+  const rcptTxid = document.getElementById('rcpt-txid');
+  if (rcptTxid) rcptTxid.textContent = tx.transaction_id || 'tx-' + Math.random().toString(36).substring(2, 12);
+
+  const rcptTime = document.getElementById('rcpt-time');
+  if (rcptTime) rcptTime.textContent = `${tx.timestamp ? tx.timestamp.replace('T', ' ').slice(0, 19) : new Date().toISOString().replace('T', ' ').slice(0, 19)} IST`;
+
+  const myName = (GREEN_BANK_STATE.currentUser && GREEN_BANK_STATE.currentUser.name) || 'You';
+  const myBankId = (GREEN_BANK_STATE.currentUser && GREEN_BANK_STATE.currentUser.bank_id) || 'Account';
+  const isCredit = String(tx.recipient_bank_id || tx.recipientBankId).toUpperCase() === myBankId.toUpperCase();
+
+  const rcptSender = document.getElementById('rcpt-sender');
+  if (rcptSender) {
+    const sName = tx.sender_name || (isCredit ? 'Sender' : myName);
+    const sId = tx.sender_bank_id || tx.senderBankId || myBankId;
+    rcptSender.textContent = `${sId} (${sName})`;
+  }
+
+  const rcptRecip = document.getElementById('rcpt-recipient');
+  if (rcptRecip) {
+    const rName = tx.recipient_name || (isCredit ? myName : 'Beneficiary');
+    const rId = tx.recipient_bank_id || tx.recipientBankId || 'Recipient';
+    rcptRecip.textContent = `${rId} (${rName})`;
+  }
+
+  const rcptHash = document.getElementById('rcpt-hash');
+  if (rcptHash) {
+    rcptHash.textContent = tx.audit_hash ? `SHA-256: ${tx.audit_hash.slice(0, 24)}... (Verified)` : 'SHA-256 Ledger Verified';
+  }
 
   openModal('modal-receipt');
 }
@@ -635,15 +642,27 @@ function showLiveReceipt(tx) {
 function showStaticReceipt(merchant, amt, desc) {
   const absAmt = Math.abs(amt);
   const isPos = amt > 0;
-  
-  document.getElementById('rcpt-amount').textContent = (isPos ? '+ ' : '- ') + formatINR(absAmt);
-  document.getElementById('rcpt-txid').textContent = 'tx-' + Math.random().toString(36).substring(2, 10) + '-' + Math.random().toString(36).substring(2, 6);
-  document.getElementById('rcpt-time').textContent = '2026-10-10 18:30:00 IST';
-  document.getElementById('rcpt-sender').textContent = isPos ? `${merchant}` : `${GREEN_BANK_STATE.currentUser.bank_id} (${GREEN_BANK_STATE.currentUser.name})`;
-  document.getElementById('rcpt-recipient').textContent = isPos ? `${GREEN_BANK_STATE.currentUser.bank_id} (Main Account)` : `${merchant}`;
-  document.getElementById('rcpt-energy').textContent = '0.6952 Joules (1.93e-7 kWh)';
-  document.getElementById('rcpt-carbon').textContent = '0.1376 mg CO₂ (0.000138 g)';
-  document.getElementById('rcpt-hash').textContent = 'd3e87443725e8f8e9348140a88e8a58ec63ab14be3014a71249d5848c3d5d6e2';
+
+  const rcptAmt = document.getElementById('rcpt-amount');
+  if (rcptAmt) rcptAmt.textContent = (isPos ? '+ ' : '- ') + formatINR(absAmt);
+
+  const rcptTxid = document.getElementById('rcpt-txid');
+  if (rcptTxid) rcptTxid.textContent = 'tx-' + Math.random().toString(36).substring(2, 10);
+
+  const rcptTime = document.getElementById('rcpt-time');
+  if (rcptTime) rcptTime.textContent = 'Recent Transaction';
+
+  const myName = (GREEN_BANK_STATE.currentUser && GREEN_BANK_STATE.currentUser.name) || 'Account Holder';
+  const myBankId = (GREEN_BANK_STATE.currentUser && GREEN_BANK_STATE.currentUser.bank_id) || 'HDFC9999';
+
+  const rcptSender = document.getElementById('rcpt-sender');
+  if (rcptSender) rcptSender.textContent = isPos ? `${merchant}` : `${myBankId} (${myName})`;
+
+  const rcptRecip = document.getElementById('rcpt-recipient');
+  if (rcptRecip) rcptRecip.textContent = isPos ? `${myBankId} (${myName})` : `${merchant}`;
+
+  const rcptHash = document.getElementById('rcpt-hash');
+  if (rcptHash) rcptHash.textContent = 'SHA-256 Ledger Verified';
 
   openModal('modal-receipt');
 }
@@ -651,14 +670,14 @@ function showStaticReceipt(merchant, amt, desc) {
 /* ---------------------------------------------------------------------
    9. QUICK ACTIONS (Bills, Top Up, Workload Exchange)
    --------------------------------------------------------------------- */
-function quickPayBill(billName, amount) {
+function quickPayBill(serviceName, providerId, defaultAmount) {
   closeModal('modal-paybills');
-  document.getElementById('transfer-dest-acc').value = 'manual';
-  document.getElementById('manual-recipient-group').classList.remove('hidden');
-  document.getElementById('manual-recipient-id').value = billName.split(' ')[0].toUpperCase() + 'ECO';
-  document.getElementById('transfer-amount-input').value = amount;
-  document.getElementById('transfer-note').value = billName;
-  updateCarbonPreview();
+  const destInput = document.getElementById('transfer-dest-acc');
+  if (destInput) destInput.value = providerId;
+  const amtInput = document.getElementById('transfer-amount-input');
+  if (amtInput) amtInput.value = defaultAmount;
+  const noteInput = document.getElementById('transfer-note');
+  if (noteInput) noteInput.value = serviceName;
   openModal('modal-transfer');
 }
 
@@ -672,36 +691,7 @@ function executeTopUp() {
 }
 
 async function executeBatchSimulation(count) {
-  const feedback = document.getElementById('exchange-feedback');
-  if (feedback) feedback.textContent = `Dispatching ${count} concurrent microservice transactions...`;
-
-  let successCount = 0;
-  for (let i = 0; i < count; i++) {
-    try {
-      await fetch('/payment/transfer', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          source_account: 'HDFC9999',
-          destination_account: 'MAH123',
-          amount: Math.round(100 + Math.random() * 500),
-          currency: 'INR',
-          transaction_type: 'UPI_TRANSFER',
-          note: `Batch workload simulation #${i + 1}`
-        })
-      });
-      successCount++;
-    } catch (e) {
-      console.warn('Batch item error', e);
-    }
-  }
-
-  if (feedback) {
-    feedback.textContent = `✓ Generated ${successCount} transactions. Attributed ~${(successCount * 0.69).toFixed(1)} J of telemetry!`;
-  }
-  showToast(`Generated ${successCount} transactions across microservices!`);
-  loadBackendAccounts();
-  loadBackendTransactions();
+  // Legacy stub retained
 }
 
 /* ---------------------------------------------------------------------
@@ -718,7 +708,6 @@ function closeModal(id) {
 }
 
 function openTransferModal() {
-  updateCarbonPreview();
   openModal('modal-transfer');
 }
 
@@ -731,8 +720,6 @@ function openTopUpModal() {
 }
 
 function openExchangeModal() {
-  const feedback = document.getElementById('exchange-feedback');
-  if (feedback) feedback.textContent = '';
   openModal('modal-exchange');
 }
 
@@ -745,11 +732,11 @@ function openCardsModal() {
 }
 
 function openAnalyticsModal() {
-  showToast('Carbon Footprint: Computed live for every payment using Scope 2 baseline.');
+  showToast('Real-time balance analytics active.');
 }
 
 function openSupportModal() {
-  showToast('Green Finance Support & ESG Desk: support@greenfinance.io');
+  openModal('modal-support');
 }
 
 function openAllTransactionsModal() {

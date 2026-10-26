@@ -62,9 +62,12 @@
         <li class="gf-bank-nav-item">
           <button class="gf-bank-nav-link" onclick="openPayBillsModal()">
             <svg class="gf-bank-nav-icon" viewBox="0 0 24 24">
-              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+              <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+              <line x1="6" y1="8" x2="10" y2="8"></line>
+              <line x1="6" y1="12" x2="14" y2="12"></line>
+              <line x1="6" y1="16" x2="18" y2="16"></line>
             </svg>
-            <span>Green Bonds</span>
+            <span>Services & Bill Pay</span>
           </button>
         </li>
         <li class="gf-bank-nav-item">
@@ -74,7 +77,7 @@
               <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
               <line x1="12" y1="17" x2="12.01" y2="17"/>
             </svg>
-            <span>Help & ESG Desk</span>
+            <span>Help & Support</span>
           </button>
         </li>
 
@@ -142,44 +145,35 @@
         </div>
       </header>
 
-      <!-- HERO ROW: 2 Cards (Balance & Platinum Green Card) -->
+      <!-- HERO ROW: 1 Primary Account Balance Card -->
       <section class="gf-bank-hero-grid" aria-label="Account Overview Cards">
-
-        <!-- Card 1: Total Account Balance Dark Card with Glowing Neon Sparkline -->
-        <div class="gf-bank-dark-balance-card">
-          <div class="card-label-subtle">Total Account Balance</div>
-          <div class="card-amount-huge" id="total-balance-display">₹26,289.38</div>
-          <div class="card-trend-badge" id="balance-trend">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-              <polyline points="18 15 12 9 6 15"></polyline>
-            </svg>
-            <span>12.5% from last month</span>
+        <div class="gf-bank-dark-balance-card" style="min-height: 185px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; z-index:1;">
+            <div class="card-label-subtle">Primary Green Account Balance</div>
+            <div style="display:flex; align-items:center; gap:10px;">
+              <span class="card-mask-num" id="card-masked-num" style="font-size:13px; color:#cbd5e1; font-family:monospace; background:rgba(255,255,255,0.08); padding:4px 10px; border-radius:8px;">HDFC •••• 9999</span>
+              <span style="font-size:11px; font-weight:700; color:#52bd89; background:rgba(82,189,137,0.15); border:1px solid rgba(82,189,137,0.3); padding:4px 10px; border-radius:12px;">ACTIVE • VISA PLATINUM</span>
+            </div>
+          </div>
+          <div style="display:flex; justify-content:space-between; align-items:flex-end; z-index:1; margin-top:8px;">
+            <div>
+              <div class="card-amount-huge" id="main-account-balance">₹26,289.38</div>
+              <div class="card-trend-badge" id="balance-trend">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                  <polyline points="18 15 12 9 6 15"></polyline>
+                </svg>
+                <span>Active Savings & Daily Transacting Account</span>
+              </div>
+            </div>
+            <span id="total-balance-display" style="display:none;">₹26,289.38</span>
           </div>
 
           <!-- Glowing Neon Green Sparkline Canvas -->
-          <canvas class="gf-bank-sparkline-canvas" id="sparkline-canvas" width="460" height="70"></canvas>
+          <canvas class="gf-bank-sparkline-canvas" id="sparkline-canvas" width="800" height="60" style="margin-top:10px;"></canvas>
         </div>
-
-        <!-- Card 2: Main Account Purple Card with VISA Logo -->
-        <div class="gf-bank-purple-card">
-          <div class="purple-deco-pill-1"></div>
-          <div class="purple-deco-pill-2"></div>
-
-          <div class="card-top-meta">
-            <span class="card-acc-label">Green Premier Account</span>
-            <span class="card-mask-num" id="card-masked-num">HDFC •••• 9999</span>
-          </div>
-
-          <div class="purple-balance-val" id="main-account-balance">₹26,289.38</div>
-
-          <div class="card-bottom-row">
-            <span class="card-visa-logo">VISA PLATINUM</span>
-          </div>
-        </div>
-
       </section>
 
-      <!-- FOUR ACTION PILL BUTTONS (Transfer, Green Bonds, Deposit, Offset) -->
+      <!-- THREE ACTION PILL BUTTONS (Transfer, Services & Bills, Deposit) -->
       <section class="gf-bank-action-bar" aria-label="Quick Actions">
         <!-- 1. Transfer Money (Mint Green) -->
         <button class="gf-bank-action-btn btn-gf-bank-transfer" onclick="openTransferModal()">
@@ -190,9 +184,9 @@
           </svg>
         </button>
 
-        <!-- 2. Green Bonds & Bills (Amber / Gold) -->
+        <!-- 2. Services & Bill Pay (Amber / Gold) -->
         <button class="gf-bank-action-btn btn-gf-bank-paybills" onclick="openPayBillsModal()">
-          <span>Green Bonds</span>
+          <span>Services & Bill Pay</span>
           <svg class="action-btn-icon" viewBox="0 0 24 24">
             <rect x="2" y="4" width="20" height="16" rx="2"></rect>
             <line x1="6" y1="8" x2="10" y2="8"></line>
@@ -201,7 +195,7 @@
           </svg>
         </button>
 
-        <!-- 3. Deposit / Top Up (Coral / Red) -->
+        <!-- 3. Deposit Funds (Coral / Red) -->
         <button class="gf-bank-action-btn btn-gf-bank-topup" onclick="openTopUpModal()">
           <span>Deposit Funds</span>
           <svg class="action-btn-icon" viewBox="0 0 24 24">
@@ -209,15 +203,6 @@
             <path d="M3 11V9a4 4 0 0 1 4-4h14"></path>
             <polyline points="7 23 3 19 7 15"></polyline>
             <path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
-          </svg>
-        </button>
-
-        <!-- 4. Carbon Offset (Charcoal Black) -->
-        <button class="gf-bank-action-btn btn-gf-bank-exchange" onclick="openExchangeModal()">
-          <span>Carbon Offset</span>
-          <svg class="action-btn-icon" viewBox="0 0 24 24">
-            <line x1="12" y1="5" x2="12" y2="19"></line>
-            <line x1="5" y1="12" x2="19" y2="12"></line>
           </svg>
         </button>
       </section>
@@ -288,10 +273,10 @@
           </ul>
         </div>
 
-        <!-- Card 4: Spending & Carbon Overview Dark Card with Vertical Mint Pillar Bars -->
+        <!-- Card 4: Monthly Spending & Analytics Dark Card with Vertical Mint Pillar Bars -->
         <div class="gf-bank-overview-card">
           <div class="overview-header">
-            <span class="overview-title">Carbon & Spending Overview</span>
+            <span class="overview-title">Monthly Spending & Analytics</span>
             <button class="overview-period-btn" onclick="cycleSpendingPeriod()">
               <span id="spending-period-label">This month</span>
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
@@ -302,37 +287,38 @@
 
           <div class="overview-val-big" id="spending-total-val">₹8,100.00</div>
           <div style="font-size:12px; color:#52bd89; font-weight:700; margin-top:-14px; margin-bottom:18px;">
-            Footprint: <span id="spending-carbon-val">0.89 mg CO₂</span> • CEA India 713 g/kWh
+            Weekly Outflow Analytics • Last 7 Days
+            <span id="spending-carbon-val" style="display:none;">0.89 mg CO₂</span>
           </div>
 
           <!-- 7 Vertical Mint Green Pillar Bars (Mon to Sun) -->
           <div class="gf-bank-pillars-container" id="pillars-container">
             <div class="pillar-col">
-              <div class="pillar-bar" style="height: 38px;" title="Mon: ₹500 (0.09 mg CO₂)"></div>
+              <div class="pillar-bar" style="height: 38px;" title="Mon: ₹500"></div>
               <span class="pillar-day">Mon</span>
             </div>
             <div class="pillar-col">
-              <div class="pillar-bar" style="height: 58px;" title="Tue: ₹1,200 (0.13 mg CO₂)"></div>
+              <div class="pillar-bar" style="height: 58px;" title="Tue: ₹1,200"></div>
               <span class="pillar-day">Tue</span>
             </div>
             <div class="pillar-col">
-              <div class="pillar-bar" style="height: 86px;" title="Wed: ₹2,400 (0.24 mg CO₂)"></div>
+              <div class="pillar-bar" style="height: 86px;" title="Wed: ₹2,400"></div>
               <span class="pillar-day">Wed</span>
             </div>
             <div class="pillar-col">
-              <div class="pillar-bar" style="height: 52px;" title="Thu: ₹950 (0.11 mg CO₂)"></div>
+              <div class="pillar-bar" style="height: 52px;" title="Thu: ₹950"></div>
               <span class="pillar-day">Thu</span>
             </div>
             <div class="pillar-col">
-              <div class="pillar-bar" style="height: 104px;" title="Fri: ₹3,100 (0.31 mg CO₂)"></div>
+              <div class="pillar-bar" style="height: 104px;" title="Fri: ₹3,100"></div>
               <span class="pillar-day">Fri</span>
             </div>
             <div class="pillar-col">
-              <div class="pillar-bar" style="height: 128px;" title="Sat: ₹5,000 (0.42 mg CO₂)"></div>
+              <div class="pillar-bar" style="height: 128px;" title="Sat: ₹5,000"></div>
               <span class="pillar-day">Sat</span>
             </div>
             <div class="pillar-col">
-              <div class="pillar-bar" style="height: 74px;" title="Sun: ₹1,850 (0.18 mg CO₂)"></div>
+              <div class="pillar-bar" style="height: 74px;" title="Sun: ₹1,850"></div>
               <span class="pillar-day">Sun</span>
             </div>
           </div>
@@ -346,46 +332,30 @@
 
   <!-- ================= 3. INTERACTIVE MODALS ================= -->
 
-  <!-- MODAL 1: TRANSFER MONEY (With Real-Time Carbon Preview) -->
+  <!-- MODAL 1: TRANSFER MONEY (Simplified Instant Transfer) -->
   <div class="gf-bank-modal-overlay hidden" id="modal-transfer">
     <div class="gf-bank-modal-card">
       <div class="gf-bank-modal-header">
-        <h3 class="gf-bank-modal-title">Inter-Bank Sustainable Transfer</h3>
+        <h3 class="gf-bank-modal-title">Instant Money Transfer</h3>
         <button class="gf-bank-modal-close" onclick="closeModal('modal-transfer')">&times;</button>
       </div>
       <div class="gf-bank-modal-body">
         <form id="transfer-form" onsubmit="handleTransferSubmit(event)">
-          <div class="gf-bank-form-group">
-            <label class="gf-bank-form-label">Debit Source Account</label>
-            <select class="gf-bank-form-select" id="transfer-source-acc">
-              <option value="HDFC9999">Soham Gaikwad (Admin) • HDFC9999 (₹26,289.38)</option>
-              <option value="DEMO0001">Investor Reserve • DEMO0001 (₹45,000.00)</option>
-              <option value="ALICE101">Alice Smith • ALICE101 (₹18,200.00)</option>
-            </select>
-          </div>
+          <input type="hidden" id="transfer-source-acc" value="" />
+          <input type="hidden" id="transfer-payment-type" value="UPI_TRANSFER" />
 
           <div class="gf-bank-form-group">
-            <label class="gf-bank-form-label">Beneficiary Recipient Bank ID</label>
-            <select class="gf-bank-form-select" id="transfer-dest-acc" onchange="handleRecipientSelect(this.value)">
-              <option value="MAH123">Bank of Maharashtra • MAH123 (IFSC: MAHB0001234)</option>
-              <option value="IDF892">IDFC FIRST Bank • IDF892 (IFSC: IDFB0004567)</option>
-              <option value="SBIN456">State Bank of India • SBIN456 (IFSC: SBIN0000888)</option>
-              <option value="BOB202">Bob Kumar • BOB202 (ICICI Bank)</option>
-              <option value="manual">Enter Custom Bank ID / UPI...</option>
-            </select>
-          </div>
-
-          <div class="gf-bank-form-group hidden" id="manual-recipient-group">
-            <label class="gf-bank-form-label">Custom Bank ID / UPI Virtual Address</label>
-            <input type="text" class="gf-bank-form-input" id="manual-recipient-id" placeholder="e.g. ICIC5500 or recipient@upi" />
+            <label class="gf-bank-form-label">Beneficiary UPI ID / Bank ID</label>
+            <input type="text" class="gf-bank-form-input" id="transfer-dest-acc" placeholder="e.g. bob@bank, BOB202, ALICE101, or MAH123" required />
+            <div style="font-size:11px; color:#64748b; margin-top:4px;">Enter beneficiary UPI ID, mobile VPA, or internal account identifier.</div>
           </div>
 
           <div class="gf-bank-form-group">
             <label class="gf-bank-form-label">Transfer Amount (INR ₹)</label>
-            <input type="number" class="gf-bank-form-input" id="transfer-amount-input" step="1" min="1" max="1000000" value="1250" oninput="updateCarbonPreview()" required />
+            <input type="number" class="gf-bank-form-input" id="transfer-amount-input" step="1" min="1" max="1000000" value="1250" required />
             <div class="gf-bank-amount-pills">
               <button type="button" class="amount-pill" onclick="setQuickAmount(500)">₹500</button>
-              <button type="button" class="amount-pill" onclick="setQuickAmount(1250)">₹1,250</button>
+              <button type="button" class="amount-pill" onclick="setQuickAmount(1000)">₹1,000</button>
               <button type="button" class="amount-pill" onclick="setQuickAmount(2500)">₹2,500</button>
               <button type="button" class="amount-pill" onclick="setQuickAmount(5000)">₹5,000</button>
               <button type="button" class="amount-pill" onclick="setQuickAmount(10000)">₹10,000</button>
@@ -393,44 +363,8 @@
           </div>
 
           <div class="gf-bank-form-group">
-            <label class="gf-bank-form-label">Transfer Protocol</label>
-            <select class="gf-bank-form-select" id="transfer-payment-type" onchange="updateCarbonPreview()">
-              <option value="UPI_TRANSFER">UPI Transfer (Instant • Low Computational Footprint)</option>
-              <option value="IMPS">IMPS Immediate Payment (Real-Time Service)</option>
-              <option value="NEFT">NEFT National Electronic Funds</option>
-              <option value="RTGS">RTGS Real Time Gross Settlement</option>
-            </select>
-          </div>
-
-          <div class="gf-bank-form-group">
-            <label class="gf-bank-form-label">Transaction Purpose / Note</label>
-            <input type="text" class="gf-bank-form-input" id="transfer-note" placeholder="e.g. Eco fund transfer, solar invoice" value="Sustainable Project Milestone Payment" />
-          </div>
-
-          <!-- Real-Time Carbon Preview Card -->
-          <div class="gf-bank-carbon-preview-box">
-            <div class="carbon-preview-title">
-              <span>🌱 Real-Time Computational Carbon Footprint Preview</span>
-              <span class="preview-badge simulated">SIMULATED TELEMETRY</span>
-            </div>
-            <div class="carbon-preview-grid">
-              <div>
-                <span class="c-meta-label">Attributed Workload Energy</span>
-                <span class="c-meta-val" id="prev-energy">0.695 Joules</span>
-              </div>
-              <div>
-                <span class="c-meta-label">Scope 2 Carbon Footprint</span>
-                <span class="c-meta-val" id="prev-carbon">0.138 mg CO₂</span>
-              </div>
-              <div>
-                <span class="c-meta-label">Grid Factor (CEA India v20.0)</span>
-                <span class="c-meta-val">713.0 g/kWh</span>
-              </div>
-              <div>
-                <span class="c-meta-label">Double-Entry Ledger</span>
-                <span class="c-meta-val text-success">Atomic & SHA-256 Digest</span>
-              </div>
-            </div>
+            <label class="gf-bank-form-label">Payment Purpose / Note</label>
+            <input type="text" class="gf-bank-form-input" id="transfer-note" placeholder="e.g. Rent, Grocery, Dinner, Utilities" value="Direct Payment" />
           </div>
 
           <div class="gf-bank-form-actions">
@@ -442,11 +376,11 @@
     </div>
   </div>
 
-  <!-- MODAL 2: TRANSACTION DIGITAL RECEIPT (With SHA-256 Audit Verification) -->
+  <!-- MODAL 2: TRANSACTION DIGITAL RECEIPT -->
   <div class="gf-bank-modal-overlay hidden" id="modal-receipt">
     <div class="gf-bank-modal-card">
       <div class="gf-bank-modal-header">
-        <h3 class="gf-bank-modal-title">Green Finance Digital Audit Receipt</h3>
+        <h3 class="gf-bank-modal-title">Transaction Receipt</h3>
         <button class="gf-bank-modal-close" onclick="closeModal('modal-receipt')">&times;</button>
       </div>
       <div class="gf-bank-modal-body">
@@ -455,7 +389,7 @@
             <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
             <polyline points="22 4 12 14.01 9 11.01"></polyline>
           </svg>
-          <span style="font-weight: 700; color:#059669;">Atomic Transaction Verified & Audited in Carbon Ledger</span>
+          <span style="font-weight: 700; color:#059669;">Transaction Processed Successfully</span>
         </div>
 
         <div class="receipt-amount-row">
@@ -465,7 +399,7 @@
 
         <div class="receipt-meta-table">
           <div class="receipt-meta-row">
-            <span class="receipt-label">Transaction ID:</span>
+            <span class="receipt-label">Transaction Reference:</span>
             <span class="receipt-value" id="rcpt-txid">9a81d666-dbb4-4770-987a</span>
           </div>
           <div class="receipt-meta-row">
@@ -473,37 +407,21 @@
             <span class="receipt-value" id="rcpt-time">2026-10-10 19:04:37 IST</span>
           </div>
           <div class="receipt-meta-row">
-            <span class="receipt-label">Sender Account:</span>
+            <span class="receipt-label">From Account:</span>
             <span class="receipt-value" id="rcpt-sender">HDFC9999 (Soham Gaikwad)</span>
           </div>
           <div class="receipt-meta-row">
-            <span class="receipt-label">Recipient Account:</span>
+            <span class="receipt-label">To Account:</span>
             <span class="receipt-value" id="rcpt-recipient">MAH123 (Bank of Maharashtra)</span>
           </div>
           <div class="receipt-meta-row">
-            <span class="receipt-label">Attributed Workload Energy:</span>
-            <span class="receipt-value" id="rcpt-energy">0.6952 Joules (1.93e-7 kWh)</span>
-          </div>
-          <div class="receipt-meta-row">
-            <span class="receipt-label">Computational Carbon Footprint:</span>
-            <span class="receipt-value" id="rcpt-carbon">0.138 mg CO₂ (0.00014 g)</span>
-          </div>
-          <div class="receipt-meta-row">
-            <span class="receipt-label">Electricity Grid Baseline:</span>
-            <span class="receipt-value">CEA India Baseline Database v20.0 • 713.0 g/kWh</span>
-          </div>
-          <div class="receipt-meta-row">
-            <span class="receipt-label">Cryptographic Audit Hash:</span>
-            <span class="receipt-value font-mono" id="rcpt-hash" style="word-break:break-all; font-size:11px;">d3e87443725e8f8e9348140a88e8a58ec63ab14be3014a71249d5848c3d5d6e2</span>
+            <span class="receipt-label">Security Verification:</span>
+            <span class="receipt-value font-mono" id="rcpt-hash" style="word-break:break-all; font-size:11px; color:#059669;">SHA-256 Ledger Verified</span>
           </div>
         </div>
 
         <div class="gf-bank-form-actions">
-          <a href="/sustainability/report/pdf" target="_blank" class="gf-bank-btn-secondary" style="text-decoration:none; display:inline-flex; align-items:center; gap:6px;">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
-            Download Official Audit PDF
-          </a>
-          <button type="button" class="gf-bank-btn-primary" onclick="closeModal('modal-receipt')">Done</button>
+          <button type="button" class="gf-bank-btn-primary" style="width:100%; justify-content:center;" onclick="closeModal('modal-receipt')">Done</button>
         </div>
       </div>
     </div>
@@ -536,34 +454,37 @@
     </div>
   </div>
 
-  <!-- MODAL 4: GREEN BONDS & BILLS -->
+  <!-- MODAL 4: SERVICES & UTILITY BILL PAY -->
   <div class="gf-bank-modal-overlay hidden" id="modal-paybills">
     <div class="gf-bank-modal-card">
       <div class="gf-bank-modal-header">
-        <h3 class="gf-bank-modal-title">Green Bonds & Eco Utilities</h3>
+        <h3 class="gf-bank-modal-title">Services & Utility Bill Pay</h3>
         <button class="gf-bank-modal-close" onclick="closeModal('modal-paybills')">&times;</button>
       </div>
       <div class="gf-bank-modal-body">
+        <p style="font-size:13px; color:#64748b; margin-bottom:16px;">
+          Select a verified utility service provider to initiate an instant payment:
+        </p>
         <div class="bill-categories-grid">
-          <div class="bill-cat-card" onclick="quickPayBill('Green Sovereign Bond 2026', 5000)">
-            <span style="font-size:24px;">🌱</span>
-            <strong>Green Bond</strong>
-            <span style="font-size:11px; color:#64748b;">Solar Sovereign</span>
+          <div class="bill-cat-card" onclick="quickPayBill('Electricity Bill (Mahavitaran / Adani)', 'ELEC_MAHA', 1850)">
+            <span style="font-size:26px;">⚡</span>
+            <strong>Electricity Bill</strong>
+            <span style="font-size:11px; color:#64748b;">ELEC_MAHA • ₹1,850</span>
           </div>
-          <div class="bill-cat-card" onclick="quickPayBill('Tata Solar Net Metering', 1850)">
-            <span style="font-size:24px;">⚡</span>
-            <strong>Solar Utility</strong>
-            <span style="font-size:11px; color:#64748b;">Rooftop Metering</span>
+          <div class="bill-cat-card" onclick="quickPayBill('Water Utility (MCGM / Municipal)', 'WATER_MCGM', 450)">
+            <span style="font-size:26px;">💧</span>
+            <strong>Water Utility</strong>
+            <span style="font-size:11px; color:#64748b;">WATER_MCGM • ₹450</span>
           </div>
-          <div class="bill-cat-card" onclick="quickPayBill('Clean Water Treatment Utility', 620)">
-            <span style="font-size:24px;">💧</span>
-            <strong>Clean Water</strong>
-            <span style="font-size:11px; color:#64748b;">Municipal ESG</span>
+          <div class="bill-cat-card" onclick="quickPayBill('Piped Gas Utility (MGL / IGL)', 'GAS_MGL', 920)">
+            <span style="font-size:26px;">🔥</span>
+            <strong>Piped Gas Utility</strong>
+            <span style="font-size:11px; color:#64748b;">GAS_MGL • ₹920</span>
           </div>
-          <div class="bill-cat-card" onclick="quickPayBill('Wind Energy Grid Subscription', 1400)">
-            <span style="font-size:24px;">💨</span>
-            <strong>Wind Power</strong>
-            <span style="font-size:11px; color:#64748b;">Renewable Tariffs</span>
+          <div class="bill-cat-card" onclick="quickPayBill('Broadband & Telecom (Jio / Airtel)', 'TELE_JIO', 799)">
+            <span style="font-size:26px;">📶</span>
+            <strong>Broadband & Mobile</strong>
+            <span style="font-size:11px; color:#64748b;">TELE_JIO • ₹799</span>
           </div>
         </div>
       </div>
@@ -574,7 +495,7 @@
   <div class="gf-bank-modal-overlay hidden" id="modal-topup">
     <div class="gf-bank-modal-card">
       <div class="gf-bank-modal-header">
-        <h3 class="gf-bank-modal-title">Deposit Funds into Green Account</h3>
+        <h3 class="gf-bank-modal-title">Deposit Funds into Account</h3>
         <button class="gf-bank-modal-close" onclick="closeModal('modal-topup')">&times;</button>
       </div>
       <div class="gf-bank-modal-body">
@@ -590,32 +511,38 @@
     </div>
   </div>
 
-  <!-- MODAL 6: CARBON OFFSET / WORKLOAD BENCH -->
-  <div class="gf-bank-modal-overlay hidden" id="modal-exchange">
+  <!-- MODAL 6: HELP & SUPPORT -->
+  <div class="gf-bank-modal-overlay hidden" id="modal-support">
     <div class="gf-bank-modal-card">
       <div class="gf-bank-modal-header">
-        <h3 class="gf-bank-modal-title">Carbon Offset & Workload Test Bench</h3>
-        <button class="gf-bank-modal-close" onclick="closeModal('modal-exchange')">&times;</button>
+        <h3 class="gf-bank-modal-title">Customer Support & Help Desk</h3>
+        <button class="gf-bank-modal-close" onclick="closeModal('modal-support')">&times;</button>
       </div>
       <div class="gf-bank-modal-body">
-        <p style="font-size:13px; color:#64748b; margin-bottom:16px;">
-          Generate multi-transaction batches to test Kepler eBPF power estimation, drive live Prometheus counters, and verify Scope 2 carbon calculation:
-        </p>
-        <div class="exchange-bench-grid">
-          <button class="bench-btn" onclick="executeBatchSimulation(5)">
-            <strong>Generate 5 Transactions</strong>
-            <span>Quick Smoke Test (~3.5 Joules attributed)</span>
-          </button>
-          <button class="bench-btn" onclick="executeBatchSimulation(10)">
-            <strong>Generate 10 Transactions</strong>
-            <span>Multi-User Load (~7.0 Joules attributed)</span>
-          </button>
-          <button class="bench-btn" onclick="executeBatchSimulation(25)">
-            <strong>Generate 25 Transactions</strong>
-            <span>High-Concurrency Stress Test (~17.5 Joules)</span>
-          </button>
+        <div style="text-align:center; padding:12px 0 16px;">
+          <div style="width:52px; height:52px; border-radius:50%; background:#ecfdf5; color:#059669; display:flex; align-items:center; justify-content:center; margin:0 auto 10px; font-size:24px;">💬</div>
+          <h4 style="font-size:16px; font-weight:700; color:#0f172a; margin-bottom:4px;">We're Here to Help</h4>
+          <p style="font-size:13px; color:#64748b;">Contact our customer service team for transaction queries, account assistance, or dispute resolutions.</p>
         </div>
-        <div id="exchange-feedback" style="margin-top:14px; font-size:12px; color:#059669; font-weight:600;"></div>
+        <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:16px; margin-bottom:20px; font-size:13px; display:flex; flex-direction:column; gap:12px;">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span style="color:#64748b;">Support Email:</span>
+            <a href="mailto:support@greenfinance.dev" style="color:#059669; font-weight:700; text-decoration:none;">support@greenfinance.dev</a>
+          </div>
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span style="color:#64748b;">Toll-Free Helpline:</span>
+            <strong style="color:#0f172a; font-family:monospace;">1800-425-GRFIN (47346)</strong>
+          </div>
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span style="color:#64748b;">Support Hours:</span>
+            <span style="color:#0f172a; font-weight:600;">24x7 Customer Care</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span style="color:#64748b;">Dispute Resolution:</span>
+            <span style="color:#0f172a; font-weight:600;">TAT &lt; 24 Working Hours</span>
+          </div>
+        </div>
+        <button type="button" class="gf-bank-btn-primary" style="width:100%; justify-content:center;" onclick="closeModal('modal-support')">Close</button>
       </div>
     </div>
   </div>

@@ -574,7 +574,59 @@ function cyclePowerIntensityPeriod() {
 }
 
 function openAddTaskModal() {
-  showInvestigatorToast('Audit Task added: "Grid Factor Re-verification — Central Electricity Authority (713 g/kWh)"');
+  const modal = document.getElementById('modal-add-task');
+  if (modal) {
+    modal.classList.remove('hidden');
+    const nameInput = document.getElementById('task-input-name');
+    if (nameInput) nameInput.focus();
+  }
+}
+
+function closeAddTaskModal() {
+  const modal = document.getElementById('modal-add-task');
+  if (modal) modal.classList.add('hidden');
+}
+
+function handleCreateTask(e) {
+  e.preventDefault();
+  const name = document.getElementById('task-input-name').value.trim();
+  const assignee = document.getElementById('task-input-assignee').value;
+  const priority = document.getElementById('task-input-priority').value;
+  const status = document.getElementById('task-input-status').value;
+  const deadline = document.getElementById('task-input-deadline').value.trim();
+
+  if (!name) return;
+
+  const tbody = document.getElementById('gf-inv-task-table-body') || document.getElementById('gf-task-table-body');
+  if (tbody) {
+    const tr = document.createElement('tr');
+
+    const statusLabel = status === 'in-progress' ? 'In Progress' : (status === 'completed' ? 'Completed' : 'Pending');
+    const priorityLabel = priority === 'high' ? 'High' : (priority === 'medium' ? 'Medium' : 'Low');
+
+    tr.innerHTML = `
+      <td class="gf-inv-task-name">${name}</td>
+      <td>
+        <div class="gf-inv-assigned-user">
+          <svg class="gf-inv-user-outline-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+          <span>${assignee}</span>
+        </div>
+      </td>
+      <td><span class="gf-inv-status-text ${status}">${statusLabel}</span></td>
+      <td><span class="gf-inv-priority-text ${priority}">${priorityLabel}</span></td>
+      <td>
+        <span class="gf-inv-deadline">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+          ${deadline}
+        </span>
+      </td>
+    `;
+    tbody.prepend(tr);
+  }
+
+  closeAddTaskModal();
+  document.getElementById('task-input-name').value = '';
+  showInvestigatorToast(`Audit Task "${name}" created successfully!`);
 }
 
 function handleInvestigatorSearch(query) {

@@ -108,40 +108,12 @@
             <span>Grafana Dashboard</span>
           </a>
         </li>
-        <li style="margin: 12px 10px 4px; border-top: 1px solid #eef2f6; padding-top: 10px; list-style: none;">
-          <span style="font-size: 9.5px; font-weight: 700; color: #94a3b8; letter-spacing: 0.08em; text-transform: uppercase;">Operations &amp; Security</span>
-        </li>
-        <li class="gf-inv-nav-item">
-          <a href="/operations" class="gf-inv-nav-link" style="color:#0284c7;">
-            <svg class="gf-inv-nav-icon" viewBox="0 0 24 24" style="stroke:#0284c7;">
-              <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
-            </svg>
-            <span>Operations Center</span>
-          </a>
-        </li>
-        <li class="gf-inv-nav-item">
-          <a href="/admin" class="gf-inv-nav-link" style="color:#7c3aed;">
-            <svg class="gf-inv-nav-icon" viewBox="0 0 24 24" style="stroke:#7c3aed;">
-              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-            </svg>
-            <span>Admin Control</span>
-          </a>
-        </li>
-        <li class="gf-inv-nav-item">
-          <a href="/" class="gf-inv-nav-link" style="color:#475569;">
-            <svg class="gf-inv-nav-icon" viewBox="0 0 24 24" style="stroke:#475569;">
-              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-              <polyline points="9 22 9 12 15 12 15 22"/>
-            </svg>
-            <span>Home Hub</span>
-          </a>
-        </li>
       </ul>
 
       <!-- Transparency notice footer -->
       <div class="gf-inv-sidebar-footer">
         <div class="gf-inv-footer-meta">
-          <strong>S.P.I.T. Mumbai • Group 13</strong><br>
+          <strong>Green Finance ESG Ledger</strong><br>
           CEA Factor: <strong>713 g/kWh</strong><br>
           Telemetry: <span class="gf-inv-badge simulated" id="gf-inv-telemetry-badge">SIMULATED</span>
         </div>
@@ -172,8 +144,8 @@
             </svg>
           </button>
 
-          <!-- User Profile: Soham Gaikwad / Lead Investigator -->
-          <div class="gf-inv-user-profile" onclick="showInvestigatorToast('Active Lead Investigator: Soham Gaikwad (Group 13, S.P.I.T. Mumbai)')">
+          <!-- User Profile: Verified Lead Investigator -->
+          <div class="gf-inv-user-profile" onclick="showInvestigatorToast('Role: Lead Sustainability Investigator')">
             <div class="gf-inv-avatar-circle" id="gf-inv-avatar">SG</div>
             <div class="gf-inv-user-meta">
               <span class="gf-inv-user-name" id="gf-inv-name">Soham Gaikwad</span>
@@ -717,6 +689,60 @@
 
     </main>
 
+  </div>
+
+  <!-- Interactive Add Task Modal -->
+  <div class="gf-inv-modal-overlay hidden" id="modal-add-task">
+    <div class="gf-inv-modal-card">
+      <div class="gf-inv-modal-header">
+        <h3 class="gf-inv-modal-title">Create Sustainability Audit Task</h3>
+        <button class="gf-inv-modal-close" onclick="closeAddTaskModal()">&times;</button>
+      </div>
+      <form id="add-task-form" onsubmit="handleCreateTask(event)">
+        <div class="gf-inv-form-group">
+          <label class="gf-inv-label">Audit Task Name</label>
+          <input type="text" class="gf-inv-input" id="task-input-name" placeholder="e.g. Scope 2 Re-verification for auth-service" required />
+        </div>
+        <div class="gf-inv-grid-2">
+          <div class="gf-inv-form-group">
+            <label class="gf-inv-label">Assigned Investigator</label>
+            <select class="gf-inv-select" id="task-input-assignee">
+              <option value="Soham Gaikwad" selected>Soham Gaikwad (Lead)</option>
+              <option value="Atharva Hule">Atharva Hule</option>
+              <option value="Prathamesh Shinde">Prathamesh Shinde</option>
+              <option value="Yashraj Mane">Yashraj Mane</option>
+              <option value="ESG Auditor Desk">ESG Auditor Desk</option>
+            </select>
+          </div>
+          <div class="gf-inv-form-group">
+            <label class="gf-inv-label">Priority</label>
+            <select class="gf-inv-select" id="task-input-priority">
+              <option value="high" selected>High Priority</option>
+              <option value="medium">Medium Priority</option>
+              <option value="low">Low Priority</option>
+            </select>
+          </div>
+        </div>
+        <div class="gf-inv-grid-2">
+          <div class="gf-inv-form-group">
+            <label class="gf-inv-label">Status</label>
+            <select class="gf-inv-select" id="task-input-status">
+              <option value="in-progress" selected>In Progress</option>
+              <option value="pending">Pending</option>
+              <option value="completed">Completed</option>
+            </select>
+          </div>
+          <div class="gf-inv-form-group">
+            <label class="gf-inv-label">Deadline (DD/MM/YYYY)</label>
+            <input type="text" class="gf-inv-input" id="task-input-deadline" placeholder="e.g. 28/01/2026" value="28/01/2026" required />
+          </div>
+        </div>
+        <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:16px;">
+          <button type="button" class="gf-inv-btn" style="background:#f1f5f9; color:#475569;" onclick="closeAddTaskModal()">Cancel</button>
+          <button type="submit" class="gf-inv-btn gf-inv-btn-primary">Add to Audit Ledger</button>
+        </div>
+      </form>
+    </div>
   </div>
 
   <!-- Notification Toast Container -->
