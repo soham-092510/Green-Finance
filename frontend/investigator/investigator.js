@@ -27,18 +27,27 @@ document.addEventListener('DOMContentLoaded', () => {
   setInterval(updateTelemetryBadge, 10000);
 });
 
+function getCookie(name) {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop().split(';').shift();
+  return null;
+}
+
+function getCsrfToken() {
+  return getCookie('csrf_token') || '';
+}
+
 async function initInvestigatorSession() {
-  const token = localStorage.getItem('access_token');
-  if (!token) {
-    window.location.href = '/login';
-    return;
-  }
   try {
-    const res = await fetch('/user/me', {
-      headers: { 'Authorization': `Bearer ${token}` }
-    });
+    const token = localStorage.getItem('access_token');
+    const headers = { 'Accept': 'application/json' };
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+    const res = await fetch('/user/me', { headers });
     if (!res.ok) {
-      localStorage.removeItem('access_token');
+      localStorage.clear();
       window.location.href = '/login';
       return;
     }
@@ -56,25 +65,26 @@ async function initInvestigatorSession() {
     if (avEl) avEl.textContent = (u.name || u.username).slice(0, 2).toUpperCase();
   } catch (e) {
     console.warn('Investigator session check warning:', e);
+    window.location.href = '/login';
   }
 }
 
 async function handleInvestigatorLogout() {
   const token = localStorage.getItem('access_token');
-  if (token) {
-    try {
-      await fetch('/auth/logout', {
-        method: 'POST',
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-    } catch (e) {
-      console.warn('Logout warning:', e);
-    }
+  const csrf = getCsrfToken();
+  const headers = {};
+  if (token) headers['Authorization'] = `Bearer ${token}`;
+  if (csrf) headers['X-CSRF-Token'] = csrf;
+
+  try {
+    await fetch('/auth/logout', {
+      method: 'POST',
+      headers: headers
+    });
+  } catch (e) {
+    console.warn('Logout warning:', e);
   }
-  localStorage.removeItem('access_token');
-  localStorage.removeItem('refresh_token');
-  localStorage.removeItem('user_role');
-  localStorage.removeItem('green_bank_active_user');
+  localStorage.clear();
   window.location.href = '/login';
 }
 

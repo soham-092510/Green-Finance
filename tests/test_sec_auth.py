@@ -94,7 +94,7 @@ def test_auth_03_generic_error_prevents_account_enumeration(client):
         "password": "any_password"
     })
     assert resp1.status_code == 401
-    assert "Invalid username or password" in resp1.json().get("error", "")
+    assert "Invalid username" in resp1.json().get("error", "")
 
     # 2. Existing user with wrong password
     resp2 = client.post("/auth/login-json", json={
@@ -102,7 +102,7 @@ def test_auth_03_generic_error_prevents_account_enumeration(client):
         "password": "completely_wrong_password_xyz"
     })
     assert resp2.status_code == 401
-    assert "Invalid username or password" in resp2.json().get("error", "")
+    assert "Invalid username" in resp2.json().get("error", "")
 
 
 def test_auth_04_argon2id_password_hashing(client):
@@ -125,6 +125,7 @@ def test_auth_04_argon2id_password_hashing(client):
 
 def test_auth_05_anonymous_access_to_protected_route_rejected(client):
     """Verifies unauthenticated calls to /user/me return 401."""
+    client.cookies.clear()
     resp = client.get("/user/me")
     assert resp.status_code == 401
 

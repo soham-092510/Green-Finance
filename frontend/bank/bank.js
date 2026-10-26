@@ -45,24 +45,34 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
+function getCookie(name) {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop().split(';').shift();
+  return null;
+}
+
+function getCsrfToken() {
+  return getCookie('csrf_token') || '';
+}
+
 /* ---------------------------------------------------------------------
-   1. USER SESSION MANAGEMENT
+   1. USER SESSION MANAGEMENT (SERVER-SOURCE-OF-TRUTH)
    --------------------------------------------------------------------- */
 async function initUserSession() {
-  const token = localStorage.getItem('access_token');
-  if (!token) {
-    window.location.href = '/login';
-    return;
-  }
-
   try {
-    const res = await fetch('/user/me', {
-      headers: { 'Authorization': `Bearer ${token}` }
-    });
+    const token = localStorage.getItem('access_token');
+    const headers = { 'Accept': 'application/json' };
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+
+    const res = await fetch('/user/me', { headers });
     if (!res.ok) {
       localStorage.removeItem('access_token');
       localStorage.removeItem('refresh_token');
       localStorage.removeItem('user_role');
+      localStorage.removeItem('green_bank_active_user');
       window.location.href = '/login';
       return;
     }
@@ -84,25 +94,24 @@ async function initUserSession() {
     loadBackendTransactions();
   } catch (e) {
     console.warn('Session verification fallback:', e);
-    const saved = localStorage.getItem('green_bank_active_user');
-    if (saved) {
-      try { GREEN_BANK_STATE.currentUser = JSON.parse(saved); } catch (_) {}
-    }
-    renderUserInterface();
+    window.location.href = '/login';
   }
 }
 
 async function handleLogout() {
   const token = localStorage.getItem('access_token');
-  if (token) {
-    try {
-      await fetch('/auth/logout', {
-        method: 'POST',
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-    } catch (e) {
-      console.warn('Logout request warning:', e);
-    }
+  const csrf = getCsrfToken();
+  const headers = {};
+  if (token) headers['Authorization'] = `Bearer ${token}`;
+  if (csrf) headers['X-CSRF-Token'] = csrf;
+
+  try {
+    await fetch('/auth/logout', {
+      method: 'POST',
+      headers: headers
+    });
+  } catch (e) {
+    console.warn('Logout request warning:', e);
   }
   localStorage.removeItem('access_token');
   localStorage.removeItem('refresh_token');
@@ -551,6 +560,10 @@ async function handleTransferSubmit(e) {
       'Content-Type': 'application/json',
       'Idempotency-Key': 'idemp-' + Date.now() + '-' + Math.random().toString(36).substring(2, 9)
     };
+    const csrf = getCsrfToken();
+    if (csrf) {
+      headers['X-CSRF-Token'] = csrf;
+    }
     if (token) {
       headers['Authorization'] = `Bearer ${token}`;
     }

@@ -9,6 +9,7 @@ import random
 from datetime import datetime, timedelta
 from typing import Dict, Any, Optional
 from sqlalchemy.orm import Session
+from sqlalchemy import or_, func
 from fastapi import HTTPException, status
 
 from backend.models.user import User
@@ -31,14 +32,17 @@ def register_user(db: Session, schema: UserRegister) -> User:
     Never accepts caller-controlled roles. Creates double-entry asset,
     liability, and cash wallet accounts transactionally.
     """
-    existing_username = db.query(User).filter(User.username == schema.username).first()
+    normalized_username = schema.username.strip()
+    normalized_email = schema.email.strip().lower()
+
+    existing_username = db.query(User).filter(User.username == normalized_username).first()
     if existing_username:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Username is already registered"
         )
 
-    existing_email = db.query(User).filter(User.email == schema.email).first()
+    existing_email = db.query(User).filter(func.lower(User.email) == normalized_email).first()
     if existing_email:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -48,9 +52,9 @@ def register_user(db: Session, schema: UserRegister) -> User:
     bank_id = f"GF{random.randint(100000, 999999)}"
 
     new_user = User(
-        name=schema.name or schema.username,
-        username=schema.username,
-        email=schema.email,
+        name=schema.name.strip() if schema.name else normalized_username,
+        username=normalized_username,
+        email=normalized_email,
         bank_id=bank_id,
         hashed_password=hash_password(schema.password),
         role="CUSTOMER",  # Enforce CUSTOMER role strictly
@@ -83,8 +87,17 @@ def register_user(db: Session, schema: UserRegister) -> User:
     db.add(cash_wallet)
     db.add(carbon_asset)
     db.add(carbon_liability)
-    db.commit()
-    db.refresh(new_user)
+
+    try:
+        db.commit()
+        db.refresh(new_user)
+    except Exception as exc:
+        db.rollback()
+        logger.error(f"Registration transaction failed: {exc}")
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Account registration failed due to duplicate username or email."
+        )
 
     logger.info(f"User registered successfully: {new_user.username} ({new_user.bank_id})")
     return new_user
@@ -98,10 +111,16 @@ def authenticate_user(
     user_agent: Optional[str] = None
 ) -> Dict[str, Any]:
     """
-    Validates credentials, protects against brute-force lockout,
+    Validates credentials by username or email, protects against brute-force lockout,
     issues JWT with unique JTI, and registers an active session in auth_sessions.
     """
-    user = db.query(User).filter(User.username == username).first()
+    cleaned_identifier = username.strip()
+    user = db.query(User).filter(
+        or_(
+            User.username == cleaned_identifier,
+            func.lower(User.email) == cleaned_identifier.lower()
+        )
+    ).first()
 
     # Check lockout
     now = datetime.utcnow()
@@ -131,10 +150,10 @@ def authenticate_user(
                 user.locked_until = now + timedelta(minutes=15)
                 logger.warning(f"User account locked due to 5 failed attempts: {user.username}")
             db.commit()
-        # Constant generic response to prevent username enumeration
+        # Constant generic response to prevent username/email enumeration
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid username or password",
+            detail="Invalid username/email or password",
             headers={"WWW-Authenticate": "Bearer"}
         )
 
@@ -184,6 +203,7 @@ def authenticate_user(
             "role": user.role,
             "bank_id": user.bank_id,
             "name": user.name,
+            "email": user.email,
             "is_boss_admin": user.is_boss_admin
         }
     }

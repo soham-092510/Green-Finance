@@ -4,6 +4,7 @@
 #          and declarative hierarchical RBAC permission enforcement.
 # =====================================================================
 
+from datetime import datetime
 from fastapi import Depends, HTTPException, status, Request
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
@@ -18,17 +19,19 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/login", auto_error=False)
 
 
 def extract_token(request: Request, bearer_token: Optional[str] = Depends(oauth2_scheme)) -> Optional[str]:
-    """Extracts JWT token from Authorization header, HttpOnly cookie, or query param."""
+    """
+    Extracts JWT token from Authorization header or HttpOnly cookie.
+    Query-parameter token extraction is strictly disabled to prevent token leakage in URLs and logs.
+    """
     if bearer_token:
+        request.state.auth_type = "bearer"
         return bearer_token
     cookie_token = request.cookies.get("access_token")
     if cookie_token:
+        request.state.auth_type = "cookie"
         if cookie_token.startswith("Bearer "):
             return cookie_token.split(" ")[1]
         return cookie_token
-    token_param = request.query_params.get("token")
-    if token_param:
-        return token_param
     return None
 
 
@@ -38,8 +41,8 @@ def get_current_user(
     token: Optional[str] = Depends(extract_token)
 ) -> User:
     """
-    Validates token signature, expiration, active session status (not revoked),
-    and user account status (not suspended/disabled).
+    Validates token signature, expiration, active session status (not revoked/expired),
+    CSRF headers for cookie-authenticated mutations, and user account status.
     """
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
@@ -58,15 +61,33 @@ def get_current_user(
     if username is None:
         raise credentials_exception
 
-    # Check session revocation if JTI is present
+    # Check session revocation and expiry if JTI is present in auth_sessions
     jti: Optional[str] = payload.get("jti")
+    now = datetime.utcnow()
     if jti:
         session_rec = db.query(AuthSession).filter(AuthSession.token_jti == jti).first()
-        if session_rec and session_rec.is_revoked:
+        if not session_rec or session_rec.is_revoked:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Session has been revoked. Please log in again.",
+                detail="Session has been revoked or is invalid. Please log in again.",
                 headers={"WWW-Authenticate": "Bearer"}
+            )
+        if session_rec.expires_at and session_rec.expires_at < now:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Session has expired. Please log in again.",
+                headers={"WWW-Authenticate": "Bearer"}
+            )
+
+    # CSRF protection for cookie-authenticated state-changing requests
+    auth_type = getattr(request.state, "auth_type", None)
+    if auth_type == "cookie" and request.method in ("POST", "PUT", "DELETE", "PATCH"):
+        header_csrf = request.headers.get("x-csrf-token") or request.headers.get("X-CSRF-Token")
+        cookie_csrf = request.cookies.get("csrf_token")
+        if not header_csrf or not cookie_csrf or header_csrf != cookie_csrf:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="CSRF validation failed: Missing or invalid X-CSRF-Token header"
             )
 
     user = db.query(User).filter(User.username == username).first()

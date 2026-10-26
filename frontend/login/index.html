@@ -56,7 +56,7 @@
 
     .auth-container {
       width: 100%;
-      max-width: 520px;
+      max-width: 480px;
     }
 
     /* Brand Header */
@@ -157,29 +157,34 @@
     .input-icon {
       position: absolute;
       left: 12px;
-      color: #94a3b8;
+      color: var(--text-light);
       pointer-events: none;
       display: flex;
       align-items: center;
+      justify-content: center;
     }
 
     .form-input {
       width: 100%;
       height: 44px;
-      padding: 10px 14px 10px 40px;
-      background: #ffffff;
+      padding: 0 40px 0 38px;
       border: 1px solid var(--border-color);
       border-radius: 10px;
       font-family: var(--font-sans);
       font-size: 14px;
       color: var(--text-main);
+      background: #ffffff;
       transition: all 0.2s ease;
     }
 
     .form-input:focus {
       outline: none;
-      border-color: var(--emerald-primary);
-      box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.15);
+      border-color: var(--border-focus);
+      box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.12);
+    }
+
+    .form-input::placeholder {
+      color: #cbd5e1;
     }
 
     .toggle-pwd {
@@ -187,15 +192,24 @@
       right: 12px;
       background: none;
       border: none;
-      color: #94a3b8;
+      color: var(--text-light);
       cursor: pointer;
+      padding: 4px;
       display: flex;
       align-items: center;
-      padding: 4px;
+      justify-content: center;
+      transition: color 0.15s ease;
     }
 
     .toggle-pwd:hover {
       color: var(--text-main);
+    }
+
+    .field-hint {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 4px;
+      line-height: 1.4;
     }
 
     /* Submit Button */
@@ -208,41 +222,55 @@
       border-radius: 10px;
       font-family: var(--font-sans);
       font-size: 14px;
-      font-weight: 700;
+      font-weight: 600;
       cursor: pointer;
       transition: all 0.2s ease;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
-      box-shadow: 0 4px 12px rgba(5, 150, 105, 0.25);
-      margin-top: 8px;
+      box-shadow: 0 4px 12px rgba(5, 150, 105, 0.2);
+      margin-top: 22px;
     }
 
-    .btn-submit:hover {
+    .btn-submit:hover:not(:disabled) {
       background: var(--emerald-hover);
+      box-shadow: 0 6px 16px rgba(5, 150, 105, 0.28);
       transform: translateY(-1px);
     }
 
-    .btn-submit:active {
-      transform: translateY(0);
-    }
-
     .btn-submit:disabled {
-      background: #94a3b8;
+      opacity: 0.65;
       cursor: not-allowed;
-      box-shadow: none;
       transform: none;
     }
 
-    /* Notice & Alert Box */
+    /* Switch links */
+    .switch-link {
+      text-align: center;
+      font-size: 12.5px;
+      color: var(--text-muted);
+      margin-top: 16px;
+    }
+
+    .switch-link a {
+      color: var(--emerald-primary);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .switch-link a:hover {
+      text-decoration: underline;
+    }
+
+    /* Alert Box */
     .alert-box {
+      display: none;
       padding: 12px 14px;
       border-radius: 10px;
-      font-size: 13px;
-      margin-bottom: 18px;
-      display: none;
+      font-size: 12.5px;
       line-height: 1.4;
+      margin-bottom: 20px;
     }
 
     .alert-box.error {
@@ -263,81 +291,13 @@
       gap: 8px;
     }
 
-    /* Demo Quick Switcher Section */
-    .demo-role-section {
-      margin-top: 24px;
-      padding-top: 20px;
-      border-top: 1px dashed var(--border-color);
-    }
-
-    .demo-role-title {
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      color: var(--text-muted);
-      margin-bottom: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .demo-chips-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-    }
-
-    .demo-chip {
-      background: #f8fafc;
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      padding: 8px 10px;
-      text-align: left;
-      cursor: pointer;
-      transition: all 0.15s ease;
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-
-    .demo-chip:hover {
-      border-color: #cbd5e1;
-      background: #f1f5f9;
-      transform: translateY(-1px);
-    }
-
-    .demo-chip-role {
-      font-size: 11px;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-
-    .demo-chip.customer .demo-chip-role { color: var(--emerald-primary); }
-    .demo-chip.admin .demo-chip-role { color: #0284c7; }
-    .demo-chip.investigator .demo-chip-role { color: var(--purple-primary); }
-    .demo-chip.boss .demo-chip-role { color: var(--amber-primary); }
-
-    .demo-chip-name {
-      font-size: 10.5px;
-      color: var(--text-muted);
-    }
-
-    .demo-chip-dest {
-      font-size: 9.5px;
-      font-family: var(--font-mono);
-      color: #94a3b8;
-    }
-
     /* Routing Info Banner */
     .routing-banner {
       background: #f8fafc;
       border: 1px solid #e2e8f0;
       border-radius: 10px;
       padding: 12px 14px;
-      margin-top: 16px;
+      margin-top: 20px;
       font-size: 11.5px;
       color: #475569;
       line-height: 1.5;
@@ -355,12 +315,22 @@
       color: var(--text-light);
     }
 
+    .spinner {
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255, 255, 255, 0.4);
+      border-top-color: #ffffff;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
     @media (max-width: 480px) {
       .auth-card {
         padding: 24px 20px;
-      }
-      .demo-chips-grid {
-        grid-template-columns: 1fr;
       }
     }
   </style>
@@ -380,8 +350,8 @@
     <div class="auth-card">
 
       <!-- Tab Switcher -->
-      <div class="tab-header">
-        <button class="tab-btn active" id="tab-login-btn" onclick="switchTab('login')">
+      <div class="tab-header" role="tablist">
+        <button class="tab-btn active" id="tab-login-btn" role="tab" aria-selected="true" onclick="switchTab('login')">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
             <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
             <polyline points="10 17 15 12 10 7"></polyline>
@@ -389,7 +359,7 @@
           </svg>
           Sign In
         </button>
-        <button class="tab-btn" id="tab-register-btn" onclick="switchTab('register')">
+        <button class="tab-btn" id="tab-register-btn" role="tab" aria-selected="false" onclick="switchTab('register')">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
             <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
             <circle cx="8.5" cy="7" r="4"></circle>
@@ -401,7 +371,7 @@
       </div>
 
       <!-- Alert Box -->
-      <div id="alert-box" class="alert-box"></div>
+      <div id="alert-box" class="alert-box" role="alert" aria-live="polite"></div>
 
       <!-- TAB 1: LOGIN FORM -->
       <form id="login-form" onsubmit="handleLogin(event)">
@@ -414,7 +384,7 @@
                 <circle cx="12" cy="7" r="4"></circle>
               </svg>
             </span>
-            <input type="text" id="login-username" class="form-input" placeholder="e.g. alice_smith" required autocomplete="username" />
+            <input type="text" id="login-username" class="form-input" placeholder="e.g. alice_smith or alice@example.com" required autocomplete="username" />
           </div>
         </div>
 
@@ -427,8 +397,8 @@
                 <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
               </svg>
             </span>
-            <input type="password" id="login-password" class="form-input" placeholder="Enter password" required autocomplete="current-password" />
-            <button type="button" class="toggle-pwd" onclick="togglePasswordVisibility('login-password')">
+            <input type="password" id="login-password" class="form-input" placeholder="Enter your password" required autocomplete="current-password" />
+            <button type="button" class="toggle-pwd" aria-label="Toggle password visibility" onclick="togglePasswordVisibility('login-password')">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                 <circle cx="12" cy="12" r="3"></circle>
@@ -444,43 +414,9 @@
           </svg>
         </button>
 
-        <!-- Role Demonstration Quick Selector -->
-        <div class="demo-role-section">
-          <div class="demo-role-title">
-            <span>Instant Role Demonstrator</span>
-            <span style="font-weight:400; text-transform:none; font-size:10px; color:#94a3b8;">Click to auto-fill</span>
-          </div>
-
-          <div class="demo-chips-grid">
-            <!-- Customer -->
-            <button type="button" class="demo-chip customer" onclick="fillCredentials('alice_smith', 'password123', 'CUSTOMER')">
-              <span class="demo-chip-role">🏛️ Customer User</span>
-              <span class="demo-chip-name">Alice Smith</span>
-              <span class="demo-chip-dest">Routes to: /bank</span>
-            </button>
-
-            <!-- Admin -->
-            <button type="button" class="demo-chip admin" onclick="fillCredentials('admin_priya', 'password123', 'ADMIN')">
-              <span class="demo-chip-role">⚙️ Delegated Admin</span>
-              <span class="demo-chip-name">Priya Sharma</span>
-              <span class="demo-chip-dest">Routes to: /admin</span>
-            </button>
-
-            <!-- Investigator -->
-            <button type="button" class="demo-chip investigator" onclick="fillCredentials('investigator_rahul', 'password123', 'INVESTIGATOR')">
-              <span class="demo-chip-role">🔬 Investigator</span>
-              <span class="demo-chip-name">Rahul Deshmukh</span>
-              <span class="demo-chip-dest">Routes to: /investigator</span>
-            </button>
-
-            <!-- Boss Admin -->
-            <button type="button" class="demo-chip boss" onclick="fillCredentials('soham_gaikwad', 'password123', 'SUPER_ADMIN')">
-              <span class="demo-chip-role">👑 Boss Admin</span>
-              <span class="demo-chip-name">Soham Gaikwad</span>
-              <span class="demo-chip-dest">Routes to: /admin/super</span>
-            </button>
-          </div>
-        </div>
+        <p class="switch-link">
+          Don't have an account? <a href="#" onclick="switchTab('register'); return false;">Create Customer Account</a>
+        </p>
       </form>
 
       <!-- TAB 2: REGISTER FORM (CUSTOMER) -->
@@ -494,7 +430,7 @@
                 <circle cx="12" cy="7" r="4"></circle>
               </svg>
             </span>
-            <input type="text" id="reg-name" class="form-input" placeholder="e.g. John Doe" required />
+            <input type="text" id="reg-name" class="form-input" placeholder="e.g. John Doe" required minlength="2" autocomplete="name" />
           </div>
         </div>
 
@@ -507,8 +443,9 @@
                 <path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-3.92 7.94"></path>
               </svg>
             </span>
-            <input type="text" id="reg-username" class="form-input" placeholder="e.g. john_doe" required autocomplete="username" />
+            <input type="text" id="reg-username" class="form-input" placeholder="e.g. john_doe" required minlength="3" autocomplete="username" />
           </div>
+          <div class="field-hint">Letters, numbers, and underscores only (3-50 chars).</div>
         </div>
 
         <div class="form-group">
@@ -525,7 +462,7 @@
         </div>
 
         <div class="form-group">
-          <label class="form-label" for="reg-password">Create Strong Password</label>
+          <label class="form-label" for="reg-password">Password</label>
           <div class="input-wrapper">
             <span class="input-icon">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -533,8 +470,28 @@
                 <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
               </svg>
             </span>
-            <input type="password" id="reg-password" class="form-input" placeholder="Minimum 6 characters" required autocomplete="new-password" minlength="6" />
-            <button type="button" class="toggle-pwd" onclick="togglePasswordVisibility('reg-password')">
+            <input type="password" id="reg-password" class="form-input" placeholder="Minimum 8 characters" required minlength="8" autocomplete="new-password" />
+            <button type="button" class="toggle-pwd" aria-label="Toggle password visibility" onclick="togglePasswordVisibility('reg-password')">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+            </button>
+          </div>
+          <div class="field-hint">Must contain at least 8 characters, with letters and numbers.</div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="reg-confirm-password">Confirm Password</label>
+          <div class="input-wrapper">
+            <span class="input-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+              </svg>
+            </span>
+            <input type="password" id="reg-confirm-password" class="form-input" placeholder="Re-enter password" required minlength="8" autocomplete="new-password" />
+            <button type="button" class="toggle-pwd" aria-label="Toggle password visibility" onclick="togglePasswordVisibility('reg-confirm-password')">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                 <circle cx="12" cy="12" r="3"></circle>
@@ -544,26 +501,30 @@
         </div>
 
         <button type="submit" id="reg-submit-btn" class="btn-submit">
-          <span>Open Green Account &amp; Launch</span>
+          <span>Open Customer Account</span>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
             <line x1="5" y1="12" x2="19" y2="12"></line>
             <polyline points="12 5 19 12 12 19"></polyline>
           </svg>
         </button>
+
+        <p class="switch-link">
+          Already registered? <a href="#" onclick="switchTab('login'); return false;">Sign In</a>
+        </p>
       </form>
 
       <!-- Routing Info Banner -->
       <div class="routing-banner">
-        <strong>🛡️ Role-Isolated Redirection:</strong>
-        Each user is directed exclusively to their authorized interface. Regular customers access the Sustainable Banking Portal (<code>/bank</code>); administrative and auditing consoles are strictly restricted.
+        <strong>🛡️ Role-Based Access:</strong>
+        Green Finance strictly enforces role separation on the server. Customers are routed to the Sustainable Banking Portal (<code>/bank</code>); administrative and auditing tools require authorized privileges.
       </div>
 
     </div>
 
     <!-- Footer -->
     <footer class="auth-footer">
-      <div>Green Finance — Software Engineering Project • S.P.I.T. Mumbai</div>
-      <div style="margin-top: 4px;">Group 13 (Soham Gaikwad, Atharva Hule, Laukik Deshpande)</div>
+      <div>Green Finance — Real-Time Energy Observability &amp; Sustainable Digital Banking &bull; &copy; 2026</div>
+      <div style="margin-top: 4px;">Group 13 (Soham Gaikwad, Atharva Hule, Laukik Deshpande) &bull; S.P.I.T. Mumbai</div>
     </footer>
 
   </div>
@@ -575,18 +536,22 @@
       const loginForm = document.getElementById('login-form');
       const regForm = document.getElementById('register-form');
       const alertBox = document.getElementById('alert-box');
-      alertBox.style.display = 'none';
 
       if (mode === 'login') {
         loginBtn.classList.add('active');
+        loginBtn.setAttribute('aria-selected', 'true');
         regBtn.classList.remove('active');
+        regBtn.setAttribute('aria-selected', 'false');
         loginForm.style.display = 'block';
         regForm.style.display = 'none';
       } else {
         regBtn.classList.add('active');
+        regBtn.setAttribute('aria-selected', 'true');
         loginBtn.classList.remove('active');
+        loginBtn.setAttribute('aria-selected', 'false');
         regForm.style.display = 'block';
         loginForm.style.display = 'none';
+        alertBox.style.display = 'none';
       }
     }
 
@@ -597,32 +562,28 @@
       }
     }
 
-    function fillCredentials(username, password, role) {
-      switchTab('login');
-      document.getElementById('login-username').value = username;
-      document.getElementById('login-password').value = password;
-      showAlert(`Selected ${role} credentials for: ${username}`, 'success');
-    }
-
     function showAlert(msg, type = 'error') {
       const box = document.getElementById('alert-box');
       box.className = `alert-box ${type}`;
       box.textContent = msg;
-      box.style.display = 'block';
+      box.style.display = 'flex';
     }
 
-    // Role-based redirector
+    function getCookie(name) {
+      const value = `; ${document.cookie}`;
+      const parts = value.split(`; ${name}=`);
+      if (parts.length === 2) return parts.pop().split(';').shift();
+      return null;
+    }
+
     function routeUserByRole(role, isBossAdmin) {
-      if (isBossAdmin) {
-        window.location.href = '/admin/super';
-      } else if (role === 'SUPER_ADMIN') {
+      if (isBossAdmin || role === 'SUPER_ADMIN') {
         window.location.href = '/admin/super';
       } else if (role === 'ADMIN') {
         window.location.href = '/admin';
       } else if (role === 'INVESTIGATOR') {
         window.location.href = '/investigator';
       } else {
-        // Customer, Bank, or generic user
         window.location.href = '/bank';
       }
     }
@@ -634,7 +595,7 @@
       const password = document.getElementById('login-password').value;
 
       btn.disabled = true;
-      btn.innerHTML = 'Signing in...';
+      btn.innerHTML = '<span class="spinner"></span><span>Signing in...</span>';
 
       try {
         const res = await fetch('/auth/login-json', {
@@ -645,32 +606,22 @@
 
         const data = await res.json();
         if (!res.ok) {
-          throw new Error(data.error || data.detail || 'Authentication failed. Please verify credentials.');
+          throw new Error('Invalid username/email or password.');
         }
 
-        // Save token & user context
-        localStorage.setItem('access_token', data.access_token);
-        localStorage.setItem('token_type', data.token_type || 'bearer');
-        
-        // If user summary included, save it
+        showAlert(`Authentication successful. Redirecting...`, 'success');
+
         if (data.user) {
-          localStorage.setItem('gf_user', JSON.stringify(data.user));
-          showAlert(`Welcome, ${data.user.name || data.user.username}! Redirecting to your workspace...`, 'success');
           setTimeout(() => {
             routeUserByRole(data.user.role, data.user.is_boss_admin);
-          }, 600);
+          }, 400);
         } else {
-          // Query /user/me
-          const meRes = await fetch('/user/me', {
-            headers: { 'Authorization': `Bearer ${data.access_token}` }
-          });
+          const meRes = await fetch('/user/me');
           if (meRes.ok) {
             const meData = await meRes.json();
-            localStorage.setItem('gf_user', JSON.stringify(meData));
-            showAlert(`Welcome, ${meData.name || meData.username}! Redirecting...`, 'success');
             setTimeout(() => {
               routeUserByRole(meData.role, meData.is_boss_admin);
-            }, 600);
+            }, 400);
           } else {
             window.location.href = '/bank';
           }
@@ -689,33 +640,60 @@
       const username = document.getElementById('reg-username').value.trim();
       const email = document.getElementById('reg-email').value.trim();
       const password = document.getElementById('reg-password').value;
+      const confirmPassword = document.getElementById('reg-confirm-password').value;
+
+      if (password !== confirmPassword) {
+        showAlert('Passwords do not match. Please verify.', 'error');
+        return;
+      }
+
+      if (password.length < 8 || !/[a-zA-Z]/.test(password) || !/\d/.test(password)) {
+        showAlert('Password must be at least 8 characters long and contain both letters and numbers.', 'error');
+        return;
+      }
 
       btn.disabled = true;
-      btn.innerHTML = 'Creating account...';
+      btn.innerHTML = '<span class="spinner"></span><span>Creating account...</span>';
 
       try {
         const res = await fetch('/auth/register', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name, username, email, password })
+          body: JSON.stringify({
+            name,
+            username,
+            email,
+            password,
+            confirm_password: confirmPassword
+          })
         });
 
         const data = await res.json();
         if (!res.ok) {
-          throw new Error(data.error || data.detail || 'Registration failed. Please try a different username/email.');
+          let errDetail = 'Registration failed. Please check your information.';
+          if (data && data.detail) {
+            if (Array.isArray(data.detail)) {
+              errDetail = data.detail.map(d => d.msg).join(', ');
+            } else {
+              errDetail = data.detail;
+            }
+          }
+          throw new Error(errDetail);
         }
 
-        localStorage.setItem('access_token', data.access_token);
-        localStorage.setItem('token_type', data.token_type || 'bearer');
-        showAlert('Green Banking Account created successfully! Launching your digital bank...', 'success');
-        
-        setTimeout(() => {
-          window.location.href = '/bank';
-        }, 800);
+        // On success: pre-fill username on login tab, clear password, and switch to login tab
+        document.getElementById('login-username').value = username;
+        document.getElementById('login-password').value = '';
+        document.getElementById('reg-password').value = '';
+        document.getElementById('reg-confirm-password').value = '';
+
+        switchTab('login');
+        showAlert('Customer account created successfully! Please sign in with your credentials.', 'success');
       } catch (err) {
         showAlert(err.message, 'error');
+      } finally {
         btn.disabled = false;
-        btn.innerHTML = '<span>Open Green Account &amp; Launch</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>';
+        btn.innerHTML = '<span>Open Customer Account</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>';
       }
     }
   </script>

@@ -4,24 +4,53 @@
 #          and session verification.
 # =====================================================================
 
+import secrets
 from typing import Optional
-from fastapi import APIRouter, Depends, status, Request
+from fastapi import APIRouter, Depends, status, Request, Response
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
-from pydantic import BaseModel, Field
 
 from backend.db.session import get_db
 from backend.core.dependencies import get_current_user
+from backend.core.config import settings
 from backend.models.user import User
-from backend.schemas.auth_schema import UserRegister, Token
+from backend.schemas.auth_schema import UserRegister, Token, LoginJsonRequest
 from backend.services import auth_service
 
 router = APIRouter(prefix="/auth", tags=["Authentication"])
 
+SESSION_COOKIE_NAME = "access_token"
+CSRF_COOKIE_NAME = "csrf_token"
+SESSION_MAX_AGE = settings.access_token_expire_minutes * 60
 
-class LoginJsonRequest(BaseModel):
-    username: str
-    password: str
+
+def set_session_cookies(response: Response, access_token: str, csrf_token: str) -> None:
+    """Sets secure HttpOnly session cookie and readable CSRF token cookie."""
+    is_prod = str(settings.environment).lower() == "production"
+    response.set_cookie(
+        key=SESSION_COOKIE_NAME,
+        value=access_token,
+        httponly=True,
+        secure=is_prod,
+        samesite="lax",
+        path="/",
+        max_age=SESSION_MAX_AGE
+    )
+    response.set_cookie(
+        key=CSRF_COOKIE_NAME,
+        value=csrf_token,
+        httponly=False,  # Client-side JavaScript reads this to attach X-CSRF-Token header
+        secure=is_prod,
+        samesite="lax",
+        path="/",
+        max_age=SESSION_MAX_AGE
+    )
+
+
+def clear_session_cookies(response: Response) -> None:
+    """Explicitly clears authentication and CSRF cookies."""
+    response.delete_cookie(key=SESSION_COOKIE_NAME, path="/")
+    response.delete_cookie(key=CSRF_COOKIE_NAME, path="/")
 
 
 @router.post(
@@ -33,6 +62,7 @@ class LoginJsonRequest(BaseModel):
 def register(
     schema: UserRegister,
     request: Request,
+    response: Response,
     db: Session = Depends(get_db)
 ):
     """
@@ -47,6 +77,9 @@ def register(
         ip_address=request.client.host if request.client else None,
         user_agent=request.headers.get("user-agent")
     )
+    csrf_token = secrets.token_urlsafe(32)
+    tokens["csrf_token"] = csrf_token
+    set_session_cookies(response=response, access_token=tokens["access_token"], csrf_token=csrf_token)
     return tokens
 
 
@@ -57,6 +90,7 @@ def register(
 )
 def login(
     request: Request,
+    response: Response,
     form_data: OAuth2PasswordRequestForm = Depends(),
     db: Session = Depends(get_db)
 ):
@@ -68,6 +102,9 @@ def login(
         ip_address=request.client.host if request.client else None,
         user_agent=request.headers.get("user-agent")
     )
+    csrf_token = secrets.token_urlsafe(32)
+    tokens["csrf_token"] = csrf_token
+    set_session_cookies(response=response, access_token=tokens["access_token"], csrf_token=csrf_token)
     return tokens
 
 
@@ -79,6 +116,7 @@ def login(
 def login_json(
     payload: LoginJsonRequest,
     request: Request,
+    response: Response,
     db: Session = Depends(get_db)
 ):
     """Handles JSON login from modern web frontends."""
@@ -89,6 +127,9 @@ def login_json(
         ip_address=request.client.host if request.client else None,
         user_agent=request.headers.get("user-agent")
     )
+    csrf_token = secrets.token_urlsafe(32)
+    tokens["csrf_token"] = csrf_token
+    set_session_cookies(response=response, access_token=tokens["access_token"], csrf_token=csrf_token)
     return tokens
 
 
@@ -98,11 +139,14 @@ def login_json(
 )
 def logout(
     request: Request,
+    response: Response,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
-    """Revokes the current JWT session token immediately."""
+    """Revokes the current JWT session token immediately and clears cookies."""
     jti = getattr(request.state, "token_jti", None)
     if jti:
         auth_service.logout_user(db=db, token_jti=jti)
+    clear_session_cookies(response=response)
     return {"status": "success", "message": "Session successfully revoked"}
+

@@ -10,11 +10,11 @@
 
 import os
 from typing import Optional
-from fastapi import FastAPI, HTTPException as FastAPIHTTPException
+from fastapi import FastAPI, HTTPException as FastAPIHTTPException, Request, status
 from starlette.exceptions import HTTPException as StarletteHTTPException
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse, JSONResponse
+from fastapi.responses import FileResponse, JSONResponse, RedirectResponse
 from prometheus_fastapi_instrumentator import Instrumentator
 
 from backend.core.config import settings
@@ -172,7 +172,9 @@ def serve_grafana_file(file_path: str):
 
 @app.get("/bank", include_in_schema=False)
 @app.get("/bank/", include_in_schema=False)
-def serve_bank():
+def serve_bank(request: Request):
+    if not request.cookies.get("access_token"):
+        return RedirectResponse(url="/login", status_code=status.HTTP_302_FOUND)
     return safe_static_serve(bank_dir, "index.html")
 
 @app.get("/bank/{file_path:path}", include_in_schema=False)
@@ -181,7 +183,9 @@ def serve_bank_file(file_path: str):
 
 @app.get("/investigator", include_in_schema=False)
 @app.get("/investigator/", include_in_schema=False)
-def serve_investigator():
+def serve_investigator(request: Request):
+    if not request.cookies.get("access_token"):
+        return RedirectResponse(url="/login", status_code=status.HTTP_302_FOUND)
     return safe_static_serve(investigator_dir, "index.html")
 
 @app.get("/investigator/{file_path:path}", include_in_schema=False)
@@ -190,12 +194,16 @@ def serve_investigator_file(file_path: str):
 
 @app.get("/admin", include_in_schema=False)
 @app.get("/admin/", include_in_schema=False)
-def serve_admin():
+def serve_admin(request: Request):
+    if not request.cookies.get("access_token"):
+        return RedirectResponse(url="/login", status_code=status.HTTP_302_FOUND)
     return safe_static_serve(admin_dir, "index.html")
 
 @app.get("/admin/super", include_in_schema=False)
 @app.get("/admin/super/", include_in_schema=False)
-def serve_admin_super():
+def serve_admin_super(request: Request):
+    if not request.cookies.get("access_token"):
+        return RedirectResponse(url="/login", status_code=status.HTTP_302_FOUND)
     return safe_static_serve(admin_dir, "super.html")
 
 @app.get("/operations", include_in_schema=False)

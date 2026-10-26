@@ -35,5 +35,6 @@ Documents/*Prompt*
 Documents/*Phase*
 Documents/*Interactive*
 Documents/presentation_assets/
+Documents/*.zip
 *.db-shm
 *.db-wal

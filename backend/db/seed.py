@@ -9,6 +9,7 @@
 #          - Baseline Profiles and Validation Runs
 # =====================================================================
 
+import os
 import hashlib
 import uuid
 from datetime import datetime, timedelta
@@ -16,6 +17,7 @@ import random
 
 from sqlalchemy.orm import Session
 
+from backend.core.config import settings
 from backend.core.security import hash_password
 from backend.db.session import SessionLocal
 from backend.middleware.logger import logger
@@ -108,6 +110,14 @@ def seed_database(db: Session) -> None:
             logger.info(f"Seeded Grid Carbon Factor: {gf['region']} ({gf['year']}) -> {gf['factor_gco2_per_kwh']} g/kWh")
 
     # ------------------ 3. Seed Banking & Investor Users ------------------
+    if str(settings.environment).lower() == "production":
+        logger.warning(
+            "[SECURITY ALERT] Production environment detected: Automatic seeding of demo accounts "
+            "and default passwords is strictly disabled. Use backend/scripts/bootstrap_admin.py to initialize."
+        )
+        return
+
+    logger.info("Development mode: Seeding local test fixture accounts with isolated credentials.")
     users_to_seed = [
         {
             "username": "soham_gaikwad",
@@ -117,7 +127,7 @@ def seed_database(db: Session) -> None:
             "balance": 50000.0,
             "role": "SUPER_ADMIN",
             "is_boss_admin": True,
-            "password": "password123"
+            "password": os.environ.get("DEV_TEST_PASSWORD", "password123")
         },
         {
             "username": "admin_priya",
@@ -127,7 +137,7 @@ def seed_database(db: Session) -> None:
             "balance": 35000.0,
             "role": "ADMIN",
             "is_boss_admin": False,
-            "password": "password123"
+            "password": os.environ.get("DEV_TEST_PASSWORD", "password123")
         },
         {
             "username": "investigator_rahul",
