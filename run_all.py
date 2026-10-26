@@ -15,6 +15,10 @@ import sys
 import time
 import subprocess
 
+if sys.platform == "win32" and hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8")
+    sys.stderr.reconfigure(encoding="utf-8")
+
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 # Support running from inside Green-Finance or parent folder
 GF1_DIR = ROOT_DIR if os.path.exists(os.path.join(ROOT_DIR, "backend")) else os.path.join(ROOT_DIR, "Green-Finance")
